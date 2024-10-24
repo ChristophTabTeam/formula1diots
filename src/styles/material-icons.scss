@@ -1,0 +1,25 @@
+﻿@font-face {
+    font-family: 'MaterialIconsRound'; /*Name der Schriftartfamilie*/
+    src: url('../font/MaterialIconsRound-Regular.otf') /*Pfad zur Schriftartdatei*/
+    format('opentype'); /*Dateiformat der Schriftartdatei*/
+}
+
+.icon {
+    font-family: 'MaterialIconsRound';
+    font-size: inherit;
+}
+
+.icon-20pt {
+    font-family: 'MaterialIconsRound';
+    font-size: 20pt;
+}
+
+.icon-15pt {
+    font-family: 'MaterialIconsRound';
+    font-size: 15pt;
+}
+
+.icon-12pt {
+    font-family: 'MaterialIconsRound';
+    font-size: 12pt;
+}

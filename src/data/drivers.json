@@ -1,0 +1,183 @@
+[
+    {
+      "id": "maxVerstappen",
+      "name": "Max Verstappen",
+      "nationality": "Dutch",
+      "teamId": "redBull",
+      "dateOfBirth": "1997-09-30",
+      "profilePictureUrl": "/drivers/verstappen.png",
+      "driverSlot": 1
+    },
+    {
+      "id": "sergioPerez",
+      "name": "Sergio Perez",
+      "nationality": "Mexican",
+      "teamId": "redBull",
+      "dateOfBirth": "1990-01-26",
+      "profilePictureUrl": "/drivers/perez.png",
+      "driverSlot": 2
+    },
+    {
+      "id": "lewisHamilton",
+      "name": "Lewis Hamilton",
+      "nationality": "British",
+      "teamId": "mercedes",
+      "dateOfBirth": "1985-01-07",
+      "profilePictureUrl": "/drivers/hamilton.png",
+      "driverSlot": 1
+    },
+    {
+      "id": "georgeRussell",
+      "name": "George Russell",
+      "nationality": "British",
+      "teamId": "mercedes",
+      "dateOfBirth": "1998-02-15",
+      "profilePictureUrl": "/drivers/russell.png",
+      "driverSlot": 2
+    },
+    {
+      "id": "charlesLeclerc",
+      "name": "Charles Leclerc",
+      "nationality": "Monégasque",
+      "teamId": "ferrari",
+      "dateOfBirth": "1997-10-16",
+      "profilePictureUrl": "/drivers/leclerc.png",
+      "driverSlot": 1
+    },
+    {
+      "id": "carlosSainz",
+      "name": "Carlos Sainz",
+      "nationality": "Spanish",
+      "teamId": "ferrari",
+      "dateOfBirth": "1994-09-01",
+      "profilePictureUrl": "/drivers/sainz.png",
+      "driverSlot": 2
+    },
+    {
+      "id": "landoNorris",
+      "name": "Lando Norris",
+      "nationality": "British",
+      "teamId": "mclaren",
+      "dateOfBirth": "1999-11-13",
+      "profilePictureUrl": "/drivers/norris.png",
+      "driverSlot": 1
+    },
+    {
+      "id": "oscarPiastri",
+      "name": "Oscar Piastri",
+      "nationality": "Australian",
+      "teamId": "mclaren",
+      "dateOfBirth": "2001-04-06",
+      "profilePictureUrl": "/drivers/piastri.png",
+      "driverSlot": 2
+    },
+    {
+      "id": "fernandoAlonso",
+      "name": "Fernando Alonso",
+      "nationality": "Spanish",
+      "teamId": "astonMartin",
+      "dateOfBirth": "1981-07-29",
+      "profilePictureUrl": "/drivers/alonso.png",
+      "driverSlot": 1
+    },
+    {
+      "id": "lanceStroll",
+      "name": "Lance Stroll",
+      "nationality": "Canadian",
+      "teamId": "astonMartin",
+      "dateOfBirth": "1998-10-29",
+      "profilePictureUrl": "/drivers/stroll.png",
+      "driverSlot": 2
+    },
+    {
+      "id": "estebanOcon",
+      "name": "Esteban Ocon",
+      "nationality": "French",
+      "teamId": "alpine",
+      "dateOfBirth": "1996-09-17",
+      "profilePictureUrl": "/drivers/ocon.png",
+      "driverSlot": 1
+    },
+    {
+      "id": "pierreGasly",
+      "name": "Pierre Gasly",
+      "nationality": "French",
+      "teamId": "alpine",
+      "dateOfBirth": "1996-02-07",
+      "profilePictureUrl": "/drivers/gasly.png",
+      "driverSlot": 2
+    },
+    {
+      "id": "valtteriBottas",
+      "name": "Valtteri Bottas",
+      "nationality": "Finnish",
+      "teamId": "kickSauber",
+      "dateOfBirth": "1989-08-28",
+      "profilePictureUrl": "/drivers/bottas.png",
+      "driverSlot": 1
+    },
+    {
+      "id": "zhouGuanyu",
+      "name": "Zhou Guanyu",
+      "nationality": "Chinese",
+      "teamId": "kickSauber",
+      "dateOfBirth": "1999-05-30",
+      "profilePictureUrl": "/drivers/zhou.png",
+      "driverSlot": 2
+    },
+    {
+      "id": "nicoHulkenberg",
+      "name": "Nico Hülkenberg",
+      "nationality": "German",
+      "teamId": "haas",
+      "dateOfBirth": "1987-08-19",
+      "profilePictureUrl": "/drivers/hulkenberg.png",
+      "driverSlot": 1
+    },
+    {
+      "id": "kevinMagnussen",
+      "name": "Kevin Magnussen",
+      "nationality": "Danish",
+      "teamId": "haas",
+      "dateOfBirth": "1992-10-05",
+      "profilePictureUrl": "/drivers/magnussen.png",
+      "driverSlot": 2
+    },
+    {
+      "id": "alexAlbon",
+      "name": "Alex Albon",
+      "nationality": "Thai-British",
+      "teamId": "williams",
+      "dateOfBirth": "1996-03-23",
+      "profilePictureUrl": "/drivers/albon.png",
+      "driverSlot": 1
+    },
+    {
+      "id": "loganSargeant",
+      "name": "Logan Sargeant",
+      "nationality": "American",
+      "teamId": "williams",
+      "dateOfBirth": "2000-12-31",
+      "profilePictureUrl": "/drivers/sargeant.png",
+      "driverSlot": 2
+    },
+    {
+      "id": "danielRicciardo",
+      "name": "Daniel Ricciardo",
+      "nationality": "Australian",
+      "teamId": "rbAlphaTauri",
+      "dateOfBirth": "1989-07-01",
+      "profilePictureUrl": "/drivers/ricciardo.png",
+      "driverSlot": 1
+    },
+    {
+      "id": "yukiTsunoda",
+      "name": "Yuki Tsunoda",
+      "nationality": "Japanese",
+      "teamId": "rbAlphaTauri",
+      "dateOfBirth": "2000-05-11",
+      "profilePictureUrl": "/drivers/tsunoda.png",
+      "driverSlot": 2
+    }
+  ]
+  

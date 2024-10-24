@@ -1,0 +1,83 @@
+[
+    {
+      "id": "mercedes",
+      "name": "Mercedes AMG Petronas Formula One Team",
+      "shortName": "Mercedes",
+      "headquarters": "Brackley, United Kingdom",
+      "principal": "Toto Wolff",
+      "logoUrl": "/logos/mercedes.png"
+    },
+    {
+      "id": "redBull",
+      "name": "Oracle Red Bull Racing",
+      "shortName": "Red Bull",
+      "headquarters": "Milton Keynes, United Kingdom",
+      "principal": "Christian Horner",
+      "logoUrl": "/logos/redbull.png"
+    },
+    {
+      "id": "ferrari",
+      "name": "Scuderia Ferrari",
+      "shortName": "Ferrari",
+      "headquarters": "Maranello, Italy",
+      "principal": "Frédéric Vasseur",
+      "logoUrl": "/logos/ferrari.png"
+    },
+    {
+      "id": "mclaren",
+      "name": "McLaren F1 Team",
+      "shortName": "McLaren",
+      "headquarters": "Woking, United Kingdom",
+      "principal": "Andrea Stella",
+      "logoUrl": "/logos/mclaren.png"
+    },
+    {
+      "id": "astonMartin",
+      "name": "Aston Martin Aramco Cognizant Formula One Team",
+      "shortName": "Aston Martin",
+      "headquarters": "Silverstone, United Kingdom",
+      "principal": "Mike Krack",
+      "logoUrl": "/logos/astonmartin.png"
+    },
+    {
+      "id": "alpine",
+      "name": "BWT Alpine F1 Team",
+      "shortName": "Alpine",
+      "headquarters": "Enstone, United Kingdom",
+      "principal": "Bruno Famin",
+      "logoUrl": "/logos/alpine.png"
+    },
+    {
+      "id": "williams",
+      "name": "Williams Racing",
+      "shortName": "Williams",
+      "headquarters": "Grove, United Kingdom",
+      "principal": "James Vowles",
+      "logoUrl": "/logos/williams.png"
+    },
+    {
+      "id": "kickSauber",
+      "name": "Stake F1 Team Kick Sauber",
+      "shortName": "Kick Sauber",
+      "headquarters": "Hinwil, Switzerland",
+      "principal": "Alessandro Alunni Bravi",
+      "logoUrl": "/logos/kicksauber.png"
+    },
+    {
+      "id": "haas",
+      "name": "MoneyGram Haas F1 Team",
+      "shortName": "Haas",
+      "headquarters": "Kannapolis, United States",
+      "principal": "Guenther Steiner",
+      "logoUrl": "/logos/haas.png"
+    },
+    {
+      "id": "rbAlphaTauri",
+      "name": "Visa Cash App RB",
+      "shortName": "RB VCARB",
+      "headquarters": "Faenza, Italy",
+      "principal": "Peter Bayer",
+      "logoUrl": "/logos/rbAlphaTauri.png"
+    }
+  ]
+  

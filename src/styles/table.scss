@@ -1,0 +1,199 @@
+﻿@import "_variables.scss";
+
+.home-wrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 50px;
+}
+
+.table-wrapper {
+    background: $table-background-dark;
+    color: $white;
+    padding: 20px;
+    border-top: 4px solid $accent-red;
+}
+
+.table-mask {
+    max-height: 547.04px;
+    overflow-y: auto;
+
+    &::-webkit-scrollbar {
+        display: none;
+    }
+}
+
+.leaderboard-table {
+    width: 100%;
+    position: relative;
+    color: white;
+    top: -10px;
+    & tr:first-child {
+        background: $table-background-dark;
+        position:sticky;
+        top: -3px;
+        transition-duration: .3s;
+        & > th {
+            padding: 10px;
+            font-size: 1.2em;
+            font-weight: 900;
+            text-transform: uppercase;
+        }
+    }
+
+    & tr:nth-child(2) {
+        position: sticky;
+        top: 46px;
+        transition-duration: .3s;
+    }
+
+    & tr {
+        background: $table-background-light;
+        border-top: solid 5px $table-background-dark;
+        border-bottom: solid 5px $table-background-dark;
+        margin: 0;
+        & > td {
+            padding: 10px;
+        }
+
+        & > td:last-of-type, th:last-of-type {
+            text-align: right;
+        }
+    }
+}
+
+.season-results-table {
+    width: 100%;
+    position: relative;
+    color: white;
+    top: -10px;
+
+    & tr:first-child {
+        background: $table-background-dark;
+        position: sticky;
+        top: -3px;
+        transition-duration: .3s;
+
+        & > th {
+            padding: 10px;
+            font-size: 1.2em;
+            font-weight: 900;
+            text-transform: uppercase;
+            white-space: nowrap;
+            text-align: center;
+        }
+    }
+
+    & tr:nth-child(2) {
+        position: sticky;
+        top: 77px;
+        transition-duration: .3s;
+    }
+
+    & tr {
+        background: $table-background-light;
+        border-top: solid 5px $table-background-dark;
+        border-bottom: solid 5px $table-background-dark;
+        margin: 0;
+
+        & > td:first-of-type, th:first-of-type {
+            text-align: left;
+        }
+
+        & > td {
+            padding: 10px;
+            text-align: center;
+        }
+
+        & > td:last-of-type, th:last-of-type {
+            text-align: right;
+        }
+    }
+}
+
+.tyre-table {
+    & tr:first-child {
+        background: $table-background-dark;
+        position: sticky;
+        top: -3px;
+        transition-duration: .3s;
+
+        & > th {
+            padding: 10px;
+            font-size: 1.2em;
+            font-weight: 900;
+            text-transform: uppercase;
+            white-space: nowrap;
+        }
+    }
+
+    & tr:nth-child(2) {
+        position: sticky;
+        top: 77px;
+        transition-duration: .3s;
+    }
+
+    & tr {
+        background: $table-background-light;
+        border-top: solid 5px $table-background-dark;
+        border-bottom: solid 5px $table-background-dark;
+        margin: 0;
+
+        & > td:first-of-type, th:first-of-type {
+            text-align: center;
+        }
+
+        & > td, th {
+            padding: 10px;
+            text-align: center;
+        }
+
+        & > td:last-of-type, th:last-of-type {
+            text-align: center;
+        }
+    }
+}
+
+.season-result-table-mask {
+    max-height: 800px;
+    overflow-y: auto;
+    overflow-x: auto;
+}
+
+.race-list {
+    width: 100%;
+    position: relative;
+    color: white;
+
+    & > tr:first-child {
+        background: $table-background-dark;
+        position: sticky;
+        top: -3px;
+        transition-duration: .3s;
+
+        & > th {
+            padding: 10px;
+            font-size: 1.2em;
+            font-weight: 900;
+            text-transform: uppercase;
+        }
+    }
+
+    & > tr {
+        background: $table-background-light;
+        border-top: solid 5px $table-background-dark;
+        border-bottom: solid 5px $table-background-dark;
+
+        & > td {
+            padding: 10px;
+        }
+
+        & > td:last-of-type, th:last-of-type {
+            text-align: right;
+        }
+    }
+}
+
+.pos {
+    display: flex;
+    justify-content: space-between;
+}

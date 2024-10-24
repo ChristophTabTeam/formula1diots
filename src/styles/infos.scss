@@ -1,0 +1,77 @@
+﻿@import "_variables.scss";
+
+//Season Results
+.table-race-id {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    padding: 3px;
+}
+
+.country-flag-small {
+    width: 40px;
+    height: 20px;
+}
+
+.country-three-letter {
+    margin: 0;
+}
+
+.season-results-driver-name {
+    margin: 0;
+}
+
+.season-results-pos-wrapper {
+    width: 30px;
+    height: 30px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 5px;
+    &.fastest-lap {
+        background: $fastest-lap;
+    }
+}
+
+//Tyre Info
+.tyre-pic-grid {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 50px;
+    padding: 50px 0;
+    &>img {
+        max-width: 150px;
+        width: 100%;
+    }
+}
+
+.tyre-info-text-wrapper {
+    padding: 50px 0;
+}
+
+//Races Info
+.race-info-list {
+    width: 100%;
+
+    & > tr {
+        background: $table-background-light;
+        border-top: solid 5px $table-background-dark;
+        border-bottom: solid 5px $table-background-dark;
+        transition: all .3s ease;
+        cursor: pointer;
+        &:hover {
+            transform: scale(1.01);
+        }
+        & > td {
+            padding: 10px
+        }
+    }
+}
+
+.race-info-country-flag {
+    width: 50px;
+    height: 25px;
+}
