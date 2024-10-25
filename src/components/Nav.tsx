@@ -1,4 +1,5 @@
 import React from "react";
+import '../styles/nav.scss'
 
 const Nav: React.FC = () => {
   return (
@@ -14,11 +15,11 @@ const Nav: React.FC = () => {
         </div>
 
         <div className="nav-item px-3">
-          <a className="nav-link" href="results-entry">
+          <a className="nav-link" href="/season">
             <span className="icon-20pt" aria-hidden="true">
-              directions_car
+              calendar_month
             </span>{" "}
-            Results Entry
+            Season
           </a>
         </div>
 

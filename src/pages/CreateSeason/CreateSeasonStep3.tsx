@@ -4,13 +4,13 @@ import { db } from '../../firebase/firebaseConfig';
 import { Driver } from '../../interfaces/Driver';
 
 interface CreateSeasonStep3Props {
-  selectedPlayers: string[];
+  selectedDrivers: string[];
 //   manualAssignment: boolean;
   teams: { [teamId: string]: { driver1: string; driver2: string } };
   nextStep: (includeDrivers: boolean, updatedTeams: { [teamId: string]: { driver1: string; driver2: string } }) => void;
 }
 
-export function CreateSeasonStep3({ selectedPlayers, teams, nextStep }: CreateSeasonStep3Props) {
+export function CreateSeasonStep3({ selectedDrivers, teams, nextStep }: CreateSeasonStep3Props) {
   const [includeDrivers, setIncludeDrivers] = useState(false);
   const [drivers, setDrivers] = useState<Driver[]>([]);
   const [updatedTeams, setUpdatedTeams] = useState(teams);

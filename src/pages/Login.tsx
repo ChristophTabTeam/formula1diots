@@ -35,7 +35,7 @@ const Login: React.FC = () => {
         const username = extractUsername(email);
 
         // Überprüfen, ob der Benutzer bereits in der 'players'-Collection existiert
-        const userDocRef = doc(db, "players", username);
+        const userDocRef = doc(db, "drivers", username);
         const userDoc = await getDoc(userDocRef);
 
         if (!userDoc.exists()) {
@@ -44,6 +44,7 @@ const Login: React.FC = () => {
             email: email,
             createdAt: new Date(),
             id: username,
+            isPlayer: true,
             // Weitere Benutzerinformationen hier speichern
           });
           console.log("Neuer Benutzer hinzugefügt.");

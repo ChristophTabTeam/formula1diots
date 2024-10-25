@@ -1,0 +1,55 @@
+﻿@import "_variables.scss";
+
+.team-grid {
+    padding-top: 50px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    gap: 20px;
+}
+
+.team-box {
+    padding: 50px 20px 50px 20px;
+    border-radius: 0 20px 20px 0;
+    border-right: none !important;
+    position: relative;
+    background: $table-background-light;
+    color: white;
+}
+
+.team-name {
+    position: absolute;
+    top: 10px;
+    left: 20px;
+    font-weight: 600; 
+    text-transform: uppercase;
+    font-size: 20px;
+    margin: 0;
+}
+
+.driver-wrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.driver-box {
+    aspect-ratio: 1/1;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    position: relative;
+    border-bottom-right-radius: 20px;
+}
+
+.driver-name {
+    margin: 0;
+    width: 100%;
+    padding: 5px;
+    position: absolute;
+    bottom: -40px;
+    outline: none;
+    border: none;
+    color: white;
+    background: $table-background-light;
+    cursor: pointer;
+}

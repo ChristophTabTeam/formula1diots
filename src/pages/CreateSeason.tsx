@@ -1,41 +1,52 @@
 import React, { useState } from "react";
 import { CreateSeasonStep1 } from "./CreateSeason/CreateSeasonStep1";
-import { CreateSeasonStep5 } from "./CreateSeason/CreateSeasonStep5";
 import { CreateSeasonStep2 } from "./CreateSeason/CreateSeasonStep2";
 import { CreateSeasonStep3 } from "./CreateSeason/CreateSeasonStep3";
 import { CreateSeasonStep4 } from "./CreateSeason/CreateSeasonStep4";
-import { Driver } from "../interfaces/Driver";
+import { CreateSeasonStep5 } from "./CreateSeason/CreateSeasonStep5";
 
 const CreateSeason: React.FC = () => {
   const [step, setStep] = useState(1);
   const [seasonName, setSeasonName] = useState("");
-  const [selectedPlayers, setSelectedPlayers] = useState<string[]>([]);
-//   const [manualAssignment, setManualAssignment] = useState<boolean>(true);
+  const [selectedDrivers, setSelectedDrivers] = useState<string[]>([]);
   const [includeDrivers, setIncludeDrivers] = useState<boolean>(false);
   const [selectedRaces, setSelectedRaces] = useState<string[]>([]);
   const [teams, setTeams] = useState<{
-    [teamId: string]: { driver1: string; driver2: string };
+    [teamId: string]: { points: number; driver1: string; driver2: string };
   }>({});
-  const [drivers, setDrivers] = useState<Driver[]>([]);
 
-  // Weiter zum nächsten Schritt
+  // Funktion zum nächsten Schritt wechseln
   const nextStep = (data?: any) => {
-    if (step === 1) {
-      setSeasonName(data);
-    } else if (step === 2) {
-      setSelectedPlayers(data);
-    //   setManualAssignment(data.manualAssignment);
-      setTeams(data.teams); // Teams mit Spielern speichern
-    } else if (step === 3) {
-      setIncludeDrivers(data.includeDrivers);
-      setTeams(data.updatedTeams); // Aktualisierte Teams mit Fahrern speichern
-    } else if (step === 4) {
-      setSelectedRaces(data);
+    switch (step) {
+      case 1:
+        if (data) {
+          setSeasonName(data);
+        }
+        break;
+      case 2:
+        if (data?.selectedDrivers && data?.teams) {
+          setSelectedDrivers(data.selectedDrivers);
+          setTeams(data.teams);
+        }
+        break;
+      case 3:
+        if (data?.includeDrivers !== undefined) {
+          setIncludeDrivers(data.includeDrivers);
+          setTeams(data.updatedTeams);
+        }
+        break;
+      case 4:
+        if (data) {
+          setSelectedRaces(data);
+        }
+        break;
+      default:
+        break;
     }
     setStep(step + 1);
   };
 
-  // Zurück zum vorherigen Schritt
+  // Funktion zum vorherigen Schritt wechseln
   const previousStep = () => {
     setStep(step - 1);
   };
@@ -46,42 +57,27 @@ const CreateSeason: React.FC = () => {
       {step === 2 && (
         <CreateSeasonStep2
           seasonName={seasonName}
-          nextStep={(selectedPlayers, teams) => {
-            setSelectedPlayers(selectedPlayers);
-            // setManualAssignment(manualAssignment);
-            setTeams(teams);
-            nextStep();
-          }}
+          nextStep={(selectedDrivers, teams) => nextStep({ selectedDrivers, teams })}
         />
       )}
       {step === 3 && (
         <CreateSeasonStep3
-          selectedPlayers={selectedPlayers}
-        //   manualAssignment={manualAssignment}
+          selectedDrivers={selectedDrivers}
           teams={teams}
-          nextStep={(includeDrivers, updatedTeams) => {
-            setIncludeDrivers(includeDrivers);
-            setTeams(updatedTeams);
-            nextStep();
-          }}
+          nextStep={(includeDrivers, updatedTeams) => nextStep({ includeDrivers, updatedTeams })}
         />
       )}
       {step === 4 && (
         <CreateSeasonStep4
-          teams={teams}
-          nextStep={(selectedRaces) => {
-            setSelectedRaces(selectedRaces); // Speichere die ausgewählten Rennen
-            nextStep();
-          }}
+          nextStep={(selectedRaces) => nextStep(selectedRaces)}
         />
       )}
       {step === 5 && (
         <CreateSeasonStep5
           seasonName={seasonName}
-          selectedPlayers={selectedPlayers}
+          selectedDrivers={selectedDrivers}
           selectedRaces={selectedRaces}
-          teams={teams} // Teams mit Spielern und ggf. regulären Fahrern übergeben
-        //   drivers={drivers} // Reguläre Fahrer, falls ausgewählt
+          teams={teams}
           includeDrivers={includeDrivers}
           onFinish={() => alert("Saison erfolgreich erstellt!")}
         />

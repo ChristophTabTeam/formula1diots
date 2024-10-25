@@ -1,4 +1,4 @@
-﻿@import "_variables.scss";
+﻿@import "variables";
 
 .home-wrapper {
     display: grid;
@@ -27,8 +27,11 @@
     position: relative;
     color: white;
     top: -10px;
-    & tr:first-child {
+    & thead > tr {
         background: $table-background-dark;
+    }
+    & tr:first-child {
+        
         position:sticky;
         top: -3px;
         transition-duration: .3s;
@@ -38,12 +41,6 @@
             font-weight: 900;
             text-transform: uppercase;
         }
-    }
-
-    & tr:nth-child(2) {
-        position: sticky;
-        top: 46px;
-        transition-duration: .3s;
     }
 
     & tr {

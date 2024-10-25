@@ -3,7 +3,7 @@ export interface Race {
   fullName: string; // Vollständiger Name des Rennens
   pathToTrackMap: string; // Pfad zur Streckenkarte
   pathToCountryFlag: string; // Pfad zur Landesflagge
-  countryThreeLetterId: string; // Ländercode (z.B. "BHR" für Bahrain)
+  threeLetterCode: string; // Ländercode (z.B. "BHR" für Bahrain)
   trackDistance: string; // Distanz der Strecke in km
   raceLaps: number; // Anzahl der Runden
   lapRecord: string; // Rundenrekordzeit

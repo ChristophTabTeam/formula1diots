@@ -6,4 +6,5 @@ export interface Driver {
     dateOfBirth: string;
     profilePictureUrl: string;
     driverSlot: number;
+    isPlayer?: boolean;
 }

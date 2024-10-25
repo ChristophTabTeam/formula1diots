@@ -6,8 +6,10 @@ import Home from "../pages/Home";
 import Login from "../pages/Login";
 import CreateSeason from "../pages/CreateSeason";
 import ViewSeason from "../pages/ViewSeason";
-import RaceView from "../pages/RaceView";
+// import RaceView from "../pages/RaceView";
 import { useAuth } from "../context/authcontext";
+import Season from "../pages/Season";
+import RaceResultsEntry from "../pages/RaceResultsEntry";
 
 const routes: { [key: string]: () => React.JSX.Element } = {
   "/": () => (
@@ -16,6 +18,11 @@ const routes: { [key: string]: () => React.JSX.Element } = {
     </PrivateRoute>
   ),
   "/login": () => <Login />,
+  "/season": () => (
+    <PrivateRoute>
+      <Season />
+    </PrivateRoute>
+  ),
   "/create-season": () => (
     <PrivateRoute>
       <CreateSeason />
@@ -29,11 +36,19 @@ const routes: { [key: string]: () => React.JSX.Element } = {
       </PrivateRoute>
     );
   },
-  "/season/:seasonId/race/:id": () => (
-    <PrivateRoute>
-      <RaceView />
-    </PrivateRoute>
-  ),
+  "/season/:seasonId/results-entry": () => {
+    const seasonId = window.location.pathname.split("/")[2];
+    return (
+      <PrivateRoute>
+        <RaceResultsEntry seasonId={seasonId} />
+      </PrivateRoute>
+    );
+  },
+  // "/season/:seasonId/race/:id": () => (
+  //   <PrivateRoute>
+  //     <RaceView />
+  //   </PrivateRoute>
+  // ),
 };
 
 const PrivateRoute = ({ children }: { children: React.JSX.Element }) => {

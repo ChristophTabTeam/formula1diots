@@ -1,42 +1,58 @@
-import { useEffect, useState } from 'react';
-import { collection, getDocs } from 'firebase/firestore';
-import { db } from '../../firebase/firebaseConfig';
-import { Player } from '../../interfaces/Player';
-import { Team } from '../../interfaces/Team';
+import { useEffect, useState } from "react";
+import { collection, getDocs } from "firebase/firestore";
+import { db } from "../../firebase/firebaseConfig";
+import { Team } from "../../interfaces/Team";
+import { Driver } from "../../interfaces/Driver";
 
 interface CreateSeasonStep2Props {
   seasonName: string;
-  nextStep: (selectedPlayers: string[], teams: { [teamId: string]: { driver1: string, driver2: string } }) => void;
+  nextStep: (
+    selectedDrivers: string[],
+    teams: { [teamId: string]: { driver1: string; driver2: string } }
+  ) => void;
 }
 
-export function CreateSeasonStep2({ seasonName, nextStep }: CreateSeasonStep2Props) {
-  const [players, setPlayers] = useState<Player[]>([]);
-  const [selectedPlayers, setSelectedPlayers] = useState([] as string[]);
-//   const [manualAssignment, setManualAssignment] = useState(true);
+export function CreateSeasonStep2({
+  seasonName,
+  nextStep,
+}: CreateSeasonStep2Props) {
+  const [drivers, setDrivers] = useState<Driver[]>([]);
+  const [selectedDrivers, setSelectedDrivers] = useState([] as string[]);
+  //   const [manualAssignment, setManualAssignment] = useState(true);
   const [teams, setTeams] = useState([] as Team[]);
-  const [assignedTeams, setAssignedTeams] = useState<{ [teamId: string]: { driver1: string, driver2: string } }>({});
+  const [assignedTeams, setAssignedTeams] = useState<{
+    [teamId: string]: { driver1: string; driver2: string };
+  }>({});
 
   useEffect(() => {
-    const fetchPlayers = async () => {
-      const playersCollection = collection(db, 'players');
-      const playersSnapshot = await getDocs(playersCollection);
-      setPlayers(playersSnapshot.docs.map(doc => doc.data() as Player));
-    };
-
     const fetchTeams = async () => {
-      const teamsCollection = collection(db, 'teams');
+      const teamsCollection = collection(db, "teams");
       const teamsSnapshot = await getDocs(teamsCollection);
-      setTeams(teamsSnapshot.docs.map(doc => doc.data() as Team));
+      setTeams(teamsSnapshot.docs.map((doc) => doc.data() as Team));
     };
 
-    fetchPlayers();
+    const fetchDrivers = async () => {
+      const driversCollection = collection(db, "drivers");
+      const driversSnapshot = await getDocs(driversCollection);
+      const filteredDrivers = new Array<Driver>();
+      for (const driver of driversSnapshot.docs.map(
+        (doc) => doc.data() as Driver
+      )) {
+        if (driver.isPlayer) {
+          filteredDrivers.push(driver);
+        }
+      }
+      setDrivers(filteredDrivers);
+    };
+
+    fetchDrivers();
     fetchTeams();
   }, []);
 
-  const assignPlayersToTeams = () => {
-    const updatedTeams = { ...assignedTeams };  // Kopiere die Teams in ein neues Objekt
+  const assignDriversToTeams = () => {
+    const updatedTeams = { ...assignedTeams }; // Kopiere die Teams in ein neues Objekt
 
-    selectedPlayers.forEach((playerId) => {
+    selectedDrivers.forEach((driverId) => {
       let teamAssigned = false;
 
       while (!teamAssigned) {
@@ -45,23 +61,32 @@ export function CreateSeasonStep2({ seasonName, nextStep }: CreateSeasonStep2Pro
 
         // Prüfe, ob der Teamplatz frei ist (driver1 oder driver2)
         if (!updatedTeams[selectedTeam.id]?.driver1) {
-          updatedTeams[selectedTeam.id] = { ...updatedTeams[selectedTeam.id], driver1: playerId };
+          updatedTeams[selectedTeam.id] = {
+            ...updatedTeams[selectedTeam.id],
+            driver1: driverId,
+          };
           teamAssigned = true;
         } else if (!updatedTeams[selectedTeam.id]?.driver2) {
-          updatedTeams[selectedTeam.id] = { ...updatedTeams[selectedTeam.id], driver2: playerId };
+          updatedTeams[selectedTeam.id] = {
+            ...updatedTeams[selectedTeam.id],
+            driver2: driverId,
+          };
           teamAssigned = true;
         }
       }
     });
 
-    setAssignedTeams(updatedTeams);  // Aktualisierte Teams setzen
+    setAssignedTeams(updatedTeams); // Aktualisierte Teams setzen
   };
 
   const handleSubmit = () => {
-    if (selectedPlayers.length > 0) {
-      nextStep(selectedPlayers, assignedTeams);  // Übertrage Teams mit Zuordnungen
+    if (selectedDrivers.length > 0 && Object.keys(assignedTeams).length > 0) {
+      nextStep(selectedDrivers, assignedTeams);
+      console.log("Assigned Teams:", assignedTeams);
     } else {
-      alert('Bitte wählen Sie mindestens einen Spieler aus.');
+      alert(
+        "Bitte wählen Sie mindestens einen Spieler aus und weisen Sie die Spieler den Teams zu."
+      );
     }
   };
 
@@ -69,21 +94,23 @@ export function CreateSeasonStep2({ seasonName, nextStep }: CreateSeasonStep2Pro
     <div>
       <h1>Welche Spieler sollen an der Saison "{seasonName}" teilnehmen?</h1>
       <ul>
-        {players.map((player) => (
-          <li key={player.id}>
+        {drivers.map((driver) => (
+          <li key={driver.id}>
             <label>
               <input
                 type="checkbox"
-                value={player.id}
+                value={driver.id}
                 onChange={(e) => {
                   if (e.target.checked) {
-                    setSelectedPlayers([...selectedPlayers, player.id]);
+                    setSelectedDrivers([...selectedDrivers, driver.id]);
                   } else {
-                    setSelectedPlayers(selectedPlayers.filter(id => id !== player.id));
+                    setSelectedDrivers(
+                      selectedDrivers.filter((id) => id !== driver.id)
+                    );
                   }
                 }}
               />
-              {!player.firstName && !player.lastName ? player.id : `${player.firstName} ${player.lastName}`}
+              {!driver.name ? driver.id : driver.name}
             </label>
           </li>
         ))}
@@ -106,7 +133,7 @@ export function CreateSeasonStep2({ seasonName, nextStep }: CreateSeasonStep2Pro
           Zufällige Zuordnung
         </label>
       </div> */}
-      <button onClick={assignPlayersToTeams}>Spieler Teams zuweisen</button>
+      <button onClick={assignDriversToTeams}>Spieler Teams zuweisen</button>
 
       {/* Zeige zugewiesene Teams an */}
       {Object.keys(assignedTeams).length > 0 && (
@@ -115,9 +142,9 @@ export function CreateSeasonStep2({ seasonName, nextStep }: CreateSeasonStep2Pro
           <ul>
             {teams.map((team) => (
               <li key={team.id}>
-                <strong>{team.name}</strong>: 
-                <p>Driver 1: {assignedTeams[team.id]?.driver1 || 'frei'}</p>
-                <p>Driver 2: {assignedTeams[team.id]?.driver2 || 'frei'}</p>
+                <strong>{team.name}</strong>:
+                <p>Driver 1: {assignedTeams[team.id]?.driver1 || "frei"}</p>
+                <p>Driver 2: {assignedTeams[team.id]?.driver2 || "frei"}</p>
               </li>
             ))}
           </ul>

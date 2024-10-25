@@ -7,6 +7,19 @@
     align-items: center;
     gap: 5px;
     padding: 3px;
+    -webkit-user-select: none;
+    -moz-user-select: none; 
+    -ms-user-select: none; 
+    user-select: none;
+
+    &.is-finished {
+        cursor: pointer;
+        transition: all .3s ease;
+
+        &:hover {
+            transform: scale(1.2);
+        }
+    }
 }
 
 .country-flag-small {
@@ -20,6 +33,7 @@
 
 .season-results-driver-name {
     margin: 0;
+    width: max-content;
 }
 
 .season-results-pos-wrapper {
@@ -74,4 +88,200 @@
 .race-info-country-flag {
     width: 50px;
     height: 25px;
+}
+
+.race-info-grid {
+    margin: 0 auto;
+    padding: 50px 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 50px;
+}
+
+.race-info-grid-column {
+    display: flex;
+    flex-direction: column;
+    gap: 70px;
+}
+
+.race-info-wrapper {
+    display: flex;
+    flex-direction: column;
+}
+
+.race-info-headline {
+    color: $accent-red;
+    font-size: 40px;
+    font-weight: 400;
+    position: relative;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    &::after {
+        content: "";
+        height: 3px;
+        width: 100px;
+        background: $accent-red;
+        position: absolute;
+        bottom: -10px;
+        left: 0;
+    }
+}
+
+.race-info-text {
+    font-weight: 600;
+    font-size: 60px;
+    margin-bottom: -20px;
+    font-style: italic;
+    &.small-text {
+        font-size: 35px;
+    }
+}
+
+.race-info-text-unit {
+    font-size: .5em;
+    font-style: initial;
+}
+
+.race-grid-2-columns {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr;
+}
+
+.race-info-bottom-grid {
+    padding: 50px 0;
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 50px;
+}
+
+.race-info-track-map {
+    padding: 50px 0;
+    width: 100%;
+    margin: 0 auto;
+
+    & > img {
+        width: 100%;
+    }
+}
+
+.race-setup-wrapper {
+    max-width: 850px;
+}
+
+.race-setup-inner-wrapper {
+    background: $table-background-dark;
+    color: $white;
+    padding: 30px 0;
+    border-top: 4px solid $accent-red;
+}
+
+.race-setup-mask {
+    width: 100%;
+    overflow-x: hidden;
+}
+
+.race-setup-tabs {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 10px;
+}
+
+.race-setup-tab-name {
+    text-transform: uppercase;
+    font-weight: 600;
+    padding: 10px 10px 20px;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.race-setup-tabs-grid {
+    width: 600%;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+    transition: .75s ease all;
+}
+
+.race-setup-tab {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 0 20px;
+}
+
+.race-setup-row {
+    display: grid;
+    justify-content: space-between;
+    grid-template-columns: 1fr 1fr 1fr;
+    padding: 10px;
+    background: $table-background-light;
+}
+
+.race-setup-name {
+    justify-self: start;
+    text-transform: uppercase;
+    font-weight: 600;
+}
+
+.race-setup-value {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 20px;
+    justify-self: left;
+    font-weight: 600;
+}
+
+.race-setup-value-range {
+    justify-self: end;
+    text-transform: uppercase;
+    font-weight: 600;
+}
+
+.race-setup-progress-bar {
+    height: 20px;
+    width: 200px;
+    border-radius: 0px;
+
+    &::-webkit-progress-bar {
+        background-color: grey;
+        border-radius: 5px;
+    }
+
+    &::-webkit-progress-value {
+        background-color: white;
+        border-radius: 5px;
+    }
+}
+
+.race-tyre-list-grid {
+    padding: 0 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.tyre-image-wrapper {
+    max-width: 80px;
+    width: 100%;
+}
+
+.race-tyre-list-item {
+    display: flex;
+    gap: 30px;
+}
+
+.tyre-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0px;
+    justify-content: center;
+    text-transform: uppercase;
+}
+
+.tyre-name {
+    font-size: 30px;
+    font-weight: 600;
 }
