@@ -1,20 +1,101 @@
 @import "variables.scss";
 
+.profile-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 50px;
+}
+
 .profile-card {
-    background: $table-background-dark;
-    color: $white;
-    padding: 20px;
-    border-top: 4px solid $accent-red;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
+  background: $table-background-dark;
+  color: $white;
+  padding: 20px 30px 40px;
+  border-top: 4px solid $accent-red;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: max-content;
 }
 
 .profile-pic-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 30px;
+  width: max-content;
+}
+
+.pic-button-wrapper {
+  display: flex;
+  gap: 10px;
+  flex-direction: column;
+}
+
+.profile-image {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.save-image-button {
+    border: none;
+    background: green;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    text-align: center;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.profile-placeholder {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    background: $table-background-light;
     display: flex;
     justify-content: center;
     align-items: center;
-    flex-direction: column;
-    gap: 10px;
-    width: max-content;
+    font-size: 20px;
+    font-weight: 300;
+    text-align: center;
+}
+
+.custom-file-upload {
+  display: inline-block;
+  padding: 10px 20px;
+  color: #fff;
+  background-color: $table-background-light;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  text-align: center;
+  transition: all 0.3s;
+  &.delete {
+    background-color: $decend-red;
+  }
+}
+
+.custom-file-upload:hover {
+  background-color: $decend-red;
+}
+
+.edit-button {
+    border: none;
+    background: transparent;
+    color: white;
+}
+
+.info-wrapper {
+    display: flex;
+    align-items: center;
+    font-size: 24px;
+    font-weight: 300;
 }

@@ -239,7 +239,7 @@ const ViewSeason: React.FC<ViewSeasonProps> = ({
                         );
                       })}
                       <td>
-                        <p>{seasonData.driverPoints[driverId] || "--"}</p>
+                        <div className="season-results-pos-wrapper">{seasonData.driverPoints[driverId] || "--"}</div>
                       </td>
                     </tr>
                   );

@@ -1,7 +1,15 @@
 import React from "react";
 import "../styles/nav.scss";
+import { useAuth } from "../context/authcontext";
 
 const Nav: React.FC = () => {
+  const {logout} = useAuth();
+
+  const handleLogout = async () => {
+    await logout();
+    window.location.href = "/login";
+  };
+
   return (
     <div className="nav-scrollable position-relative">
       <nav className="flex-column">
@@ -39,9 +47,9 @@ const Nav: React.FC = () => {
             </span>{" "}
             Infos
           </a>
-        </div>
+        </div> */}
 
-        <div className="nav-item px-3">
+        {/* <div className="nav-item px-3">
           <a className="nav-link" href="/settings">
             <span className="icon-20pt" aria-hidden="true">
               settings
@@ -50,6 +58,14 @@ const Nav: React.FC = () => {
           </a>
         </div> */}
       </nav>
+      <div className="nav-item px-3">
+        <div className="nav-link" onClick={handleLogout}>
+          <span className="icon-20pt" aria-hidden="true">
+            logout
+          </span>{" "}
+          Logout
+        </div>
+      </div>
     </div>
   );
 };

@@ -31,7 +31,6 @@
         background: $table-background-dark;
     }
     & tr:first-child {
-        
         position:sticky;
         top: -3px;
         transition-duration: .3s;
@@ -63,13 +62,11 @@
     position: relative;
     color: white;
     top: -10px;
-
-    & tr:first-child {
+    & thead > tr {
         background: $table-background-dark;
         position: sticky;
         top: -3px;
         transition-duration: .3s;
-
         & > th {
             padding: 10px;
             font-size: 1.2em;
@@ -79,13 +76,9 @@
             text-align: center;
         }
     }
-
-    & tr:nth-child(2) {
-        position: sticky;
-        top: 77px;
-        transition-duration: .3s;
+    & tbody > tr {
+        position: static !important;
     }
-
     & tr {
         background: $table-background-light;
         border-top: solid 5px $table-background-dark;
@@ -102,7 +95,7 @@
         }
 
         & > td:last-of-type, th:last-of-type {
-            text-align: right;
+            text-align: center;
         }
     }
 }
