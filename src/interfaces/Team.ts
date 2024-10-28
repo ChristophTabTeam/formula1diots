@@ -7,4 +7,6 @@ export interface Team {
   logoUrl: string;
   driver1?: string;
   driver2?: string; 
+  teamColor: string;
+  listOrder: number;
 }

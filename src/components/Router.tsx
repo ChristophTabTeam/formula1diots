@@ -11,6 +11,7 @@ import { useAuth } from "../context/authcontext";
 import Season from "../pages/Season";
 import RaceResultsEntry from "../pages/RaceResultsEntry";
 import Profile from "../pages/Personal/Profile";
+import DriverLineup from "../pages/DriverLineup";
 
 const routes: { [key: string]: () => React.JSX.Element } = {
   "/login": () => <Login />,
@@ -42,6 +43,14 @@ const routes: { [key: string]: () => React.JSX.Element } = {
     return (
       <PrivateRoute>
         <RaceResultsEntry seasonId={seasonId} />
+      </PrivateRoute>
+    );
+  },
+  "/season/:seasonId/driver-lineup": () => {
+    const seasonId = window.location.pathname.split("/")[2];
+    return (
+      <PrivateRoute>
+        <DriverLineup seasonId={seasonId} />
       </PrivateRoute>
     );
   },

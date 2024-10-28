@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import racingFlag from "../assets/racing-flag-svgrepo-com.svg";
 import calendarAdd from "../assets/calendar_add_on_24dp_FFF_FILL0_wght400_GRAD0_opsz24.svg";
 import calendarView from "../assets/date_range_24dp_FFF_FILL0_wght400_GRAD0_opsz24.svg";
+import groupe from "../assets/groups_24dp_FILL0_wght400_GRAD0_opsz24.svg"
 import {
   getFirestore,
   collection,
@@ -59,10 +60,12 @@ const Season: React.FC = () => {
             Result Entry
           </a>
         )}
-        {/* <a href="settings/tyres/new" className="settings-card">
-          <img src="/imgs/tyre-2.svg" className="settings-icon" />
-          Edit Tyres
-        </a> */}
+        {season.length > 0 && (
+        <a href={`/season/${season[0].id}/driver-lineup`} className="settings-card">
+          <img src={groupe} className="settings-icon" />
+          Driver Lineup
+        </a>
+        )}
       </div>
     </div>
   );
