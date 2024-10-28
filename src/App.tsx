@@ -11,8 +11,8 @@ function AppContent() {
         <div className="sidebar">
           <Nav />
           <div className="version-wrapper">
-            <a href="/changelog">Changelog</a>
-            <p>Version 0.1.1</p>
+            {/* <a href="/changelog">Changelog</a> */}
+            <p>Version 2.0.0</p>
           </div>
         </div>
       )}
