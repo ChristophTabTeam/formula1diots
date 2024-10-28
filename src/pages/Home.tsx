@@ -160,7 +160,7 @@ const Home: React.FC = () => {
           <div className="home-headline-wraper">
             <h1 className="display-1 home-head">
               <img src={f1Logo} className="f1-logo-home" alt="F1 Logo" />
-              Formula 1diots
+              Formula1diots
             </h1>
             <h2 className="display-4">Season {seasonName}</h2>
           </div>
@@ -174,9 +174,9 @@ const Home: React.FC = () => {
                   <thead>
                     <tr>
                       <th>Pos.</th>
-                      <th>Fahrer</th>
+                      <th>Driver</th>
                       <th>Team</th>
-                      <th>Punkte</th>
+                      <th>Points</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -204,7 +204,7 @@ const Home: React.FC = () => {
                   <tr>
                     <th>Pos.</th>
                     <th>Team</th>
-                    <th>Punkte</th>
+                    <th>Points</th>
                   </tr>
                 </thead>
                 <tbody>

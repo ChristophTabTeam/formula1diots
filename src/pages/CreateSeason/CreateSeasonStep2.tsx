@@ -111,7 +111,7 @@ export function CreateSeasonStep2({
 
   return (
     <div className="create-season-wrapper">
-      <h1 className="display-1">Spieler für Season "{seasonName}" wählen</h1>
+      <h1 className="display-1">Select Players for Season "{seasonName}"</h1>
       <ul className="create-season-list">
         {drivers.map((driver) => (
           <li key={driver.id} className="create-season-list-item">
@@ -163,12 +163,12 @@ export function CreateSeasonStep2({
           Zufällige Zuordnung
         </label>
       </div> */}
-      <button onClick={assignDriversToTeams} className="btn-primary">Spieler Teams zuweisen</button>
+      <button onClick={assignDriversToTeams} className="btn-primary">Assign players to teams</button>
 
       {/* Zeige zugewiesene Teams an */}
       {Object.keys(assignedTeams).length > 0 && (
         <div className="create-season-wrapper">
-          <h2>Zugewiesene Teams</h2>
+          <h2>Assigned Teams</h2>
           <ul className="create-season-teams-list">
             {teams.map((team) => (
               <li key={team.id}>
@@ -186,14 +186,14 @@ export function CreateSeasonStep2({
                         <td>Driver 1:</td>
                         <td>
                           {driverName(assignedTeams[team.id]?.driver1) ||
-                            "frei"}
+                            "free"}
                         </td>
                       </tr>
                       <tr>
                         <td>Driver 2:</td>
                         <td>
                           {driverName(assignedTeams[team.id]?.driver2) ||
-                            "frei"}
+                            "free"}
                         </td>
                       </tr>
                     </tbody>
@@ -205,8 +205,8 @@ export function CreateSeasonStep2({
         </div>
       )}
       <div className="btn-wrapper">
-        <button onClick={previousStep} className="btn-primary">Zurück</button>
-        <button onClick={handleSubmit} className="btn-primary">Weiter</button>
+        <button onClick={previousStep} className="btn-primary">Back</button>
+        <button onClick={handleSubmit} className="btn-primary">Next</button>
       </div>
     </div>
   );

@@ -185,10 +185,6 @@ const ViewSeason: React.FC<ViewSeasonProps> = ({
     return <div>{error}</div>;
   }
 
-  if (!seasonData) {
-    return <div>Keine Season-Daten gefunden.</div>;
-  }
-
   return (
     <div className="container-large">
       <div className="table-wrapper">

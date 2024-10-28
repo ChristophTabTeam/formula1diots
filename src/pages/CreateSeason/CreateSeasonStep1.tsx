@@ -18,7 +18,7 @@ export function CreateSeasonStep1({ nextStep }: CreateSeasonStep1Props) {
   return (
     <div className="create-season-wrapper">
       <div className="create-season-inner-wrapper">
-        <h1 className="display-1">Benenne die Season</h1>
+        <h1 className="display-1">Name the Season</h1>
         <input
           type="text"
           value={seasonName}
@@ -26,7 +26,7 @@ export function CreateSeasonStep1({ nextStep }: CreateSeasonStep1Props) {
           placeholder="Season Name"
           className="create-season-input season-name-input"
         />
-        <button onClick={handleSubmit} className="btn-primary">Weiter</button>
+        <button onClick={handleSubmit} className="btn-primary">Next</button>
       </div>
     </div>
   );

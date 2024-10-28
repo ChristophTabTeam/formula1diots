@@ -105,7 +105,7 @@ const Login: React.FC = () => {
             />
           </div>
           <div className="form-group">
-            <label className="form-label">Passwort:</label>
+            <label className="form-label">Password:</label>
             <input
               className="form-input"
               type="password"

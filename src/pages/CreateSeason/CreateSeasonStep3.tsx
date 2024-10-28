@@ -65,7 +65,7 @@ export function CreateSeasonStep3({
 
   return (
     <div className="create-season-wrapper">
-      <h1 className="display-1">AI-Fahrer einbeziehen?</h1>
+      <h1 className="display-1">Add AI-Drivers?</h1>
       {includeDrivers}
       <div className="create-season-list-item">
         <label className={includeDrivers ? "checked" : ""}>
@@ -74,13 +74,13 @@ export function CreateSeasonStep3({
             checked={includeDrivers}
             onChange={(e) => setIncludeDrivers(e.target.checked)}
           />
-          Ja, Fahrer berücksichtigen
+          Yes, add AI-Drivers
         </label>
       </div>
       <div className="btn-wrapper">
 
-      <button onClick={previousStep} className="btn-primary">Zurück</button>
-      <button onClick={handleSubmit} className="btn-primary">Weiter</button>
+      <button onClick={previousStep} className="btn-primary">Back</button>
+      <button onClick={handleSubmit} className="btn-primary">Next</button>
       </div>
     </div>
   );

@@ -61,10 +61,10 @@ export function CreateSeasonStep4({
 
   return (
     <div className="create-season-wrapper">
-      <h1 className="display-1">Rennstrecken wählen</h1>
+      <h1 className="display-1">Select Grand Prix</h1>
       <div className="create-season-race-select-grid">
         <div className="available-races">
-          <h2>Verfügbare Rennen</h2>
+          <h2>Available Races</h2>
           <ul className="create-season-races-list">
             {races.map((race) => (
               <li key={race.name.replace(/\s+/g, "-")}>
@@ -87,7 +87,7 @@ export function CreateSeasonStep4({
         </div>
 
         <div className="selected-races">
-          <h2>Hinzugefügte Rennen</h2>
+          <h2>Added Races</h2>
           <DragDropContext onDragEnd={handleDragEnd}>
             <Droppable droppableId="droppable-selected-races">
               {(provided) => (
@@ -120,10 +120,10 @@ export function CreateSeasonStep4({
 
       <div className="btn-wrapper">
         <button onClick={previousStep} className="btn-primary">
-          Zurück
+          Back
         </button>
         <button onClick={handleSubmit} className="btn-primary">
-          Weiter
+          Next
         </button>
       </div>
     </div>

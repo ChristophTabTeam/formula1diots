@@ -172,11 +172,11 @@ export function CreateSeasonStep5({
 
   return (
     <div className='create-season-wrapper'>
-      <h1 className='display-1'>Season {seasonName} erstellen</h1>
-      <button onAbort={previousStep} className='btn-primary'>Zurück</button>
+      <h1 className='display-1'>Create Season {seasonName}</h1>
       <button onClick={handleCreateSeason} disabled={isSaving} className='btn-primary'>
         {isSaving ? 'Speichern...' : 'Season erstellen'}
       </button>
+      <button onAbort={previousStep} className='btn-primary'>Back</button>
     </div>
   );
 }

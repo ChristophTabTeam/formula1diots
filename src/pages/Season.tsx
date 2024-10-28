@@ -40,7 +40,7 @@ const Season: React.FC = () => {
   return (
     <div className="container">
       <div className="home-header">
-        <h1 className="display-2">Settings</h1>
+        <h1 className="display-2">Season Options</h1>
       </div>
       <div className="settings-grid">
         <a className="settings-card" href="/create-season">

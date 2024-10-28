@@ -181,7 +181,7 @@ const Profile: React.FC = () => {
             Current Position:{" "}
             {Object.keys(season.driverPoints).findIndex(
               (driverId) => driverId === driverProfile.id
-            ) + 1}
+            ) + 1}.
           </p>
         </div>
       )}

@@ -218,18 +218,18 @@ const RaceResultsEntry: React.FC<RaceResultsEntryProps> = ({ seasonId }) => {
 
   return (
     <div>
-      <h1 className="display-2">Ergebnisse für {raceId} eintragen</h1>
+      <h1 className="display-2">Enter results for {raceId}</h1>
       <div className="home-wrapper" style={{ paddingBottom: 0, gap: 20 }}>
         <div className="">
-          <h2 className="display-6">Qualifying Ergebnisse</h2>
+          <h2 className="display-6">Qualifying Results</h2>
           <div className="table-wrapper">
             <div className="table-mask">
               <table className="leaderboard-table">
                 <thead>
                   <tr>
                     <th>Pos.</th>
-                    <th>Fahrer</th>
-                    <th>Rundenzeit</th>
+                    <th>Driver</th>
+                    <th>Laptime</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -249,7 +249,7 @@ const RaceResultsEntry: React.FC<RaceResultsEntryProps> = ({ seasonId }) => {
                             value={qualifyingResults[`P${index + 1}`] || ""}
                             className="results-input select"
                           >
-                            <option value="">Fahrer wählen</option>
+                            <option value="">select Driver</option>
                             {drivers.map((driver) => (
                               <option
                                 key={driver.id}
@@ -268,7 +268,7 @@ const RaceResultsEntry: React.FC<RaceResultsEntryProps> = ({ seasonId }) => {
                         <label>
                           <input
                             type="text"
-                            placeholder="Rundenzeit"
+                            placeholder="Laptime"
                             value={
                               qualifyingResults[`P${index + 1}LapTime`] || ""
                             }
@@ -291,14 +291,14 @@ const RaceResultsEntry: React.FC<RaceResultsEntryProps> = ({ seasonId }) => {
           </div>
         </div>
         <div className="">
-          <h2 className="display-6">Rennergebnisse</h2>
+          <h2 className="display-6">Race Results</h2>
           <div className="table-wrapper">
             <div className="table-mask">
               <table className="leaderboard-table">
                 <thead>
                   <tr>
                     <th>Pos.</th>
-                    <th>Fahrer</th>
+                    <th>Driver</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -314,7 +314,7 @@ const RaceResultsEntry: React.FC<RaceResultsEntryProps> = ({ seasonId }) => {
                             value={raceResults[`P${index + 1}`] || ""}
                             className="results-input select"
                           >
-                            <option value="">Fahrer wählen</option>
+                            <option value="">select Driver</option>
                             {drivers.map((driver) => (
                               <option
                                 key={driver.id}
@@ -343,15 +343,15 @@ const RaceResultsEntry: React.FC<RaceResultsEntryProps> = ({ seasonId }) => {
               justifyContent: "space-between",
             }}
           >
-            <h2 className="display-6">Schnellste Runde</h2>
+            <h2 className="display-6">Fastest Lap</h2>
             <label style={{ display: "flex", gap: 20, alignItems: "center" }}>
-              Fahrer mit der schnellsten Runde:
+              Fastest Lap:
               <select
                 value={fastestLap}
                 onChange={(e) => setFastestLap(e.target.value)}
                 className="results-input select"
               >
-                <option value="">Fahrer wählen</option>
+                <option value="">select Driver</option>
                 {drivers.map((driver) => (
                   <option key={driver.id} value={driver.id}>
                     {driver.name}
