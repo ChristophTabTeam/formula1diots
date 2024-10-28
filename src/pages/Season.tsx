@@ -46,14 +46,16 @@ const Season: React.FC = () => {
             Season Results
           </a>
         )}
-        <a href="settings/team-driver" className="settings-card">
-          <img src={racingFlag} className="settings-icon" />
-          View Races
-        </a>
-        <a href="settings/tyres/new" className="settings-card">
+        {season.length > 0 && (
+          <a href={`/season/${season[0].id}/results-entry`} className="settings-card">
+            <img src={racingFlag} className="settings-icon" />
+            Result Entry
+          </a>
+        )}
+        {/* <a href="settings/tyres/new" className="settings-card">
           <img src="/imgs/tyre-2.svg" className="settings-icon" />
           Edit Tyres
-        </a>
+        </a> */}
       </div>
     </div>
   );

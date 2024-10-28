@@ -52,12 +52,13 @@ const CreateSeason: React.FC = () => {
   };
 
   return (
-    <div>
+    <>
       {step === 1 && <CreateSeasonStep1 nextStep={nextStep} />}
       {step === 2 && (
         <CreateSeasonStep2
           seasonName={seasonName}
           nextStep={(selectedDrivers, teams) => nextStep({ selectedDrivers, teams })}
+          previousStep={previousStep}
         />
       )}
       {step === 3 && (
@@ -65,11 +66,13 @@ const CreateSeason: React.FC = () => {
           selectedDrivers={selectedDrivers}
           teams={teams}
           nextStep={(includeDrivers, updatedTeams) => nextStep({ includeDrivers, updatedTeams })}
+          previousStep={previousStep}
         />
       )}
       {step === 4 && (
         <CreateSeasonStep4
           nextStep={(selectedRaces) => nextStep(selectedRaces)}
+          previousStep={previousStep}
         />
       )}
       {step === 5 && (
@@ -80,11 +83,10 @@ const CreateSeason: React.FC = () => {
           teams={teams}
           includeDrivers={includeDrivers}
           onFinish={() => alert("Saison erfolgreich erstellt!")}
+          previousStep={previousStep}
         />
       )}
-
-      {step > 1 && <button onClick={previousStep}>Zurück</button>}
-    </div>
+    </>
   );
 };
 

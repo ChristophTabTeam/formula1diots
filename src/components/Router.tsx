@@ -93,7 +93,7 @@ const Router: React.FC = () => {
     return route ? routes[route]() : <div>404 - Page not found</div>;
   };
 
-  return <div>{renderRoute()}</div>;
+  return <>{renderRoute()}</>;
 };
 
 export default Router;

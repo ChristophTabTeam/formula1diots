@@ -4,7 +4,7 @@ export interface Driver {
     nationality: string;
     teamId: string;
     dateOfBirth: string;
-    profilePictureUrl: string;
+    profilePictureUrl?: string;
     driverSlot: number;
     isPlayer?: boolean;
 }

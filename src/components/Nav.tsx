@@ -23,7 +23,7 @@ const Nav: React.FC = () => {
           </a>
         </div>
 
-        <div className="nav-item px-3">
+        {/* <div className="nav-item px-3">
           <a className="nav-link" href="/races">
             <span className="icon-20pt" aria-hidden="true">
               sports_score
@@ -48,7 +48,7 @@ const Nav: React.FC = () => {
             </span>{" "}
             Einstellungen
           </a>
-        </div>
+        </div> */}
       </nav>
     </div>
   );

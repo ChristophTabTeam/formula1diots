@@ -1,0 +1,107 @@
+@import "variables";
+
+.create-season-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  gap: 50px;
+}
+
+.create-season-inner-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.create-season-input {
+  border: none;
+  border-bottom: 3px solid rgb(150, 150, 150);
+  padding: 20px 10px;
+  font-size: 20px;
+  &:focus {
+    outline: none;
+  }
+}
+
+.season-name-input {
+  width: 100%;
+}
+
+.create-season-list {
+  display: flex;
+  flex: wrap;
+  gap: 20px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.create-season-list-item {
+  label {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    font-size: 20px;
+    align-items: center;
+    color: #fff;
+    font-weight: normal;
+    background: $table-background-light;
+    color: white;
+    padding: 20px;
+    border: 3px solid $accent-red;
+    cursor: pointer;
+    user-select: none;
+    border-radius: 10px;
+    transition: all 0.3s;
+
+    &.checked {
+      background: $table-background-dark;
+      border: 3px solid green;
+    }
+
+    input[type="checkbox"] {
+      display: none;
+    }
+  }
+}
+
+.create-season-profile-pic {
+    max-width: 150px;
+}
+
+.create-season-teams-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.create-season-race-select-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 50px;
+}
+
+.create-season-races-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    &>li {
+        width: 100%;
+        &>label {
+            width: 100%;
+            &>button {
+                width: 100%;
+                text-align: left;
+            }
+        }
+    }
+}

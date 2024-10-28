@@ -11,6 +11,7 @@ interface CreateSeasonStep5Props {
   teams: { [teamId: string]: { points: number; driver1: string | null; driver2: string | null } };
   includeDrivers: boolean;
   onFinish: () => void;
+  previousStep: () => void;
 }
 
 export function CreateSeasonStep5({
@@ -20,9 +21,11 @@ export function CreateSeasonStep5({
   teams,
   includeDrivers,
   onFinish,
+  previousStep,
 }: CreateSeasonStep5Props) {
   const [isSaving, setIsSaving] = useState(false);
   const [drivers, setDrivers] = useState<Driver[]>([]);
+  const [seasons, setSeasons] = useState<Season[]>([]);
 
   useEffect(() => {
     const fetchDrivers = async () => {
@@ -30,7 +33,14 @@ export function CreateSeasonStep5({
       const driversSnapshot = await getDocs(driversCollection);
       setDrivers(driversSnapshot.docs.map(doc => doc.data() as Driver));
     };
+    const fetchSeason = async () => {
+      const seasonsCollection = collection(db, 'seasons');
+      const seasonsSnapshot = await getDocs(seasonsCollection);
+      setSeasons(seasonsSnapshot.docs.map(doc => doc.data() as Season));
+    };
+
     fetchDrivers();
+    fetchSeason();
   }, []);
 
   const handleCreateSeason = async () => {
@@ -66,13 +76,14 @@ export function CreateSeasonStep5({
         }
       });
   
+      const isActiveSeason = !seasons.some((season) => season.isActiveSeason);
       // Saison-Dokument basierend auf dem Season-Interface erstellen
       const season: Season = {
         id: seasonName,
         name: seasonName,
         teams: updatedTeams,
         driverPoints,
-        isActiveSeason: true,
+        isActiveSeason: isActiveSeason,
         playerData,
       };
   
@@ -148,10 +159,11 @@ export function CreateSeasonStep5({
   };
 
   return (
-    <div>
-      <h1>Saison erstellen: {seasonName}</h1>
-      <button onClick={handleCreateSeason} disabled={isSaving}>
-        {isSaving ? 'Speichern...' : 'Saison erstellen'}
+    <div className='create-season-wrapper'>
+      <h1 className='display-1'>Season {seasonName} erstellen</h1>
+      <button onAbort={previousStep} className='btn-primary'>Zurück</button>
+      <button onClick={handleCreateSeason} disabled={isSaving} className='btn-primary'>
+        {isSaving ? 'Speichern...' : 'Season erstellen'}
       </button>
     </div>
   );

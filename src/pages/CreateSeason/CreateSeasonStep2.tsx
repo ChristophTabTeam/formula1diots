@@ -10,13 +10,16 @@ interface CreateSeasonStep2Props {
     selectedDrivers: string[],
     teams: { [teamId: string]: { driver1: string; driver2: string } }
   ) => void;
+  previousStep: () => void;
 }
 
 export function CreateSeasonStep2({
   seasonName,
   nextStep,
+  previousStep,
 }: CreateSeasonStep2Props) {
   const [drivers, setDrivers] = useState<Driver[]>([]);
+  const [allDrivers, setAllDrivers] = useState<Driver[]>([]);
   const [selectedDrivers, setSelectedDrivers] = useState([] as string[]);
   //   const [manualAssignment, setManualAssignment] = useState(true);
   const [teams, setTeams] = useState([] as Team[]);
@@ -34,6 +37,9 @@ export function CreateSeasonStep2({
     const fetchDrivers = async () => {
       const driversCollection = collection(db, "drivers");
       const driversSnapshot = await getDocs(driversCollection);
+      const allDrivers = driversSnapshot.docs.map(
+        (doc) => doc.data() as Driver
+      );
       const filteredDrivers = new Array<Driver>();
       for (const driver of driversSnapshot.docs.map(
         (doc) => doc.data() as Driver
@@ -42,6 +48,7 @@ export function CreateSeasonStep2({
           filteredDrivers.push(driver);
         }
       }
+      setAllDrivers(allDrivers);
       setDrivers(filteredDrivers);
     };
 
@@ -90,13 +97,29 @@ export function CreateSeasonStep2({
     }
   };
 
+  const driverName = (driverId: string) => {
+    const driver = allDrivers.find((driver) => driver.id === driverId);
+    return driver?.name || driverId;
+  };
+
   return (
-    <div>
-      <h1>Welche Spieler sollen an der Saison "{seasonName}" teilnehmen?</h1>
-      <ul>
+    <div className="create-season-wrapper">
+      <h1 className="display-1">Spieler für Season "{seasonName}" wählen</h1>
+      <ul className="create-season-list">
         {drivers.map((driver) => (
-          <li key={driver.id}>
-            <label>
+          <li key={driver.id} className="create-season-list-item">
+            <label
+              className={
+                selectedDrivers.includes(driver.id)
+                  ? "checked"
+                  : ""
+              }
+            >
+              <img
+                src={driver.profilePictureUrl}
+                alt={driver.name}
+                className="create-season-profile-pic"
+              />
               <input
                 type="checkbox"
                 value={driver.id}
@@ -133,24 +156,51 @@ export function CreateSeasonStep2({
           Zufällige Zuordnung
         </label>
       </div> */}
-      <button onClick={assignDriversToTeams}>Spieler Teams zuweisen</button>
+      <button onClick={assignDriversToTeams} className="btn-primary">Spieler Teams zuweisen</button>
 
       {/* Zeige zugewiesene Teams an */}
       {Object.keys(assignedTeams).length > 0 && (
-        <div>
+        <div className="create-season-wrapper">
           <h2>Zugewiesene Teams</h2>
-          <ul>
+          <ul className="create-season-teams-list">
             {teams.map((team) => (
               <li key={team.id}>
-                <strong>{team.name}</strong>:
-                <p>Driver 1: {assignedTeams[team.id]?.driver1 || "frei"}</p>
-                <p>Driver 2: {assignedTeams[team.id]?.driver2 || "frei"}</p>
+                <div className="table-wrapper">
+                  <table className="leaderboard-table">
+                    <thead>
+                      <tr>
+                        <th colSpan={2}>
+                          <strong>{team.name}</strong>:
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>Driver 1:</td>
+                        <td>
+                          {driverName(assignedTeams[team.id]?.driver1) ||
+                            "frei"}
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>Driver 2:</td>
+                        <td>
+                          {driverName(assignedTeams[team.id]?.driver2) ||
+                            "frei"}
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
               </li>
             ))}
           </ul>
         </div>
       )}
-      <button onClick={handleSubmit}>Weiter</button>
+      <div className="btn-wrapper">
+        <button onClick={previousStep} className="btn-primary">Zurück</button>
+        <button onClick={handleSubmit} className="btn-primary">Weiter</button>
+      </div>
     </div>
   );
 }

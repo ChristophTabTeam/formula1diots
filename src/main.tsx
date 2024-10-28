@@ -7,6 +7,7 @@ import './styles/form.scss'
 import './styles/infos.scss'
 import './styles/table.scss'
 import './styles/material-icons.scss'
+import './styles/funnel.scss'
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 createRoot(document.getElementById('root')!).render(

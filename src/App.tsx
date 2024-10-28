@@ -14,7 +14,7 @@ function App() {
           </div>
         </div>
 
-        <main className="content px-5" style={{ position: "relative" }}>
+        <main style={{ position: "relative" }}>
           <Router />
         </main>
       </div>

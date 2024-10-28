@@ -13,4 +13,5 @@ export interface Race {
   turns: number; // Anzahl der Kurven
   elevationInMeter: number; // Höhenunterschied in Metern
   tyreTypes: string[]; // Array mit den verwendeten Reifenmischungen (C1-C5)
+  originalOrder: number; // Reihenfolge des Rennens im Kalender
 }

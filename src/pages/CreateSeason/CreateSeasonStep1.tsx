@@ -16,15 +16,18 @@ export function CreateSeasonStep1({ nextStep }: CreateSeasonStep1Props) {
   };
 
   return (
-    <div>
-      <h1>Wie soll die Saison heißen?</h1>
-      <input
-        type="text"
-        value={seasonName}
-        onChange={(e) => setSeasonName(e.target.value)}
-        placeholder="Saison Name"
-      />
-      <button onClick={handleSubmit}>Weiter</button>
+    <div className="create-season-wrapper">
+      <div className="create-season-inner-wrapper">
+        <h1 className="display-1">Benenne die Season</h1>
+        <input
+          type="text"
+          value={seasonName}
+          onChange={(e) => setSeasonName(e.target.value)}
+          placeholder="Season Name"
+          className="create-season-input season-name-input"
+        />
+        <button onClick={handleSubmit} className="btn-primary">Weiter</button>
+      </div>
     </div>
   );
 }

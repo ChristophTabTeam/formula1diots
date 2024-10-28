@@ -1,185 +1,199 @@
 @import "_variables.scss";
 
-.input-wrapper{
-    display: flex;
-    flex-direction: column;
-    &.checkbox {
-        flex-direction: row-reverse;
-        align-items: center;
-        justify-content: flex-end;
-        gap: 24px;
-        & > label {
-            font-size: 20px;
-        }
-        & > .input {
-            height: 20px;
-            width: 20px;
-        }
+.input-wrapper {
+  display: flex;
+  flex-direction: column;
+  &.checkbox {
+    flex-direction: row-reverse;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 24px;
+    & > label {
+      font-size: 20px;
     }
+    & > .input {
+      height: 20px;
+      width: 20px;
+    }
+  }
 }
 
-.headline{
-    text-align: center;
+.headline {
+  text-align: center;
 }
 
 .grid {
-    display: grid;
-    grid-template-columns: .5fr 1fr;
-    gap: 100px;
+  display: grid;
+  grid-template-columns: 0.5fr 1fr;
+  gap: 100px;
 }
 
 .form {
-    display: flex;
-    flex-direction: column;
-    border-radius: 25px;
-    background: #f1f1f1;
-    padding: 50px; 
-    gap: 20px;
+  display: flex;
+  flex-direction: column;
+  border-radius: 25px;
+  background: #f1f1f1;
+  padding: 50px;
+  gap: 20px;
 }
 
-.input{
-    border: none;
-    background: #f1f1f1;
-    padding: 10px 20px;
-    font-size: 20px;
-    border-radius: 10px;
-    &.textarea{
-        min-height: 400px;
-        max-height: 1000px;
-    }
-    &:focus {
-        outline: none;
-    }
+.input {
+  border: none;
+  background: #f1f1f1;
+  padding: 10px 20px;
+  font-size: 20px;
+  border-radius: 10px;
+  &.textarea {
+    min-height: 400px;
+    max-height: 1000px;
+  }
+  &:focus {
+    outline: none;
+  }
+}
+
+.results-input {
+  border: none;
+  background: #f1f1f1;
+  padding: 6px 10px;
+  font-size: 16px;
+  border-radius: 10px;
+  &.textarea {
+    min-height: 400px;
+    max-height: 1000px;
+  }
+  &:focus {
+    outline: none;
+  }
 }
 
 .input-label {
-    font-size: 1.4em;
+  font-size: 1.4em;
 }
 
-.input select{
-    background: $white;
+.input select {
+  background: $white;
 }
 
-.button-wrapper{
-    display: flex;
-    justify-content: center;
-    padding: 40px 0 15px;
+.button-wrapper {
+  display: flex;
+  justify-content: center;
+  padding: 40px 0 15px;
 }
 
 .button-primary {
-    background: $table-background-light;
-    padding: 15px 30px;
-    font-size: 20px;
-    color: $white;
-    font-weight: 600;
-    border-radius: 15px;
-    border: none;
-    transition-duration: 0.3s;
-    text-decoration: none;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 10px;
+  background: $table-background-light;
+  padding: 15px 30px;
+  font-size: 20px;
+  color: $white;
+  font-weight: 600;
+  border-radius: 15px;
+  border: none;
+  transition-duration: 0.3s;
+  text-decoration: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;
 
-    &.transparent {
-        background: transparent;
-        color: $table-background-light;
-
-        &:hover {
-            background: transparent;
-            color: $table-background-light
-        }
-    }
-
-    &.white {
-        background: $white;
-        color: $table-background-light;
-
-        &:hover {
-            background: $table-background-light;
-            color: $white;
-        }
-    }
-
-    &.small {
-        padding: 8px 20px;
-        font-size: 18px;
-    }
+  &.transparent {
+    background: transparent;
+    color: $table-background-light;
 
     &:hover {
-        background: $accent-red;
-        color: $white;
+      background: transparent;
+      color: $table-background-light;
     }
+  }
+
+  &.white {
+    background: $white;
+    color: $table-background-light;
+
+    &:hover {
+      background: $table-background-light;
+      color: $white;
+    }
+  }
+
+  &.small {
+    padding: 8px 20px;
+    font-size: 18px;
+  }
+
+  &:hover {
+    background: $accent-red;
+    color: $white;
+  }
 }
 
 .priority {
-    padding: 5px 10px;
+  padding: 5px 10px;
 
-    &.Niedrig {
-        background: rgba(47, 125, 250, 0.3);
-    }
+  &.Niedrig {
+    background: rgba(47, 125, 250, 0.3);
+  }
 
-    &.Mittel {
-        background: rgba(162, 162, 163, 0.3);
-    }
+  &.Mittel {
+    background: rgba(162, 162, 163, 0.3);
+  }
 
-    &.Hoch {
-        background: rgba(245, 118, 44, 0.3);
-    }
+  &.Hoch {
+    background: rgba(245, 118, 44, 0.3);
+  }
 
-    &.Dringend {
-        background: rgba(157, 35, 250, 0.3);
-    }
+  &.Dringend {
+    background: rgba(157, 35, 250, 0.3);
+  }
 }
 
 .input-wrapper-2-columns {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 48px;
-    &.checkbox {
-        grid-template-columns: 300px 1fr;
-        gap: 62px;
-    }
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+  &.checkbox {
+    grid-template-columns: 300px 1fr;
+    gap: 62px;
+  }
 }
 
 .input-wrapper-3-columns {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 48px;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 48px;
 }
 
 .input-wrapper-4-columns {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr;
-    gap: 48px;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  gap: 48px;
 }
 
 .kilometer-gesamt {
-    font-size: 20px;
-    display: flex;
-    align-items: center;
+  font-size: 20px;
+  display: flex;
+  align-items: center;
 }
 
 .dayreport-details-text {
-    font-size: 20px;
+  font-size: 20px;
 }
 
 .dayreport-submit-wrapper {
-    background: $white;
-
+  background: $white;
 }
 
 .season-race-grid {
-    display: grid;
-    gap: 100px;
-    grid-template-columns: 1fr 1fr;
-    padding: 50px 0px;
+  display: grid;
+  gap: 100px;
+  grid-template-columns: 1fr 1fr;
+  padding: 50px 0px;
 }
 
 .driver-team-form {
-    padding: 50px 0;
-    display: grid;
-    max-width: 800px;
-    gap: 50px;
-    grid-template-columns: 200px auto;
+  padding: 50px 0;
+  display: grid;
+  max-width: 800px;
+  gap: 50px;
+  grid-template-columns: 200px auto;
 }
