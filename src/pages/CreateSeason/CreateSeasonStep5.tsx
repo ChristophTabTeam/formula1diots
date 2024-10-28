@@ -4,6 +4,7 @@ import { db } from '../../firebase/firebaseConfig';
 import { Season } from '../../interfaces/Season';
 import { Driver } from '../../interfaces/Driver';
 import Loading from '../../components/Loading';
+import { useAuth } from '../../context/authcontext';
 
 interface CreateSeasonStep5Props {
   seasonName: string;
@@ -23,6 +24,7 @@ export function CreateSeasonStep5({
   onFinish,
   previousStep,
 }: CreateSeasonStep5Props) {
+  const { user } = useAuth();
   const [isSaving, setIsSaving] = useState(false);
   const [, setDrivers] = useState<Driver[]>([]);
   const [seasons, setSeasons] = useState<Season[]>([]);
@@ -87,6 +89,8 @@ export function CreateSeasonStep5({
         driverPoints,
         isActiveSeason: isActiveSeason,
         playerData,
+        addedAt: new Date(),
+        addedBy: user?.email?.replace('@formula1diots.de', '') || 'Unbekannt',
       };
   
       // Dokument in Firestore speichern
@@ -146,6 +150,8 @@ export function CreateSeasonStep5({
             P20: null,
             fastestLap: null, // Fahrer mit der schnellsten Runde
           },
+          updatedAt: new Date(),
+          updatedBy: user?.email?.replace('@formula1diots.de', '') || 'Unbekannt',
         });
       });
       await batch.commit();

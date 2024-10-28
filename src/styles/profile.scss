@@ -1,0 +1,20 @@
+@import "variables.scss";
+
+.profile-card {
+    background: $table-background-dark;
+    color: $white;
+    padding: 20px;
+    border-top: 4px solid $accent-red;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.profile-pic-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 10px;
+    width: max-content;
+}

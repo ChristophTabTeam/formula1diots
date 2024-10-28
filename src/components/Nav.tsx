@@ -1,5 +1,5 @@
 import React from "react";
-import '../styles/nav.scss'
+import "../styles/nav.scss";
 
 const Nav: React.FC = () => {
   return (
@@ -23,16 +23,16 @@ const Nav: React.FC = () => {
           </a>
         </div>
 
-        {/* <div className="nav-item px-3">
-          <a className="nav-link" href="/races">
+        <div className="nav-item px-3">
+          <a className="nav-link" href="/profile">
             <span className="icon-20pt" aria-hidden="true">
-              sports_score
+              person
             </span>{" "}
-            Races
+            Profil
           </a>
         </div>
 
-        <div className="nav-item px-3">
+        {/* <div className="nav-item px-3">
           <a className="nav-link" href="/infos">
             <span className="icon-20pt" aria-hidden="true">
               info

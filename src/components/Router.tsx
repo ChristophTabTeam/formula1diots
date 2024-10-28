@@ -10,14 +10,15 @@ import ViewSeason from "../pages/ViewSeason";
 import { useAuth } from "../context/authcontext";
 import Season from "../pages/Season";
 import RaceResultsEntry from "../pages/RaceResultsEntry";
+import Profile from "../pages/Personal/Profile";
 
 const routes: { [key: string]: () => React.JSX.Element } = {
+  "/login": () => <Login />,
   "/": () => (
     <PrivateRoute>
       <Home />
     </PrivateRoute>
   ),
-  "/login": () => <Login />,
   "/season": () => (
     <PrivateRoute>
       <Season />
@@ -44,6 +45,11 @@ const routes: { [key: string]: () => React.JSX.Element } = {
       </PrivateRoute>
     );
   },
+  "/profile": () => (
+    <PrivateRoute>
+      <Profile />
+    </PrivateRoute>
+  ),
   // "/season/:seasonId/race/:id": () => (
   //   <PrivateRoute>
   //     <RaceView />

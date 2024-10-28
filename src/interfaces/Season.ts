@@ -16,4 +16,6 @@ export interface Season {
         slot: string;
     };
   };
+  addedAt: Date; // Datum, an dem die Saison hinzugefügt wurde
+  addedBy: string; // E-Mail-Adresse des Benutzers, der die Saison hinzugefügt hat
 }

@@ -62,6 +62,10 @@ const Home: React.FC = () => {
       try {
         // Abrufen der aktuellen Saison
         const seasonSnapshot = await getDocs(collection(db, "seasons"));
+        if (seasonSnapshot.docs.length === 0) {
+          window.location.href = "/create-season";
+          return;
+        }
         const seasonData = seasonSnapshot.docs[0].data(); // Annahme: Nur eine aktive Saison
         setSeasonName(seasonData.name);
 
