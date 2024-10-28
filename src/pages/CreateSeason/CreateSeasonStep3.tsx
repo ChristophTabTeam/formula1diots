@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../../firebase/firebaseConfig";
 import { Driver } from "../../interfaces/Driver";
+import Loading from "../../components/Loading";
 
 interface CreateSeasonStep3Props {
   selectedDrivers: string[];
@@ -15,7 +16,6 @@ interface CreateSeasonStep3Props {
 }
 
 export function CreateSeasonStep3({
-  selectedDrivers,
   teams,
   nextStep,
   previousStep,
@@ -23,6 +23,7 @@ export function CreateSeasonStep3({
   const [includeDrivers, setIncludeDrivers] = useState(false);
   const [drivers, setDrivers] = useState<Driver[]>([]);
   const [updatedTeams, setUpdatedTeams] = useState(teams);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const fetchDrivers = async () => {
@@ -30,10 +31,8 @@ export function CreateSeasonStep3({
       const driversSnapshot = await getDocs(driversCollection);
       setDrivers(driversSnapshot.docs.map((doc) => doc.data() as Driver));
     };
-    fetchDrivers();
-  }, []);
-
-  useEffect(() => {
+    
+    setLoading(true);
     if (includeDrivers) {
       // Füge Fahrer hinzu, nur wenn die Slots noch frei sind
       const newTeams = { ...teams };
@@ -49,14 +48,20 @@ export function CreateSeasonStep3({
             driver2: driver.id,
           };
         }
+        setUpdatedTeams(newTeams);
       });
-      setUpdatedTeams(newTeams);
     }
+    fetchDrivers();
+    setLoading(false);
   }, [includeDrivers, drivers, teams]);
 
   const handleSubmit = () => {
     nextStep(includeDrivers, updatedTeams); // Übergebe `includeDrivers` und die aktualisierten Teams
   };
+
+  if (loading) {
+    return <Loading />;
+  }
 
   return (
     <div className="create-season-wrapper">

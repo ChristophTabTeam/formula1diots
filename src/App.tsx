@@ -1,11 +1,13 @@
 import Nav from "./components/Nav";
 import Router from "./components/Router";
-import { AuthProvider } from "./context/authcontext";
+import { AuthProvider, useAuth } from "./context/authcontext";
 
-function App() {
+function AppContent() {
+  const { isAuthenticated } = useAuth();
+
   return (
-    <AuthProvider>
-      <div className="page">
+    <div className="page">
+      {isAuthenticated && (
         <div className="sidebar">
           <Nav />
           <div className="version-wrapper">
@@ -13,11 +15,18 @@ function App() {
             <p>Version 0.1.1</p>
           </div>
         </div>
+      )}
+      <main style={{ position: "relative" }}>
+        <Router />
+      </main>
+    </div>
+  );
+}
 
-        <main style={{ position: "relative" }}>
-          <Router />
-        </main>
-      </div>
+function App() {
+  return (
+    <AuthProvider>
+      <AppContent />
     </AuthProvider>
   );
 }

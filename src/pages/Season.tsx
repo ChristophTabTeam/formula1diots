@@ -10,9 +10,11 @@ import {
   getDocs,
 } from "firebase/firestore";
 import type { Season } from "../interfaces/Season";
+import Loading from "../components/Loading";
 
 const Season: React.FC = () => {
   const [season, setSeason] = useState<Season[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchActiveSeason = async () => {
@@ -26,9 +28,14 @@ const Season: React.FC = () => {
         setSeason(querySnapshot.docs.map((doc) => doc.data() as Season));
       });
     };
-
+    setLoading(true);
     fetchActiveSeason();
+    setLoading(false);
   }, []);
+
+  if (loading) {
+    return <Loading />;
+  }
 
   return (
     <div className="container">

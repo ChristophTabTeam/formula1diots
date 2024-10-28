@@ -3,6 +3,7 @@ import { collection, getDocs } from "firebase/firestore";
 import { db } from "../../firebase/firebaseConfig";
 import { Team } from "../../interfaces/Team";
 import { Driver } from "../../interfaces/Driver";
+import Loading from "../../components/Loading";
 
 interface CreateSeasonStep2Props {
   seasonName: string;
@@ -26,6 +27,7 @@ export function CreateSeasonStep2({
   const [assignedTeams, setAssignedTeams] = useState<{
     [teamId: string]: { driver1: string; driver2: string };
   }>({});
+  const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchTeams = async () => {
@@ -51,9 +53,10 @@ export function CreateSeasonStep2({
       setAllDrivers(allDrivers);
       setDrivers(filteredDrivers);
     };
-
+    setLoading(true);
     fetchDrivers();
     fetchTeams();
+    setLoading(false);
   }, []);
 
   const assignDriversToTeams = () => {
@@ -101,6 +104,10 @@ export function CreateSeasonStep2({
     const driver = allDrivers.find((driver) => driver.id === driverId);
     return driver?.name || driverId;
   };
+
+  if (loading) {
+    return <Loading />;
+  }
 
   return (
     <div className="create-season-wrapper">

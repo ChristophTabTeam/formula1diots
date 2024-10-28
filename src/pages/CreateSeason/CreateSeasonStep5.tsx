@@ -3,6 +3,7 @@ import { doc, setDoc, collection, writeBatch, getDocs } from 'firebase/firestore
 import { db } from '../../firebase/firebaseConfig';
 import { Season } from '../../interfaces/Season';
 import { Driver } from '../../interfaces/Driver';
+import Loading from '../../components/Loading';
 
 interface CreateSeasonStep5Props {
   seasonName: string;
@@ -19,13 +20,13 @@ export function CreateSeasonStep5({
   selectedDrivers,
   selectedRaces,
   teams,
-  includeDrivers,
   onFinish,
   previousStep,
 }: CreateSeasonStep5Props) {
   const [isSaving, setIsSaving] = useState(false);
-  const [drivers, setDrivers] = useState<Driver[]>([]);
+  const [, setDrivers] = useState<Driver[]>([]);
   const [seasons, setSeasons] = useState<Season[]>([]);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const fetchDrivers = async () => {
@@ -38,9 +39,10 @@ export function CreateSeasonStep5({
       const seasonsSnapshot = await getDocs(seasonsCollection);
       setSeasons(seasonsSnapshot.docs.map(doc => doc.data() as Season));
     };
-
+    setLoading(true);
     fetchDrivers();
     fetchSeason();
+    setLoading(false);
   }, []);
 
   const handleCreateSeason = async () => {
@@ -157,6 +159,10 @@ export function CreateSeasonStep5({
       setIsSaving(false);
     }
   };
+
+  if (loading) {
+    return <Loading />;
+  }
 
   return (
     <div className='create-season-wrapper'>

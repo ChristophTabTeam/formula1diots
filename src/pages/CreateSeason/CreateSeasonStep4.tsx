@@ -2,7 +2,8 @@ import { useEffect, useState } from "react";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../../firebase/firebaseConfig";
 import { Race } from "../../interfaces/Race";
-import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+import { DragDropContext, Droppable, Draggable, DropResult } from "@hello-pangea/dnd";
+import Loading from "../../components/Loading";
 
 interface CreateSeasonStep4Props {
   nextStep: (selectedRaces: string[]) => void;
@@ -15,8 +16,8 @@ export function CreateSeasonStep4({
 }: CreateSeasonStep4Props) {
   const [races, setRaces] = useState<Race[]>([]);
   const [selectedRaces, setSelectedRaces] = useState<string[]>([]);
+  const [loading, setLoading] = useState(false);
 
-  // Rennen-Daten aus Firestore abrufen und nach originaler Reihenfolge sortieren
   useEffect(() => {
     const fetchRaces = async () => {
       const racesCollection = collection(db, "races");
@@ -27,16 +28,16 @@ export function CreateSeasonStep4({
           .sort((a, b) => a.originalOrder - b.originalOrder)
       );
     };
+    setLoading(true);
     fetchRaces();
+    setLoading(false);
   }, []);
 
-  // Rennen zur Liste der ausgewählten Rennen hinzufügen
   const handleRaceSelection = (raceId: string) => {
     setSelectedRaces((prevSelectedRaces) => [...prevSelectedRaces, raceId]);
   };
 
-  // Drag-and-Drop-Logik für das Umsortieren der ausgewählten Rennen
-  const handleDragEnd = (result) => {
+  const handleDragEnd = (result: DropResult) => {
     if (!result.destination) return;
 
     const reorderedRaces = Array.from(selectedRaces);
@@ -46,7 +47,6 @@ export function CreateSeasonStep4({
     setSelectedRaces(reorderedRaces);
   };
 
-  // Validierung und Übergabe der ausgewählten Rennen an den nächsten Schritt
   const handleSubmit = () => {
     if (selectedRaces.length > 0) {
       nextStep(selectedRaces);
@@ -54,6 +54,10 @@ export function CreateSeasonStep4({
       alert("Bitte wählen Sie mindestens eine Rennstrecke aus.");
     }
   };
+
+  if (loading) {
+    return <Loading />;
+  }
 
   return (
     <div className="create-season-wrapper">
@@ -93,11 +97,7 @@ export function CreateSeasonStep4({
                   className="create-season-races-list"
                 >
                   {selectedRaces.map((raceId, index) => (
-                    <Draggable
-                      key={raceId + index}
-                      draggableId={raceId + index}
-                      index={index}
-                    >
+                    <Draggable key={`${raceId}-${index}`} draggableId={`${raceId}-${index}`} index={index}>
                       {(provided) => (
                         <li
                           ref={provided.innerRef}

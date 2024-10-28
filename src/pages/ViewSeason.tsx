@@ -134,6 +134,7 @@ const ViewSeason: React.FC<ViewSeasonProps> = ({
       } catch (error) {
         console.error("Error fetching Races", error);
         setError("Error fetching");
+        setLoading(false);
       }
     };
 

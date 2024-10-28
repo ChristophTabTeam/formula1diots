@@ -3,6 +3,7 @@ import { loginUser } from "../firebase/auth";
 import { useAuth } from "../context/authcontext";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { db } from "../firebase/firebaseConfig";
+import f1Logo from "../assets/F1.svg";
 
 const Login: React.FC = () => {
   const { isAuthenticated } = useAuth();
@@ -87,7 +88,11 @@ const Login: React.FC = () => {
   return (
     <div className="login-container">
       <div className="login-card">
-        <h2 className="login-title">Login</h2>
+        <h1 className="login-title display-6">
+          <img className="login-image" src={f1Logo} alt="F1 Logo" />
+          Formula1diots
+        </h1>
+        <h2 className="login-title display-4">Login</h2>
         <form className="login-form" onSubmit={handleSubmit}>
           <div className="form-group">
             <label className="form-label">Email:</label>
@@ -113,13 +118,13 @@ const Login: React.FC = () => {
             Login
           </button>
         </form>
-        <div className="login-links-wrapper">
+        {/* <div className="login-links-wrapper">
           <p>
             <a className="forgot-password-link" href="/reset-password">
               Passwort vergessen?
             </a>
           </p>
-        </div>
+        </div> */}
         {error && <p className="error-message">{error}</p>}
       </div>
     </div>

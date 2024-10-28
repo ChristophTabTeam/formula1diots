@@ -175,6 +175,79 @@ h1:focus {
     border-color: #929292;
 }
 
+.loading-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
+.login-card {
+    background: $table-background-dark;
+    padding: 50px;
+    color: white;
+    max-width: 400px;
+    width: 100%;
+    border-top: 5px $accent-red solid;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.login-title {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.login-image {
+    width: 100px;
+    margin: 0 auto;
+}
+
+.login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.form-label {
+    font-size: 25px;
+}
+
+.form-input {
+    padding: 10px;
+    font-size: 20px;
+    border-radius: 10px;
+    border: none;
+    background: $table-background-light;
+    color: white;
+}
+
+.login-button {
+    background: $accent-red;
+    padding: 10px 20px;
+    font-size: 20px;
+    border-radius: 10px;
+    color: white;
+    font-weight: 600;
+    border: none;
+}
+
 .home-headline-wraper {
     display: flex;
     width: 100%;
