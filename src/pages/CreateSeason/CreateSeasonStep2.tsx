@@ -116,15 +116,16 @@ export function CreateSeasonStep2({
         {drivers.map((driver) => (
           <li key={driver.id} className="create-season-list-item">
             <label
-              className={
-                selectedDrivers.includes(driver.id)
-                  ? "checked"
-                  : ""
-              }
+              className={selectedDrivers.includes(driver.id) ? "checked" : ""}
             >
-              <img
-                src={driver.profilePictureUrl}
-                alt={driver.name}
+              <div
+                style={{
+                  backgroundImage: `url(${driver.profilePictureUrl})`,
+                  width: "150px",
+                  height: "150px",
+                  backgroundSize: "cover",
+                  backgroundPosition: "center",
+                }}
                 className="create-season-profile-pic"
               />
               <input
@@ -163,7 +164,9 @@ export function CreateSeasonStep2({
           Zufällige Zuordnung
         </label>
       </div> */}
-      <button onClick={assignDriversToTeams} className="btn-primary">Assign players to teams</button>
+      <button onClick={assignDriversToTeams} className="btn-primary">
+        Assign players to teams
+      </button>
 
       {/* Zeige zugewiesene Teams an */}
       {Object.keys(assignedTeams).length > 0 && (
@@ -205,8 +208,12 @@ export function CreateSeasonStep2({
         </div>
       )}
       <div className="btn-wrapper">
-        <button onClick={previousStep} className="btn-primary">Back</button>
-        <button onClick={handleSubmit} className="btn-primary">Next</button>
+        <button onClick={previousStep} className="btn-primary">
+          Back
+        </button>
+        <button onClick={handleSubmit} className="btn-primary">
+          Next
+        </button>
       </div>
     </div>
   );

@@ -1,7 +1,10 @@
 import {
   createUserWithEmailAndPassword,
+  EmailAuthProvider,
+  reauthenticateWithCredential,
   sendPasswordResetEmail,
   signInWithEmailAndPassword,
+  updatePassword,
 } from "firebase/auth";
 import { auth } from "./firebaseConfig";
 import { db } from "./firebaseConfig";
@@ -59,5 +62,30 @@ export const resetPassword = async (email: string) => {
     await sendPasswordResetEmail(auth, email);
   } catch (error) {
     console.error("Fehler beim Zurücksetzen des Passworts:", error);
+  }
+};
+
+// Passwort ändern
+export const changePassword = async (
+  currentPassword: string,
+  newPassword: string
+) => {
+  if (!auth.currentUser) return;
+  
+  const user = auth.currentUser;
+  const credential = EmailAuthProvider.credential(
+    user.email as string,
+    currentPassword
+  );
+
+  try {
+    // Benutzer erneut authentifizieren
+    await reauthenticateWithCredential(user, credential);
+    // Passwort ändern
+    await updatePassword(user, newPassword);
+    console.log("Passwort erfolgreich geändert");
+  } catch (error) {
+    console.error("Fehler beim Passwort ändern:", error);
+    throw error;
   }
 };

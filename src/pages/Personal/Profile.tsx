@@ -178,7 +178,12 @@ const Profile: React.FC = () => {
                 Change Picture
               </label>
               {profileImageUrl && (
-                <button onClick={handleDeleteImage} className="custom-file-upload btn-primary delete">Delete Picture</button>
+                <button
+                  onClick={handleDeleteImage}
+                  className="custom-file-upload btn-primary delete"
+                >
+                  Delete Picture
+                </button>
               )}
             </div>
           </div>
@@ -221,6 +226,17 @@ const Profile: React.FC = () => {
               {Object.keys(season.driverPoints).findIndex(
                 (driverId) => driverId === driverProfile.id
               ) + 1}
+            </div>
+          </div>
+          <div className="">
+            <h2 className="display-6">Settings</h2>
+            <div className="info-wrapper">
+              <button
+                className="custom-file-upload btn-primary delete"
+                onClick={() => (window.location.href = "/change-password")}
+              >
+                Change Password
+              </button>
             </div>
           </div>
         </div>

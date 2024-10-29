@@ -12,9 +12,15 @@ import Season from "../pages/Season";
 import RaceResultsEntry from "../pages/RaceResultsEntry";
 import Profile from "../pages/Personal/Profile";
 import DriverLineup from "../pages/DriverLineup";
+import ChangePassword from "../pages/ChangePassword";
 
 const routes: { [key: string]: () => React.JSX.Element } = {
   "/login": () => <Login />,
+  "/change-password": () => (
+    <PrivateRoute>
+      <ChangePassword />
+    </PrivateRoute>
+  ),
   "/": () => (
     <PrivateRoute>
       <Home />
