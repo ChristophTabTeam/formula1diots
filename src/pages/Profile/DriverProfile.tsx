@@ -11,12 +11,14 @@ import {
 import Loading from "../../components/Loading";
 import { Team } from "../../interfaces/Team";
 import { Season } from "../../interfaces/Season";
+import { useAuth } from "../../context/authcontext";
 
 interface DriverProfileProps {
   id: string;
 }
 
 const DriverProfile: React.FC<DriverProfileProps> = ({ id }) => {
+  const { user } = useAuth();
   const [loading, setLoading] = useState<boolean>(false);
   const [driverProfile, setDriverProfile] = useState<Driver>();
   const [profileImageUrl, setProfileImageUrl] = useState<string | null>(null);
@@ -24,6 +26,8 @@ const DriverProfile: React.FC<DriverProfileProps> = ({ id }) => {
   const [teams, setTeams] = useState<Team[]>([]);
   const [isEditingName, setIsEditingName] = useState(false);
   const [newName, setNewName] = useState("");
+  const [, setIsOwner] = useState(false);
+  const [canEdit, setCanEdit] = useState(false);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -73,12 +77,26 @@ const DriverProfile: React.FC<DriverProfileProps> = ({ id }) => {
       }
     };
 
+    const checkIfOwner = () => {
+      if (user?.email?.replace("@formula1diots.de", "") === id) {
+        setIsOwner(true);
+        setCanEdit(true);
+      } else if (driverProfile?.isPlayer) {
+        setIsOwner(false);
+        setCanEdit(false);
+      } else {
+        setIsOwner(false);
+        setCanEdit(true);
+      }
+    };
+
     setLoading(true);
     fetchUser();
     fetchSeason();
     fetchTeams();
+    checkIfOwner();
     setLoading(false);
-  }, [id]);
+  }, [driverProfile?.isPlayer, id, user?.email]);
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && driverProfile) {
@@ -125,7 +143,7 @@ const DriverProfile: React.FC<DriverProfileProps> = ({ id }) => {
 
   const getTeamNameById = (teamId: string) => {
     const team = teams.find((t) => t.id === teamId);
-    return team?.name || "unknown";
+    return team?.shortName || "unknown";
   };
 
   const handleEditName = () => setIsEditingName(true);
@@ -169,59 +187,73 @@ const DriverProfile: React.FC<DriverProfileProps> = ({ id }) => {
                 No profile image available
               </div>
             )}
-            <div className="pic-button-wrapper">
-              <input
-                type="file"
-                accept="image/*"
-                onChange={handleFileChange}
-                id="file-upload"
-                style={{ display: "none" }} // Versteckt den Input
-              />
-              <label
-                htmlFor="file-upload"
-                className="custom-file-upload btn-primary"
-              >
-                Change Picture
-              </label>
-              {profileImageUrl && (
-                <button
-                  onClick={handleDeleteImage}
-                  className="custom-file-upload btn-primary delete"
+            {canEdit && (
+              <div className="pic-button-wrapper">
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleFileChange}
+                  id="file-upload"
+                  style={{ display: "none" }} // Versteckt den Input
+                />
+                <label
+                  htmlFor="file-upload"
+                  className="custom-file-upload btn-primary"
                 >
-                  Delete Picture
-                </button>
-              )}
-            </div>
+                  Change Picture
+                </label>
+                {profileImageUrl && (
+                  <button
+                    onClick={handleDeleteImage}
+                    className="custom-file-upload btn-primary delete"
+                  >
+                    Delete Picture
+                  </button>
+                )}
+              </div>
+            )}
           </div>
 
           <div className="">
             <h2 className="display-6">Personal Info</h2>
             <div className="info-wrapper">
               Name:{" "}
-              {isEditingName ? (
-                <input
-                  type="text"
-                  value={newName}
-                  onChange={(e) => setNewName(e.target.value)}
-                />
+              {canEdit ? (
+                isEditingName ? (
+                  <>
+                    <input
+                      type="text"
+                      value={newName}
+                      onChange={(e) => setNewName(e.target.value)}
+                    />
+                    <button onClick={handleSaveName} className="edit-button">
+                      <span className="icon-16pt">save</span>
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    {driverProfile.name || driverProfile.id}
+                    <button onClick={handleEditName} className="edit-button">
+                      <span className="icon-16pt">edit</span>
+                    </button>
+                  </>
+                )
               ) : (
                 driverProfile.name || driverProfile.id
-              )}
-              {isEditingName ? (
-                <button onClick={handleSaveName} className="edit-button">
-                  <span className="icon-16pt">save</span>
-                </button>
-              ) : (
-                <button onClick={handleEditName} className="edit-button">
-                  <span className="icon-16pt">edit</span>
-                </button>
               )}
             </div>
           </div>
           <div className="">
             <h2 className="display-6">Current Season Stats</h2>
             <div className="info-wrapper">
-              Team: {getTeamNameById(driverProfile.teamId)}
+              {driverProfile.isPlayer ? (
+                <span>
+                  Team:{" "}
+                  {getTeamNameById(season.playerData[driverProfile.id]?.teamId)}
+                </span>
+              ) : (
+                <span>Team: {getTeamNameById(driverProfile.teamId)}</span>
+              )}
             </div>
             <div className="info-wrapper">
               Points: {season.driverPoints[driverProfile.id]}

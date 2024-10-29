@@ -117,7 +117,7 @@ const Profile: React.FC = () => {
 
   const getTeamNameById = (teamId: string) => {
     const team = teams.find((t) => t.id === teamId);
-    return team?.name || "unknown";
+    return team?.shortName || "unknown";
   };
 
   const handleEditName = () => setIsEditingName(true);
