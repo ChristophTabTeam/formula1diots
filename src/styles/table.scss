@@ -1,4 +1,4 @@
-﻿@import "variables";
+﻿@use "./variables";
 
 .home-wrapper {
     display: grid;
@@ -7,10 +7,10 @@
 }
 
 .table-wrapper {
-    background: $table-background-dark;
-    color: $white;
+    background: variables.$table-background-dark;
+    color: variables.$white;
     padding: 20px;
-    border-top: 4px solid $accent-red;
+    border-top: 4px solid variables.$accent-red;
 }
 
 .table-mask {
@@ -28,7 +28,7 @@
     color: white;
     top: -10px;
     & thead > tr {
-        background: $table-background-dark;
+        background: variables.$table-background-dark;
     }
     & tr:first-child {
         position:sticky;
@@ -43,9 +43,9 @@
     }
 
     & tr {
-        background: $table-background-light;
-        border-top: solid 5px $table-background-dark;
-        border-bottom: solid 5px $table-background-dark;
+        background: variables.$table-background-light;
+        border-top: solid 5px variables.$table-background-dark;
+        border-bottom: solid 5px variables.$table-background-dark;
         margin: 0;
         & > td {
             padding: 10px;
@@ -63,7 +63,7 @@
     color: white;
     top: -10px;
     & thead > tr {
-        background: $table-background-dark;
+        background: variables.$table-background-dark;
         position: sticky;
         top: -3px;
         transition-duration: .3s;
@@ -80,9 +80,9 @@
         position: static !important;
     }
     & tr {
-        background: $table-background-light;
-        border-top: solid 5px $table-background-dark;
-        border-bottom: solid 5px $table-background-dark;
+        background: variables.$table-background-light;
+        border-top: solid 5px variables.$table-background-dark;
+        border-bottom: solid 5px variables.$table-background-dark;
         margin: 0;
 
         & > td:first-of-type, th:first-of-type {
@@ -102,7 +102,7 @@
 
 .tyre-table {
     & tr:first-child {
-        background: $table-background-dark;
+        background: variables.$table-background-dark;
         position: sticky;
         top: -3px;
         transition-duration: .3s;
@@ -123,9 +123,9 @@
     }
 
     & tr {
-        background: $table-background-light;
-        border-top: solid 5px $table-background-dark;
-        border-bottom: solid 5px $table-background-dark;
+        background: variables.$table-background-light;
+        border-top: solid 5px variables.$table-background-dark;
+        border-bottom: solid 5px variables.$table-background-dark;
         margin: 0;
 
         & > td:first-of-type, th:first-of-type {
@@ -155,7 +155,7 @@
     color: white;
 
     & > tr:first-child {
-        background: $table-background-dark;
+        background: variables.$table-background-dark;
         position: sticky;
         top: -3px;
         transition-duration: .3s;
@@ -169,9 +169,9 @@
     }
 
     & > tr {
-        background: $table-background-light;
-        border-top: solid 5px $table-background-dark;
-        border-bottom: solid 5px $table-background-dark;
+        background: variables.$table-background-light;
+        border-top: solid 5px variables.$table-background-dark;
+        border-bottom: solid 5px variables.$table-background-dark;
 
         & > td {
             padding: 10px;

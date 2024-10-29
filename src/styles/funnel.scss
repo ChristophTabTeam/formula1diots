@@ -1,4 +1,4 @@
-@import "variables";
+@use "./variables";
 
 .create-season-wrapper {
   display: flex;
@@ -48,17 +48,17 @@
     align-items: center;
     color: #fff;
     font-weight: normal;
-    background: $table-background-light;
+    background: variables.$table-background-light;
     color: white;
     padding: 20px;
-    border: 3px solid $accent-red;
+    border: 3px solid variables.$accent-red;
     cursor: pointer;
     user-select: none;
     border-radius: 10px;
     transition: all 0.3s;
 
     &.checked {
-      background: $table-background-dark;
+      background: variables.$table-background-dark;
       border: 3px solid green;
     }
 

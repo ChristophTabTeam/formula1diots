@@ -1,4 +1,4 @@
-@import "_variables.scss";
+@use "./variables";
 
 .input-wrapper {
   display: flex;
@@ -72,7 +72,7 @@
 }
 
 .input select {
-  background: $white;
+  background: variables.$white;
 }
 
 .button-wrapper {
@@ -82,10 +82,10 @@
 }
 
 .button-primary {
-  background: $table-background-light;
+  background: variables.$table-background-light;
   padding: 15px 30px;
   font-size: 20px;
-  color: $white;
+  color: variables.$white;
   font-weight: 600;
   border-radius: 15px;
   border: none;
@@ -98,21 +98,21 @@
 
   &.transparent {
     background: transparent;
-    color: $table-background-light;
+    color: variables.$table-background-light;
 
     &:hover {
       background: transparent;
-      color: $table-background-light;
+      color: variables.$table-background-light;
     }
   }
 
   &.white {
-    background: $white;
-    color: $table-background-light;
+    background: variables.$white;
+    color: variables.$table-background-light;
 
     &:hover {
-      background: $table-background-light;
-      color: $white;
+      background: variables.$table-background-light;
+      color: variables.$white;
     }
   }
 
@@ -122,8 +122,8 @@
   }
 
   &:hover {
-    background: $accent-red;
-    color: $white;
+    background: variables.$accent-red;
+    color: variables.$white;
   }
 }
 
@@ -180,7 +180,7 @@
 }
 
 .dayreport-submit-wrapper {
-  background: $white;
+  background: variables.$white;
 }
 
 .season-race-grid {

@@ -1,4 +1,4 @@
-﻿@import "_variables.scss";
+﻿@use "./variables";
 
 //Season Results
 .table-race-id {
@@ -45,7 +45,7 @@
     align-items: center;
     border-radius: 5px;
     &.fastest-lap {
-        background: $fastest-lap;
+        background: variables.$fastest-lap;
     }
 }
 
@@ -71,9 +71,9 @@
     width: 100%;
 
     & > tr {
-        background: $table-background-light;
-        border-top: solid 5px $table-background-dark;
-        border-bottom: solid 5px $table-background-dark;
+        background: variables.$table-background-light;
+        border-top: solid 5px variables.$table-background-dark;
+        border-bottom: solid 5px variables.$table-background-dark;
         transition: all .3s ease;
         cursor: pointer;
         &:hover {
@@ -110,7 +110,7 @@
 }
 
 .race-info-headline {
-    color: $accent-red;
+    color: variables.$accent-red;
     font-size: 40px;
     font-weight: 400;
     position: relative;
@@ -120,7 +120,7 @@
         content: "";
         height: 3px;
         width: 100px;
-        background: $accent-red;
+        background: variables.$accent-red;
         position: absolute;
         bottom: -10px;
         left: 0;
@@ -169,10 +169,10 @@
 }
 
 .race-setup-inner-wrapper {
-    background: $table-background-dark;
-    color: $white;
+    background: variables.$table-background-dark;
+    color: variables.$white;
     padding: 30px 0;
-    border-top: 4px solid $accent-red;
+    border-top: 4px solid variables.$accent-red;
 }
 
 .race-setup-mask {
@@ -216,7 +216,7 @@
     justify-content: space-between;
     grid-template-columns: 1fr 1fr 1fr;
     padding: 10px;
-    background: $table-background-light;
+    background: variables.$table-background-light;
 }
 
 .race-setup-name {

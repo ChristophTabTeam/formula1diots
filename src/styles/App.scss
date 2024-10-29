@@ -1,4 +1,4 @@
-@import "_variables.scss";
+@use "variables";
 
 html, body {
     font-family: 'Roboto', Helvetica, Arial, sans-serif;
@@ -107,9 +107,9 @@ a:hover {
 
 .btn-primary {
     color: #fff;
-    background-color: $table-background-dark;
+    background-color: variables.$table-background-dark;
     border: none;
-    border-bottom: $accent-red 3px solid;
+    border-bottom: variables.$accent-red 3px solid;
     padding: 10px 20px;
     font-size: 20px;
     border-radius: 10px;
@@ -190,12 +190,12 @@ h1:focus {
 }
 
 .login-card {
-    background: $table-background-dark;
+    background: variables.$table-background-dark;
     padding: 50px;
     color: white;
     max-width: 400px;
     width: 100%;
-    border-top: 5px $accent-red solid;
+    border-top: 5px variables.$accent-red solid;
     display: flex;
     flex-direction: column;
     gap: 10px;
@@ -234,12 +234,12 @@ h1:focus {
     font-size: 20px;
     border-radius: 10px;
     border: none;
-    background: $table-background-light;
+    background: variables.$table-background-light;
     color: white;
 }
 
 .login-button {
-    background: $accent-red;
+    background: variables.$accent-red;
     padding: 10px 20px;
     font-size: 20px;
     border-radius: 10px;
@@ -281,7 +281,7 @@ h1:focus {
 .fastest-lap-select {
     width: 100%;
     padding: 10px;
-    background: $fastest-lap;
+    background: variables.$fastest-lap;
     font-size: 20px;
     border: none;
     font-weight: 600;
@@ -313,14 +313,14 @@ h1:focus {
 }
 
 .grid-box {
-    border: 5px $accent-red solid;
+    border: 5px variables.$accent-red solid;
     border-radius: 20px;
     padding: 30px 10px 50px;
     display: flex;
     flex-direction: column;
     align-items: center;
     position: relative;
-    background: $table-background-dark;
+    background: variables.$table-background-dark;
     color: white;
 }
 
@@ -334,7 +334,7 @@ h1:focus {
     outline: none;
     border: none;
     padding: 10px 0;
-    background: $table-background-light;
+    background: variables.$table-background-light;
     color: white;
     border-radius: 15px;
 }
@@ -349,7 +349,7 @@ h1:focus {
     width: 100%;
     padding: 20px;
     font-size: 25px;
-    background: $table-background-light;
+    background: variables.$table-background-light;
     border-radius: 20px;
     color: white;
     font-weight: 600;
@@ -371,7 +371,7 @@ h1:focus {
     position: absolute;
     bottom: 0;
     left: 0;
-    background-color: $table-background-dark;
+    background-color: variables.$table-background-dark;
 }
 
 .carousel {
@@ -422,7 +422,7 @@ h1:focus {
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    background: $table-background-light;
+    background: variables.$table-background-light;
     padding: 60px;
     gap: 20px;
     color: white !important;
