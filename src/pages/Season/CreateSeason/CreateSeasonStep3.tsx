@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import { collection, getDocs } from "firebase/firestore";
-import { db } from "../../firebase/firebaseConfig";
-import { Driver } from "../../interfaces/Driver";
-import Loading from "../../components/Loading";
+import { db } from "../../../firebase/firebaseConfig";
+import { Driver } from "../../../interfaces/Driver";
+import Loading from "../../../components/Loading";
 
 interface CreateSeasonStep3Props {
   selectedDrivers: string[];

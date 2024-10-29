@@ -7,8 +7,8 @@ import {
   setDoc,
   updateDoc,
 } from "firebase/firestore";
-import { db } from "../firebase/firebaseConfig";
-import Loading from "../components/Loading";
+import { db } from "../../firebase/firebaseConfig";
+import Loading from "../../components/Loading";
 
 interface RaceResultsEntryProps {
   seasonId: string;

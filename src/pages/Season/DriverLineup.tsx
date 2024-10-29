@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { Driver } from "../interfaces/Driver";
-import { Team } from "../interfaces/Team";
-import Season from "./Season";
+import { Driver } from "../../interfaces/Driver";
+import { Team } from "../../interfaces/Team";
+import Season from "./Index";
 import { collection, getDocs } from "firebase/firestore";
-import { db } from "../firebase/firebaseConfig";
-import Loading from "../components/Loading";
+import { db } from "../../firebase/firebaseConfig";
+import Loading from "../../components/Loading";
 
 interface DriverLineupProps {
   seasonId: string;
@@ -94,28 +94,40 @@ const DriverLineup: React.FC<DriverLineupProps> = ({ seasonId }) => {
                     <div
                       className="driver-box"
                       style={{
+                        backgroundColor: "white",
                         backgroundImage: `url("${
-                          getDriverById(teamData.driver1)?.profilePictureUrl || ""
+                          getDriverById(teamData.driver1)?.profilePictureUrl ||
+                          ""
                         }")`,
+                        backgroundSize: "cover",
+                        backgroundPosition: "center",
                       }}
                     >
-                      <p className="driver-name">
-                        {getDriverById(teamData.driver1)?.name}
-                      </p>
+                      <a href={`/profile/${teamData.driver1.toLowerCase()}`}>
+                        <p className="driver-name">
+                          {getDriverById(teamData.driver1)?.name}
+                        </p>
+                      </a>
                     </div>
                   )}
                   {teamData.driver2 && (
                     <div
                       className="driver-box"
                       style={{
+                        backgroundColor: "white",
                         backgroundImage: `url("${
-                          getDriverById(teamData.driver2)?.profilePictureUrl || ""
+                          getDriverById(teamData.driver2)?.profilePictureUrl ||
+                          ""
                         }")`,
+                        backgroundSize: "cover",
+                        backgroundPosition: "center",
                       }}
                     >
-                      <p className="driver-name">
-                        {getDriverById(teamData.driver2)?.name}
-                      </p>
+                      <a href={`/profile/${teamData.driver2.toLowerCase()}`}>
+                        <p className="driver-name">
+                          {getDriverById(teamData.driver2)?.name}
+                        </p>
+                      </a>
                     </div>
                   )}
                 </div>

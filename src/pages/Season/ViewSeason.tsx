@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { doc, getDoc, collection, getDocs } from "firebase/firestore";
-import { db } from "../firebase/firebaseConfig"; // Firebase-Konfiguration
-import { Season } from "../interfaces/Season";
-import { Race } from "../interfaces/Race";
-import Loading from "../components/Loading";
-import { Driver } from "../interfaces/Driver";
+import { db } from "../../firebase/firebaseConfig"; // Firebase-Konfiguration
+import { Season } from "../../interfaces/Season";
+import { Race } from "../../interfaces/Race";
+import Loading from "../../components/Loading";
+import { Driver } from "../../interfaces/Driver";
 
 interface ViewSeasonProps {
   seasonId: string;

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { changePassword } from "../firebase/auth";
+import { changePassword } from "../../firebase/auth";
 
 const ChangePassword: React.FC = () => {
   const [currentPassword, setCurrentPassword] = useState("");

@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
 import { doc, setDoc, collection, writeBatch, getDocs } from 'firebase/firestore';
-import { db } from '../../firebase/firebaseConfig';
-import { Season } from '../../interfaces/Season';
-import { Driver } from '../../interfaces/Driver';
-import Loading from '../../components/Loading';
-import { useAuth } from '../../context/authcontext';
+import { db } from '../../../firebase/firebaseConfig';
+import { Season } from '../../../interfaces/Season';
+import { Driver } from '../../../interfaces/Driver';
+import Loading from '../../../components/Loading';
+import { useAuth } from '../../../context/authcontext';
 
 interface CreateSeasonStep5Props {
   seasonName: string;

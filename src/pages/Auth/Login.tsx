@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { loginUser } from "../firebase/auth";
-import { useAuth } from "../context/authcontext";
+import { loginUser } from "../../firebase/auth";
+import { useAuth } from "../../context/authcontext";
 import { doc, getDoc, setDoc } from "firebase/firestore";
-import { db } from "../firebase/firebaseConfig";
-import f1Logo from "../assets/F1.svg";
+import { db } from "../../firebase/firebaseConfig";
+import f1Logo from "../../assets/F1.svg";
 
 const Login: React.FC = () => {
   const { isAuthenticated } = useAuth();

@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import racingFlag from "../assets/racing-flag-svgrepo-com.svg";
-import calendarAdd from "../assets/calendar_add_on_24dp_FFF_FILL0_wght400_GRAD0_opsz24.svg";
-import calendarView from "../assets/date_range_24dp_FFF_FILL0_wght400_GRAD0_opsz24.svg";
-import groupe from "../assets/groups_24dp_FILL0_wght400_GRAD0_opsz24.svg"
+import racingFlag from "../../assets/racing-flag-svgrepo-com.svg";
+import calendarAdd from "../../assets/calendar_add_on_24dp_FFF_FILL0_wght400_GRAD0_opsz24.svg";
+import calendarView from "../../assets/date_range_24dp_FFF_FILL0_wght400_GRAD0_opsz24.svg";
+import groupe from "../../assets/groups_24dp_FILL0_wght400_GRAD0_opsz24.svg"
 import {
   getFirestore,
   collection,
@@ -10,8 +10,8 @@ import {
   where,
   getDocs,
 } from "firebase/firestore";
-import type { Season } from "../interfaces/Season";
-import Loading from "../components/Loading";
+import type { Season } from "../../interfaces/Season";
+import Loading from "../../components/Loading";
 
 const Season: React.FC = () => {
   const [season, setSeason] = useState<Season[]>([]);

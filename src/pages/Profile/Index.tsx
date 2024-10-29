@@ -92,7 +92,6 @@ const Profile: React.FC = () => {
         await updateDoc(driverDocRef, { profilePictureUrl: url });
 
         setProfileImageUrl(url);
-        alert("Profile image uploaded successfully!");
       } catch (error) {
         console.error("Error uploading image:", error);
       } finally {
@@ -110,7 +109,6 @@ const Profile: React.FC = () => {
         const driverDocRef = doc(db, "drivers", driverProfile.id);
         await updateDoc(driverDocRef, { profilePictureUrl: null });
         setProfileImageUrl(null);
-        alert("Profile image deleted successfully!");
       } catch (error) {
         console.error("Error deleting image:", error);
       }

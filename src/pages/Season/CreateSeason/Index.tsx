@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import { CreateSeasonStep1 } from "./CreateSeason/CreateSeasonStep1";
-import { CreateSeasonStep2 } from "./CreateSeason/CreateSeasonStep2";
-import { CreateSeasonStep3 } from "./CreateSeason/CreateSeasonStep3";
-import { CreateSeasonStep4 } from "./CreateSeason/CreateSeasonStep4";
-import { CreateSeasonStep5 } from "./CreateSeason/CreateSeasonStep5";
+import { CreateSeasonStep1 } from "./CreateSeasonStep1";
+import { CreateSeasonStep2 } from "./CreateSeasonStep2";
+import { CreateSeasonStep3 } from "./CreateSeasonStep3";
+import { CreateSeasonStep4 } from "./CreateSeasonStep4";
+import { CreateSeasonStep5 } from "./CreateSeasonStep5";
 
 const CreateSeason: React.FC = () => {
   const [step, setStep] = useState(1);

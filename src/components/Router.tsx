@@ -3,16 +3,17 @@ import { useState, useEffect } from "react";
 
 // Deine Komponenten importieren (Home, Login, CreateSeason, etc.)
 import Home from "../pages/Home";
-import Login from "../pages/Login";
-import CreateSeason from "../pages/CreateSeason";
-import ViewSeason from "../pages/ViewSeason";
+import Login from "../pages/Auth/Login";
+import CreateSeason from "../pages/Season/CreateSeason/Index";
+import ViewSeason from "../pages/Season/ViewSeason";
 // import RaceView from "../pages/RaceView";
 import { useAuth } from "../context/authcontext";
-import Season from "../pages/Season";
-import RaceResultsEntry from "../pages/RaceResultsEntry";
-import Profile from "../pages/Personal/Profile";
-import DriverLineup from "../pages/DriverLineup";
-import ChangePassword from "../pages/ChangePassword";
+import Season from "../pages/Season/Index";
+import RaceResultsEntry from "../pages/Season/RaceResultsEntry";
+import Profile from "../pages/Profile/Index";
+import DriverLineup from "../pages/Season/DriverLineup";
+import ChangePassword from "../pages/Auth/ChangePassword";
+import DriverProfile from "../pages/Profile/DriverProfile";
 
 const routes: { [key: string]: () => React.JSX.Element } = {
   "/login": () => <Login />,
@@ -65,6 +66,14 @@ const routes: { [key: string]: () => React.JSX.Element } = {
       <Profile />
     </PrivateRoute>
   ),
+  "/profile/:id": () => {
+    const id = window.location.pathname.split("/")[2];
+    return (
+      <PrivateRoute>
+        <DriverProfile id={id}/>
+      </PrivateRoute>
+    );
+  },
   // "/season/:seasonId/race/:id": () => (
   //   <PrivateRoute>
   //     <RaceView />

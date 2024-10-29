@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { collection, getDocs } from "firebase/firestore";
-import { db } from "../../firebase/firebaseConfig";
-import { Race } from "../../interfaces/Race";
+import { db } from "../../../firebase/firebaseConfig";
+import { Race } from "../../../interfaces/Race";
 import { DragDropContext, Droppable, Draggable, DropResult } from "@hello-pangea/dnd";
-import Loading from "../../components/Loading";
+import Loading from "../../../components/Loading";
 
 interface CreateSeasonStep4Props {
   nextStep: (selectedRaces: string[]) => void;
