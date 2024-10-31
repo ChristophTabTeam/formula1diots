@@ -187,3 +187,17 @@
     display: flex;
     justify-content: space-between;
 }
+
+.table-race-id {
+    color: grey;
+    text-decoration: none;
+    &.is-finished {
+        color: white;
+    }
+}
+
+tr.fastest-lap {
+    & > td {
+        background: variables.$fastest-lap;
+    }
+}

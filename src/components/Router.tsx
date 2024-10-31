@@ -5,7 +5,6 @@ import { useState, useEffect } from "react";
 import Home from "../pages/Home";
 import Login from "../pages/Auth/Login";
 import CreateSeason from "../pages/Season/CreateSeason/Index";
-import ViewSeason from "../pages/Season/ViewSeason";
 // import RaceView from "../pages/RaceView";
 import { useAuth } from "../context/authcontext";
 import Season from "../pages/Season/Index";
@@ -13,6 +12,8 @@ import RaceResultsEntry from "../pages/Season/RaceResultsEntry";
 import DriverLineup from "../pages/Season/DriverLineup";
 import ChangePassword from "../pages/Auth/ChangePassword";
 import DriverProfile from "../pages/Profile/DriverProfile";
+import SeasonResults from "../pages/Season/SeasonResults";
+import RaceResults from "../pages/Season/RaceResults";
 
 const routes: { [key: string]: () => React.JSX.Element } = {
   "/login": () => <Login />,
@@ -40,7 +41,7 @@ const routes: { [key: string]: () => React.JSX.Element } = {
     const seasonId = window.location.pathname.split("/")[2]; // Extrahiere die seasonId aus der URL
     return (
       <PrivateRoute>
-        <ViewSeason seasonId={seasonId} />
+        <SeasonResults seasonId={seasonId} />
       </PrivateRoute>
     );
   },
@@ -60,11 +61,20 @@ const routes: { [key: string]: () => React.JSX.Element } = {
       </PrivateRoute>
     );
   },
+  "/season/:seasonId/race/:id": () => {
+    const seasonId = window.location.pathname.split("/")[2];
+    const raceId = window.location.pathname.split("/")[4];
+    return (
+      <PrivateRoute>
+        <RaceResults seasonId={seasonId} raceId={raceId} />
+      </PrivateRoute>
+    );
+  },
   "/profile/:id": () => {
     const id = window.location.pathname.split("/")[2];
     return (
       <PrivateRoute>
-        <DriverProfile id={id}/>
+        <DriverProfile id={id} />
       </PrivateRoute>
     );
   },

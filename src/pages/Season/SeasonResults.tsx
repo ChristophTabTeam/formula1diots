@@ -6,7 +6,7 @@ import { Race } from "../../interfaces/Race";
 import Loading from "../../components/Loading";
 import { Driver } from "../../interfaces/Driver";
 
-interface ViewSeasonProps {
+interface SeasonResultsProps {
   seasonId: string;
 }
 
@@ -85,9 +85,9 @@ interface RaceResults {
   fastestLap: string;
 }
 
-const ViewSeason: React.FC<ViewSeasonProps> = ({
+const SeasonResults: React.FC<SeasonResultsProps> = ({
   seasonId,
-}: ViewSeasonProps) => {
+}: SeasonResultsProps) => {
   const [seasonData, setSeasonData] = useState<Season | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -168,10 +168,13 @@ const ViewSeason: React.FC<ViewSeasonProps> = ({
     return driver?.name || "NaN";
   };
 
-  const getDriverPosition = (raceResults: RaceResults, driverId: string): string => {
+  const getDriverPosition = (
+    raceResults: RaceResults,
+    driverId: string
+  ): string => {
     for (const [position, id] of Object.entries(raceResults)) {
       if (position.toLowerCase() !== "fastestlap" && id === driverId) {
-        return position.toUpperCase().replace('P', ''); // Gibt die Position als Zahl zurück
+        return position.toUpperCase().replace("P", ""); // Gibt die Position als Zahl zurück
       }
     }
     return "--"; // Wenn die `driverId` nicht gefunden wird
@@ -198,12 +201,13 @@ const ViewSeason: React.FC<ViewSeasonProps> = ({
                     const raceData = races.find((r) => r.name === race.raceId);
                     return (
                       <th key={race.raceId}>
-                        <div
+                        <a
                           className={
                             race.isFinished
                               ? "table-race-id is-finished"
                               : "table-race-id"
                           }
+                          href={`/season/${seasonId}/race/${race.raceId}`}
                         >
                           <img
                             className="country-flag-small"
@@ -212,7 +216,7 @@ const ViewSeason: React.FC<ViewSeasonProps> = ({
                           <p className="country-three-letter">
                             {raceData?.threeLetterCode || "NaN"}
                           </p>
-                        </div>
+                        </a>
                       </th>
                     );
                   })}
@@ -220,30 +224,41 @@ const ViewSeason: React.FC<ViewSeasonProps> = ({
                 </tr>
               </thead>
               <tbody>
-                {Object.entries(seasonData.driverPoints).map(([driverId]) => {
-                  return (
-                    <tr key={driverId}>
-                      <td>
-                        <p className="season-results-driver-name">
-                          {getDriverNameById(driverId)}
-                        </p>
-                      </td>
-                      {seasonRaces.map((race) => {
-                        const isFastestLap = race.raceResults.fastestLap === driverId;
-                        return (
-                          <td key={race.raceId}>
-                            <div className={isFastestLap ? "season-results-pos-wrapper fastest-lap" : "season-results-pos-wrapper"}>
-                              {getDriverPosition(race.raceResults, driverId)}
-                            </div>
-                          </td>
-                        );
-                      })}
-                      <td>
-                        <div className="season-results-pos-wrapper">{seasonData.driverPoints[driverId] || "--"}</div>
-                      </td>
-                    </tr>
-                  );
-                })}
+                {Object.entries(seasonData.driverPoints)
+                  .sort(([, pointsA], [, pointsB]) => pointsB - pointsA) // Sortiert nach Punkten in absteigender Reihenfolge
+                  .map(([driverId]) => {
+                    return (
+                      <tr key={driverId}>
+                        <td>
+                          <p className="season-results-driver-name">
+                            {getDriverNameById(driverId)}
+                          </p>
+                        </td>
+                        {seasonRaces.map((race) => {
+                          const isFastestLap =
+                            race.raceResults.fastestLap === driverId;
+                          return (
+                            <td key={race.raceId}>
+                              <div
+                                className={
+                                  isFastestLap
+                                    ? "season-results-pos-wrapper fastest-lap"
+                                    : "season-results-pos-wrapper"
+                                }
+                              >
+                                {getDriverPosition(race.raceResults, driverId)}
+                              </div>
+                            </td>
+                          );
+                        })}
+                        <td>
+                          <div className="season-results-pos-wrapper">
+                            {seasonData.driverPoints[driverId] || "--"}
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })}
               </tbody>
             </table>
           )}
@@ -253,4 +268,4 @@ const ViewSeason: React.FC<ViewSeasonProps> = ({
   );
 };
 
-export default ViewSeason;
+export default SeasonResults;
