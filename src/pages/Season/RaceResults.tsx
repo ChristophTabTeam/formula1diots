@@ -176,7 +176,7 @@ const RaceResults: React.FC<RaceResultsProps> = ({ raceId, seasonId }) => {
     <div className="race-results-wrapper">
       <h1 className="display-2">{race?.fullName}</h1>
       <h2 className="display-4">Race Results</h2>
-      <div className="table-wrapper" style={{marginBottom: 40}}>
+      <div className="table-wrapper" style={{ marginBottom: 40 }}>
         <div className="table-mask">
           <table className="leaderboard-table">
             <thead>
