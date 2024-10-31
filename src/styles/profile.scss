@@ -6,6 +6,12 @@
     gap: 40px;
 }
 
+.profile-column {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+}
+
 .profile-card {
   background: variables.$table-background-dark;
   color: variables.$white;
@@ -167,4 +173,31 @@
   border-radius: 10px;
   background-color: variables.$table-background-light;
   padding: 10px 20px;
+}
+
+//stats
+.stats-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+.stats-card {
+  background: variables.$table-background-light;
+  color: variables.$white;
+  padding: 20px 30px 0px;
+  border-top: 4px solid variables.$accent-red;
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  &>p {
+    font-size: 50px;
+    font-weight: 300;
+  }
 }

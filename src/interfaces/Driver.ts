@@ -7,4 +7,7 @@ export interface Driver {
     profilePictureUrl?: string;
     driverSlot: number;
     isPlayer?: boolean;
+    favoriteTrack?: string;
+    favoriteTeam?: string;
+    favoriteDriver?: string;
 }

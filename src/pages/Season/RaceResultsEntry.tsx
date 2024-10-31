@@ -161,8 +161,8 @@ const RaceResultsEntry: React.FC<RaceResultsEntryProps> = ({ seasonId }) => {
         for (let i = 1; i <= 10; i++) {
           const driverId = raceResults[`P${i}`];
           if (driverId) {
-            driverPoints[driverId] =
-              (driverPoints[driverId] || 0) + pointsDistribution[i - 1];
+            const points = pointsDistribution[i - 1];
+            driverPoints[driverId] = (driverPoints[driverId] || 0) + points;
 
             // Team-Punkte ebenfalls aktualisieren
             const teamId = Object.keys(teamPoints).find(
@@ -172,14 +172,44 @@ const RaceResultsEntry: React.FC<RaceResultsEntryProps> = ({ seasonId }) => {
             );
             if (teamId) {
               teamPoints[teamId].points =
-                (teamPoints[teamId].points || 0) + pointsDistribution[i - 1];
+                (teamPoints[teamId].points || 0) + points;
+            }
+
+            // All-time Punkte für den Fahrer aktualisieren
+            const allTimePointsRef = doc(
+              collection(db, "drivers", driverId, "points")
+            );
+            await setDoc(
+              allTimePointsRef,
+              {
+                raceId,
+                points,
+                seasonId,
+                date: new Date(),
+              },
+              { merge: true }
+            );
+
+            // Trophies für Platz 1, 2 und 3 hinzufügen
+            if (i <= 3) {
+              const trophyDocRef = doc(
+                collection(db, "drivers", driverId, "trophies")
+              );
+              await setDoc(trophyDocRef, {
+                raceId,
+                place: i,
+                date: new Date(),
+                seasonId,
+              });
             }
           }
         }
 
         // Punkt für die schnellste Runde vergeben
         if (fastestLap) {
-          driverPoints[fastestLap] = (driverPoints[fastestLap] || 0) + 1;
+          const fastestLapPoints = 1;
+          driverPoints[fastestLap] =
+            (driverPoints[fastestLap] || 0) + fastestLapPoints;
 
           const teamId = Object.keys(teamPoints).find(
             (team) =>
@@ -187,48 +217,30 @@ const RaceResultsEntry: React.FC<RaceResultsEntryProps> = ({ seasonId }) => {
               teamPoints[team].driver2 === fastestLap
           );
           if (teamId) {
-            teamPoints[teamId].points = (teamPoints[teamId].points || 0) + 1;
+            teamPoints[teamId].points =
+              (teamPoints[teamId].points || 0) + fastestLapPoints;
           }
+
+          // All-time Punkte für die schnellste Runde im driver's allTimePoints Collection aktualisieren
+          const fastestLapRef = doc(
+            collection(db, "drivers", fastestLap, "points")
+          );
+          await setDoc(
+            fastestLapRef,
+            {
+              raceId,
+              points: fastestLapPoints,
+              seasonId,
+              date: new Date(),
+            },
+            { merge: true }
+          );
         }
 
         // Season-Dokument aktualisieren
         await updateDoc(seasonDocRef, {
           driverPoints,
           teams: teamPoints,
-        });
-      }
-
-      // Trophies für Platz 1, 2 und 3 hinzufügen
-      for (let i = 1; i <= 3; i++) {
-        const driverId = raceResults[`P${i}`];
-        if (driverId) {
-          const trophyDocRef = doc(
-            collection(db, "drivers", driverId, "trophies")
-          );
-          await setDoc(trophyDocRef, {
-            raceId,
-            place: i,
-            date: new Date(),
-            seasonId,
-          });
-        }
-      }
-
-      // Fastest lap Collection hinzufügen
-      if (fastestLap) {
-        const fastestLapDocRef = doc(
-          collection(db, "drivers", fastestLap, "fastestLaps")
-        );
-        const position = Object.values(raceResults).findIndex(
-          (id) => id === fastestLap
-        );
-        await setDoc(fastestLapDocRef, {
-          raceId,
-          place: position + 1,
-          laptime: fastestLapTime,
-          date: new Date(),
-          tyre: fastestLapTyre,
-          seasonId,
         });
       }
 
