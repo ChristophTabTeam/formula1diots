@@ -12,6 +12,7 @@ import Loading from "../../components/Loading";
 import { Team } from "../../interfaces/Team";
 import { Season } from "../../interfaces/Season";
 import { useAuth } from "../../context/authcontext";
+import Trophies from "./Trophies";
 
 interface DriverProfileProps {
   id: string;
@@ -22,11 +23,12 @@ const DriverProfile: React.FC<DriverProfileProps> = ({ id }) => {
   const [loading, setLoading] = useState<boolean>(false);
   const [driverProfile, setDriverProfile] = useState<Driver>();
   const [profileImageUrl, setProfileImageUrl] = useState<string | null>(null);
+  const [seasons, setSeasons] = useState<Season[]>([]);
   const [season, setSeason] = useState<Season>();
   const [teams, setTeams] = useState<Team[]>([]);
   const [isEditingName, setIsEditingName] = useState(false);
   const [newName, setNewName] = useState("");
-  const [, setIsOwner] = useState(false);
+  const [isOwner, setIsOwner] = useState(false);
   const [canEdit, setCanEdit] = useState(false);
 
   useEffect(() => {
@@ -61,6 +63,7 @@ const DriverProfile: React.FC<DriverProfileProps> = ({ id }) => {
           window.location.href = "/create-season";
           return;
         }
+        setSeasons(seasons);
         setSeason(activeSeason);
       } catch (error) {
         console.error("Error fetching season data:", error);
@@ -172,7 +175,7 @@ const DriverProfile: React.FC<DriverProfileProps> = ({ id }) => {
     <div className="profile-grid">
       {driverProfile && season && (
         <div className="profile-card">
-          <h1 className="display-2">Profile Page</h1>
+          <h1 className="display-4">Profile Page</h1>
           <div className="profile-pic-wrapper">
             {profileImageUrl ? (
               <img
@@ -265,8 +268,31 @@ const DriverProfile: React.FC<DriverProfileProps> = ({ id }) => {
               ) + 1}
             </div>
           </div>
+          {isOwner && (
+            <div className="">
+              <h2 className="display-6">Settings</h2>
+              <div className="info-wrapper">
+                <button
+                  className="custom-file-upload btn-primary delete"
+                  onClick={() => (window.location.href = "/change-password")}
+                >
+                  Change Password
+                </button>
+              </div>
+            </div>
+          )}
         </div>
       )}
+      <div className="profile-card">
+        {season && seasons && driverProfile && (
+          <Trophies
+            teams={teams}
+            currentSeason={season}
+            seasons={seasons}
+            driverProfile={driverProfile}
+          />
+        )}
+      </div>
     </div>
   );
 };

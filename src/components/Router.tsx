@@ -10,7 +10,6 @@ import ViewSeason from "../pages/Season/ViewSeason";
 import { useAuth } from "../context/authcontext";
 import Season from "../pages/Season/Index";
 import RaceResultsEntry from "../pages/Season/RaceResultsEntry";
-import Profile from "../pages/Profile/Index";
 import DriverLineup from "../pages/Season/DriverLineup";
 import ChangePassword from "../pages/Auth/ChangePassword";
 import DriverProfile from "../pages/Profile/DriverProfile";
@@ -61,11 +60,6 @@ const routes: { [key: string]: () => React.JSX.Element } = {
       </PrivateRoute>
     );
   },
-  "/profile": () => (
-    <PrivateRoute>
-      <Profile />
-    </PrivateRoute>
-  ),
   "/profile/:id": () => {
     const id = window.location.pathname.split("/")[2];
     return (

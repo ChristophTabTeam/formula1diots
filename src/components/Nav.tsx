@@ -1,9 +1,17 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "../styles/nav.scss";
 import { useAuth } from "../context/authcontext";
 
 const Nav: React.FC = () => {
-  const {logout} = useAuth();
+  const {logout, user} = useAuth();
+  const [userId, setUserId] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (user && user.email) {
+      setUserId(user.email.replace("@formula1diots.de", ""));
+    }
+  }, [user]);
+
 
   const handleLogout = async () => {
     await logout();
@@ -32,7 +40,7 @@ const Nav: React.FC = () => {
         </div>
 
         <div className="nav-item px-3">
-          <a className="nav-link" href="/profile">
+          <a className="nav-link" href={`/profile/${userId}`}>
             <span className="icon-20pt" aria-hidden="true">
               person
             </span>{" "}

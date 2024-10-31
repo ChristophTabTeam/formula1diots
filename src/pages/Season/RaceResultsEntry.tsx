@@ -26,6 +26,8 @@ const RaceResultsEntry: React.FC<RaceResultsEntryProps> = ({ seasonId }) => {
   }>({});
   const [raceResults, setRaceResults] = useState<{ [key: string]: string }>({});
   const [fastestLap, setFastestLap] = useState<string>("");
+  const [fastestLapTime, setFastestLapTime] = useState<string>("");
+  const [fastestLapTyre, setFastestLapTyre] = useState<string>("");
   const [isSaving, setIsSaving] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
   const [raceId, setRaceId] = useState<string>("");
@@ -196,6 +198,40 @@ const RaceResultsEntry: React.FC<RaceResultsEntryProps> = ({ seasonId }) => {
         });
       }
 
+      // Trophies für Platz 1, 2 und 3 hinzufügen
+      for (let i = 1; i <= 3; i++) {
+        const driverId = raceResults[`P${i}`];
+        if (driverId) {
+          const trophyDocRef = doc(
+            collection(db, "drivers", driverId, "trophies")
+          );
+          await setDoc(trophyDocRef, {
+            raceId,
+            place: i,
+            date: new Date(),
+            seasonId,
+          });
+        }
+      }
+
+      // Fastest lap Collection hinzufügen
+      if (fastestLap) {
+        const fastestLapDocRef = doc(
+          collection(db, "drivers", fastestLap, "fastestLaps")
+        );
+        const position = Object.values(raceResults).findIndex(
+          (id) => id === fastestLap
+        );
+        await setDoc(fastestLapDocRef, {
+          raceId,
+          place: position + 1,
+          laptime: fastestLapTime,
+          date: new Date(),
+          tyre: fastestLapTyre,
+          seasonId,
+        });
+      }
+
       alert("Ergebnisse erfolgreich gespeichert!");
     } catch (error) {
       console.error("Fehler beim Speichern der Ergebnisse:", error);
@@ -250,17 +286,20 @@ const RaceResultsEntry: React.FC<RaceResultsEntryProps> = ({ seasonId }) => {
                             className="results-input select"
                           >
                             <option value="">select Driver</option>
-                            {drivers.map((driver) => (
-                              <option
-                                key={driver.id}
-                                value={driver.id}
-                                disabled={usedQualifyingDrivers.includes(
-                                  driver.id
-                                )}
-                              >
-                                {driver.name}
-                              </option>
-                            ))}
+                            {drivers
+                              .slice()
+                              .sort((a, b) => a.name.localeCompare(b.name))
+                              .map((driver) => (
+                                <option
+                                  key={driver.id}
+                                  value={driver.id}
+                                  disabled={usedQualifyingDrivers.includes(
+                                    driver.id
+                                  )}
+                                >
+                                  {driver.name}
+                                </option>
+                              ))}
                           </select>
                         </label>
                       </td>
@@ -315,15 +354,18 @@ const RaceResultsEntry: React.FC<RaceResultsEntryProps> = ({ seasonId }) => {
                             className="results-input select"
                           >
                             <option value="">select Driver</option>
-                            {drivers.map((driver) => (
-                              <option
-                                key={driver.id}
-                                value={driver.id}
-                                disabled={usedRaceDrivers.includes(driver.id)}
-                              >
-                                {driver.name}
-                              </option>
-                            ))}
+                            {drivers
+                              .slice()
+                              .sort((a, b) => a.name.localeCompare(b.name))
+                              .map((driver) => (
+                                <option
+                                  key={driver.id}
+                                  value={driver.id}
+                                  disabled={usedRaceDrivers.includes(driver.id)}
+                                >
+                                  {driver.name}
+                                </option>
+                              ))}
                           </select>
                         </label>
                       </td>
@@ -334,41 +376,84 @@ const RaceResultsEntry: React.FC<RaceResultsEntryProps> = ({ seasonId }) => {
             </div>
           </div>
         </div>
-        <div>
+        <div
+          className="table-wrapper"
+          style={{
+            display: "grid",
+            gridTemplateColumns: "1fr 1fr",
+            alignItems: "center",
+            justifyContent: "space-between",
+            gridColumn: "span 2",
+            gap: 20,
+          }}
+        >
           <div
-            className="table-wrapper"
             style={{
               display: "flex",
-              alignItems: "center",
               justifyContent: "space-between",
+              alignItems: "center",
+              gap: 20,
             }}
           >
             <h2 className="display-6">Fastest Lap</h2>
             <label style={{ display: "flex", gap: 20, alignItems: "center" }}>
-              Fastest Lap:
               <select
                 value={fastestLap}
                 onChange={(e) => setFastestLap(e.target.value)}
                 className="results-input select"
               >
                 <option value="">select Driver</option>
-                {drivers.map((driver) => (
-                  <option key={driver.id} value={driver.id}>
-                    {driver.name}
-                  </option>
-                ))}
+                {drivers
+                  .slice()
+                  .sort((a, b) => a.name.localeCompare(b.name))
+                  .map((driver) => (
+                    <option key={driver.id} value={driver.id}>
+                      {driver.name}
+                    </option>
+                  ))}
+              </select>
+            </label>
+            <input
+              className="results-input"
+              type="text"
+              placeholder="Laptime"
+              value={fastestLapTime}
+              onChange={(e) => setFastestLapTime(e.target.value)}
+              style={{
+                height: "min-content",
+              }}
+            ></input>
+            <label style={{ display: "flex", gap: 20, alignItems: "center" }}>
+              <select
+                value={fastestLapTyre}
+                onChange={(e) => setFastestLapTyre(e.target.value)}
+                className="results-input select"
+              >
+                <option value="">select Tyre</option>
+                <option value="soft">Soft</option>
+                <option value="medium">Medium</option>
+                <option value="hard">Hard</option>
+                <option value="int">Intermediate</option>
+                <option value="wet">Wet</option>
               </select>
             </label>
           </div>
-        </div>
-        <div className="btn-wrapper" style={{alignItems: "center", justifyContent: "center"}}>
-          <button
-            onClick={handleSaveResults}
-            disabled={isSaving}
-            className="btn-primary"
+          <div
+            className="btn-wrapper"
+            style={{
+              alignItems: "center",
+              justifyContent: "center",
+              display: "flex",
+            }}
           >
-            {isSaving ? "Speichern..." : "Ergebnisse speichern"}
-          </button>
+            <button
+              onClick={handleSaveResults}
+              disabled={isSaving}
+              className="custom-file-upload btn-primary delete"
+            >
+              {isSaving ? "Speichern..." : "Ergebnisse speichern"}
+            </button>
+          </div>
         </div>
       </div>
     </div>
