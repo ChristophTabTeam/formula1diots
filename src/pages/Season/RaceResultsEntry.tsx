@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import {
+  addDoc,
   collection,
   doc,
   getDoc,
@@ -9,6 +10,7 @@ import {
 } from "firebase/firestore";
 import { db } from "../../firebase/firebaseConfig";
 import Loading from "../../components/Loading";
+import { DriverPoints } from "../../interfaces/DriverPoints";
 
 interface RaceResultsEntryProps {
   seasonId: string;
@@ -189,52 +191,106 @@ const RaceResultsEntry: React.FC<RaceResultsEntryProps> = ({ seasonId }) => {
               },
               { merge: true }
             );
+          }
+        }
 
-            // Trophies für Platz 1, 2 und 3 hinzufügen
-            if (i <= 3) {
-              const trophyDocRef = doc(
-                collection(db, "drivers", driverId, "trophies")
-              );
-              await setDoc(trophyDocRef, {
+        // Qualifying-Position für den Fahrer aktualisieren
+        for (let i = 1; i <= 20; i++) {
+          const qualyDriverId = qualifyingResults[`P${i}`];
+          if (qualyDriverId) {
+            const qualifyingPositionRef = doc(
+              collection(db, "drivers", qualyDriverId, "qualifyings")
+            );
+            await setDoc(
+              qualifyingPositionRef,
+              {
                 raceId,
-                place: i,
-                date: new Date(),
+                position: i,
+                lapTime: qualifyingResults[`P${i}LapTime`] || "",
                 seasonId,
-              });
-            }
+                date: new Date(),
+              },
+              { merge: true }
+            );
+          }
+          const raceDriverId = raceResults[`P${i}`];
+          if (raceDriverId) {
+            const trophyDocRef = doc(
+              collection(db, "drivers", raceDriverId, "trophies")
+            );
+            await setDoc(trophyDocRef, {
+              raceId,
+              place: i,
+              date: new Date(),
+              seasonId,
+            });
           }
         }
 
         // Punkt für die schnellste Runde vergeben
         if (fastestLap) {
           const fastestLapPoints = 1;
-          driverPoints[fastestLap] =
-            (driverPoints[fastestLap] || 0) + fastestLapPoints;
-
-          const teamId = Object.keys(teamPoints).find(
-            (team) =>
-              teamPoints[team].driver1 === fastestLap ||
-              teamPoints[team].driver2 === fastestLap
-          );
-          if (teamId) {
-            teamPoints[teamId].points =
-              (teamPoints[teamId].points || 0) + fastestLapPoints;
-          }
-
-          // All-time Punkte für die schnellste Runde im driver's allTimePoints Collection aktualisieren
-          const fastestLapRef = doc(
-            collection(db, "drivers", fastestLap, "points")
-          );
-          await setDoc(
-            fastestLapRef,
-            {
+        
+          // Überprüfen, ob der Fahrer innerhalb der Top 10 ist
+          const fastestLapPosition = Object.values(raceResults).indexOf(fastestLap) + 1;
+          if (fastestLapPosition > 0 && fastestLapPosition <= 10) {
+            // Fahrer-Punkte aktualisieren
+            driverPoints[fastestLap] = (driverPoints[fastestLap] || 0) + fastestLapPoints;
+        
+            // Team-ID herausfinden
+            const teamId = Object.keys(teamPoints).find(
+              (team) =>
+                teamPoints[team].driver1 === fastestLap ||
+                teamPoints[team].driver2 === fastestLap
+            );
+        
+            // Team-Punkte aktualisieren
+            if (teamId) {
+              teamPoints[teamId].points =
+                (teamPoints[teamId].points || 0) + fastestLapPoints;
+            }
+        
+            // Firestore aktualisieren - All-Time Punkte für die schnellste Runde im `points` Collection des Fahrers
+            const pointsCollection = collection(db, "drivers", fastestLap, "points");
+            const pointsSnapshot = await getDocs(pointsCollection);
+            const pointsData = pointsSnapshot.docs.map((doc) => ({
+              id: doc.id,
+              ...doc.data(),
+            })) as (DriverPoints & { id: string })[];
+        
+            // Bestehendes Dokument für die `raceId` suchen
+            const pointsDoc = pointsData.find((doc) => doc.raceId === raceId);
+        
+            if (pointsDoc) {
+              // Dokument mit bestehender `raceId` aktualisieren
+              const pointsRef = doc(db, "drivers", fastestLap, "points", pointsDoc.id);
+              await updateDoc(pointsRef, {
+                points: pointsDoc.points + fastestLapPoints,
+                date: new Date(),
+              });
+            } else {
+              // Neues Dokument hinzufügen, falls kein Dokument mit der `raceId` gefunden wurde
+              await addDoc(pointsCollection, {
+                raceId,
+                points: fastestLapPoints,
+                seasonId,
+                date: new Date(),
+              });
+            }
+        
+            // Eintrag in die `fastestLaps`-Collection des Fahrers erstellen
+            const fastestLapCollection = collection(db, "drivers", fastestLap, "fastestLaps");
+            await addDoc(fastestLapCollection, {
               raceId,
-              points: fastestLapPoints,
-              seasonId,
+              laptime: fastestLapTime,
+              tyre: fastestLapTyre,
               date: new Date(),
-            },
-            { merge: true }
-          );
+              place: fastestLapPosition,
+              seasonId,
+            });
+          } else {
+            console.log("Fastest Lap point not awarded as driver is not in the Top 10.");
+          }
         }
 
         // Season-Dokument aktualisieren
@@ -442,11 +498,11 @@ const RaceResultsEntry: React.FC<RaceResultsEntryProps> = ({ seasonId }) => {
                 className="results-input select"
               >
                 <option value="">select Tyre</option>
-                <option value="soft">Soft</option>
-                <option value="medium">Medium</option>
-                <option value="hard">Hard</option>
-                <option value="int">Intermediate</option>
-                <option value="wet">Wet</option>
+                <option value="Soft">Soft</option>
+                <option value="Medium">Medium</option>
+                <option value="Hard">Hard</option>
+                <option value="Int">Intermediate</option>
+                <option value="Wet">Wet</option>
               </select>
             </label>
           </div>

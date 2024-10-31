@@ -31,22 +31,26 @@ export function CreateSeasonStep3({
       const driversSnapshot = await getDocs(driversCollection);
       setDrivers(driversSnapshot.docs.map((doc) => doc.data() as Driver));
     };
-    
+
     setLoading(true);
     if (includeDrivers) {
       // Füge Fahrer hinzu, nur wenn die Slots noch frei sind
       const newTeams = { ...teams };
       drivers.forEach((driver) => {
-        if (!newTeams[driver.teamId]?.driver1) {
-          newTeams[driver.teamId] = {
-            ...newTeams[driver.teamId],
-            driver1: driver.id,
-          };
-        } else if (!newTeams[driver.teamId]?.driver2) {
-          newTeams[driver.teamId] = {
-            ...newTeams[driver.teamId],
-            driver2: driver.id,
-          };
+        if (driver.seat === 0) {
+          if (!newTeams[driver.teamId]?.driver1) {
+            newTeams[driver.teamId] = {
+              ...newTeams[driver.teamId],
+              driver1: driver.id,
+            };
+          }
+        } else {
+          if (!newTeams[driver.teamId]?.driver2) {
+            newTeams[driver.teamId] = {
+              ...newTeams[driver.teamId],
+              driver2: driver.id,
+            };
+          }
         }
         setUpdatedTeams(newTeams);
       });
@@ -78,9 +82,12 @@ export function CreateSeasonStep3({
         </label>
       </div>
       <div className="btn-wrapper">
-
-      <button onClick={previousStep} className="btn-primary">Back</button>
-      <button onClick={handleSubmit} className="btn-primary">Next</button>
+        <button onClick={previousStep} className="btn-primary">
+          Back
+        </button>
+        <button onClick={handleSubmit} className="btn-primary">
+          Next
+        </button>
       </div>
     </div>
   );

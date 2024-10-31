@@ -67,21 +67,26 @@ export function CreateSeasonStep2({
 
       while (!teamAssigned) {
         const randomTeamIndex = Math.floor(Math.random() * teams.length);
+        const randomSeatIndex = Math.floor(Math.random() * 2); // This will be either 0 or 1
         const selectedTeam = teams[randomTeamIndex];
 
         // Prüfe, ob der Teamplatz frei ist (driver1 oder driver2)
-        if (!updatedTeams[selectedTeam.id]?.driver1) {
-          updatedTeams[selectedTeam.id] = {
-            ...updatedTeams[selectedTeam.id],
-            driver1: driverId,
-          };
-          teamAssigned = true;
-        } else if (!updatedTeams[selectedTeam.id]?.driver2) {
-          updatedTeams[selectedTeam.id] = {
-            ...updatedTeams[selectedTeam.id],
-            driver2: driverId,
-          };
-          teamAssigned = true;
+        if (randomSeatIndex === 0) {
+          if (!updatedTeams[selectedTeam.id]?.driver1) {
+            updatedTeams[selectedTeam.id] = {
+              ...updatedTeams[selectedTeam.id],
+              driver1: driverId,
+            };
+            teamAssigned = true;
+          }
+        } else {
+          if (!updatedTeams[selectedTeam.id]?.driver2) {
+            updatedTeams[selectedTeam.id] = {
+              ...updatedTeams[selectedTeam.id],
+              driver2: driverId,
+            };
+            teamAssigned = true;
+          }
         }
       }
     });

@@ -22,23 +22,47 @@
   gap: 20px;
 }
 
+.profile-rating-wrapper {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
 .profile-pic-wrapper {
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 30px;
   width: max-content;
+  position: relative;
 }
 
 .pic-button-wrapper {
   display: flex;
   gap: 10px;
   flex-direction: column;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  transition: all 0.3s;
+}
+
+.rating {
+  font-size: 60px;
+}
+
+.profile-pic-wrapper:hover .pic-button-wrapper {
+  opacity: 1;
 }
 
 .profile-image {
-    width: 200px;
-    height: 200px;
+    width: 150px;
+    height: 150px;
     border-radius: 50%;
     object-fit: cover;
     background-color: white;
@@ -150,6 +174,7 @@
   flex-direction: column;
   align-items: center;
   padding: 10px;
+  text-align: center;
 }
 
 .trophies-img {

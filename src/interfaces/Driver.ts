@@ -5,9 +5,10 @@ export interface Driver {
     teamId: string;
     dateOfBirth: string;
     profilePictureUrl?: string;
-    driverSlot: number;
+    seat?: number;
     isPlayer?: boolean;
     favoriteTrack?: string;
     favoriteTeam?: string;
     favoriteDriver?: string;
+    rating?: number;
 }

@@ -18,6 +18,7 @@ import { Trophy } from "../../interfaces/Trophy";
 import { FastestLap } from "../../interfaces/FastestLap";
 import { Race } from "../../interfaces/Race";
 import { DriverPoints } from "../../interfaces/DriverPoints";
+import { Qualifying } from "../../interfaces/Qualifying";
 
 interface DriverProfileProps {
   id: string;
@@ -34,6 +35,7 @@ const DriverProfile: React.FC<DriverProfileProps> = ({ id }) => {
   const [drivers, setDrivers] = useState<Driver[]>([]);
   const [trophies, setTrophies] = useState<Trophy[]>([]);
   const [fastestLaps, setFastestLaps] = useState<FastestLap[]>([]);
+  const [qualifyings, setQualifyings] = useState<Qualifying[]>([]);
   const [races, setRaces] = useState<Race[]>([]);
   const [driverPoints, setDriverPoints] = useState<DriverPoints[]>([]);
   const [isEditingName, setIsEditingName] = useState(false);
@@ -46,6 +48,10 @@ const DriverProfile: React.FC<DriverProfileProps> = ({ id }) => {
   const [newDriver, setNewDriver] = useState("");
   const [isEditingTrack, setIsEditingTrack] = useState(false);
   const [newTrack, setNewTrack] = useState("");
+  const [isEditingNationality, setIsEditingNationality] = useState(false);
+  const [newNationality, setNewNationality] = useState("");
+  const [isEditingRating, setIsEditingRating] = useState(false);
+  const [newRating, setNewRating] = useState(65);
   const [, setIsOwner] = useState(false);
   const [canEdit, setCanEdit] = useState(false);
 
@@ -175,10 +181,29 @@ const DriverProfile: React.FC<DriverProfileProps> = ({ id }) => {
             (doc) => doc.data() as DriverPoints
           );
           setDriverPoints(driverPoints);
-          console.log(driverPoints);
         }
       } catch (error) {
         console.error("Error fetching driver points:", error);
+      }
+    };
+
+    const fetchQualifyings = async () => {
+      try {
+        if (driverProfile?.id) {
+          const qualifyingsCollection = collection(
+            db,
+            "drivers",
+            driverProfile.id,
+            "qualifyings"
+          );
+          const qualifyingsSnapshot = await getDocs(qualifyingsCollection);
+          const qualifyings = qualifyingsSnapshot.docs.map(
+            (doc) => doc.data() as Qualifying
+          );
+          setQualifyings(qualifyings);
+        }
+      } catch (error) {
+        console.error("Error fetching qualifyings:", error);
       }
     };
 
@@ -204,6 +229,7 @@ const DriverProfile: React.FC<DriverProfileProps> = ({ id }) => {
     fetchFastestLaps();
     fetchRaces();
     fetchDriverPoints();
+    fetchQualifyings();
     checkIfOwner();
     setLoading(false);
   }, [driverProfile?.id, driverProfile?.isPlayer, id, user?.email]);
@@ -256,10 +282,21 @@ const DriverProfile: React.FC<DriverProfileProps> = ({ id }) => {
     return team?.shortName || "unknown";
   };
 
-  const getDriverNameById = (driverId: string) => { 
+  const getDriverNameById = (driverId: string) => {
     const driver = drivers.find((d) => d.id === driverId);
     return driver ? driver.name : "Unknown";
-  }
+  };
+
+  const getSeatOfDriver = (teamId: string, driverId: string) => {
+    const team = Object.entries(season?.teams || {}).find(
+      ([key]) => key === teamId
+    )?.[1];
+    if (team) {
+      if (team.driver1 === driverId) return "Driver 1";
+      if (team.driver2 === driverId) return "Driver 2";
+    }
+    return "Unknown";
+  };
 
   const handleEditName = () => setIsEditingName(true);
   const handleSaveName = async () => {
@@ -362,6 +399,115 @@ const DriverProfile: React.FC<DriverProfileProps> = ({ id }) => {
     }
   };
 
+  const handleEditNationality = () => setIsEditingNationality(true);
+  const handleSaveNationality = async () => {
+    if (driverProfile) {
+      try {
+        setLoading(true);
+        const driverDocRef = doc(db, "drivers", driverProfile.id);
+        await updateDoc(driverDocRef, { nationality: newNationality });
+        setDriverProfile((prevProfile) =>
+          prevProfile
+            ? { ...prevProfile, nationality: newNationality }
+            : prevProfile
+        );
+        setIsEditingNationality(false);
+      } catch (error) {
+        console.error("Error updating Nationality:", error);
+      } finally {
+        setLoading(false);
+      }
+    }
+  };
+
+  const handleEditRating = () => setIsEditingRating(true);
+  const handleSaveRating = async () => {
+    if (driverProfile) {
+      try {
+        setLoading(true);
+        const driverDocRef = doc(db, "drivers", driverProfile.id);
+        await updateDoc(driverDocRef, { rating: newRating });
+        setDriverProfile((prevProfile) =>
+          prevProfile ? { ...prevProfile, rating: newRating } : prevProfile
+        );
+        setIsEditingRating(false);
+      } catch (error) {
+        console.error("Error updating Rating:", error);
+      } finally {
+        setLoading(false);
+      }
+    }
+  };
+
+  const baseRating = 65;
+
+  const calculateExperience = (racesParticipated: number) => {
+    return Math.min(racesParticipated * 2, 100); // Skaliert auf max. 100
+  };
+
+  const calculateRacecraft = (positions: number[]) => {
+    if (positions.length === 0) return 0;
+    const avgPosition = positions.reduce((a, b) => a + b, 0) / positions.length;
+    return Math.max(100 - avgPosition * 5, 0); // Skaliert, niedrigere Positionen besser
+  };
+
+  const calculatePace = (fastestLaps: number, totalRaces: number) => {
+    return totalRaces > 0 ? Math.min((fastestLaps / totalRaces) * 100, 100) : 0;
+  };
+
+  const calculateQualifyingSkill = (qualifyingPositions: number[]) => {
+    if (qualifyingPositions.length === 0) return 0;
+    const avgQualifyingPosition =
+      qualifyingPositions.reduce((a, b) => a + b, 0) /
+      qualifyingPositions.length;
+    return Math.max(100 - avgQualifyingPosition * 5, 0);
+  };
+
+  const calculateOverallRating = (
+    racesParticipated: number,
+    positions: number[],
+    fastestLaps: number,
+    qualifyingPositions: number[]
+  ) => {
+    // Berechnung der einzelnen Attribute
+    const experience = calculateExperience(racesParticipated);
+    const racecraft = calculateRacecraft(positions);
+    const pace = calculatePace(fastestLaps, racesParticipated);
+    const qualifyingSkill = calculateQualifyingSkill(qualifyingPositions);
+
+    // Erfahrungsfaktor basierend auf der Anzahl der Rennen (z.B. maximal 1.0 bei vielen Rennen)
+    const experienceFactor = Math.sqrt(racesParticipated) / 10; // Beispiel: Max 1.0 bei ca. 100 Rennen
+
+    // Gesamt-Rating mit Basiswert und Erfahrungsfaktor
+    const calculatedRating =
+      baseRating +
+      experienceFactor *
+        (experience * 0.2 +
+          racecraft * 0.3 +
+          pace * 0.3 +
+          qualifyingSkill * 0.2);
+
+    // Sicherstellen, dass das Rating zwischen 0 und 100 liegt
+    return Math.min(Math.max(Math.round(calculatedRating), 0), 100);
+  };
+
+  const calculateRating = () => {
+    if (!trophies || !fastestLaps || !qualifyings) return 65;
+    const racesParticipated = trophies.length;
+    const positions = trophies.map((trophy) => trophy.place);
+    const fastestLapsCount = fastestLaps.length;
+    const qualifyingPositions = qualifyings.map(
+      (qualifying) => qualifying.position
+    );
+
+    return calculateOverallRating(
+      racesParticipated,
+      positions,
+      fastestLapsCount,
+      qualifyingPositions
+    );
+  };
+
   if (loading) return <Loading />;
 
   return (
@@ -369,43 +515,89 @@ const DriverProfile: React.FC<DriverProfileProps> = ({ id }) => {
       {driverProfile && season && (
         <div className="profile-card">
           <h1 className="display-4">Profile</h1>
-          <div className="profile-pic-wrapper">
-            {profileImageUrl ? (
-              <img
-                src={profileImageUrl}
-                alt="Profile"
-                width="200"
-                height="200"
-                className="profile-image"
-              />
-            ) : (
-              <div className="profile-placeholder">
-                No profile image available
-              </div>
-            )}
-            {canEdit && (
-              <div className="pic-button-wrapper">
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={handleFileChange}
-                  id="file-upload"
-                  style={{ display: "none" }}
+          <div className="profile-rating-wrapper">
+            <div className="profile-pic-wrapper">
+              {profileImageUrl ? (
+                <img
+                  src={profileImageUrl}
+                  alt="Profile"
+                  width="200"
+                  height="200"
+                  className="profile-image"
                 />
-                <label
-                  htmlFor="file-upload"
-                  className="custom-file-upload btn-primary"
-                >
-                  Change Picture
-                </label>
-                {profileImageUrl && (
-                  <button
-                    onClick={handleDeleteImage}
-                    className="custom-file-upload btn-primary delete"
+              ) : (
+                <div className="profile-placeholder">
+                  No profile image available
+                </div>
+              )}
+              {canEdit && (
+                <div className="pic-button-wrapper">
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleFileChange}
+                    id="file-upload"
+                    style={{ display: "none" }}
+                  />
+                  <label
+                    htmlFor="file-upload"
+                    className="custom-file-upload btn-primary"
                   >
-                    Delete Picture
-                  </button>
-                )}
+                    <span className="icon-16pt">add_a_photo</span>
+                  </label>
+                  {profileImageUrl && (
+                    <button
+                      onClick={handleDeleteImage}
+                      className="custom-file-upload btn-primary delete"
+                    >
+                      <span className="icon-16pt">delete</span>
+                    </button>
+                  )}
+                </div>
+              )}
+            </div>
+            {driverProfile.isPlayer ? (
+              <div className="rating-wrapper">
+                <h2 className="display-6">Rating</h2>
+                <div className="rating">{calculateRating()}</div>
+              </div>
+            ) : (
+              <div className="rating-wrapper">
+                <h2 className="display-6">Rating</h2>
+                <div className="rating">
+                  {canEdit ? (
+                    isEditingRating ? (
+                      <>
+                        <input
+                          type="number"
+                          value={newRating}
+                          className="results-input"
+                          onChange={(e) =>
+                            setNewRating(parseInt(e.target.value))
+                          }
+                        />
+                        <button
+                          onClick={handleSaveRating}
+                          className="edit-button"
+                        >
+                          <span className="icon-16pt">save</span>
+                        </button>
+                      </>
+                    ) : (
+                      <>
+                        {driverProfile.rating || "65"}
+                        <button
+                          onClick={handleEditRating}
+                          className="edit-button"
+                        >
+                          <span className="icon-16pt">edit</span>
+                        </button>
+                      </>
+                    )
+                  ) : (
+                    driverProfile.rating || "65"
+                  )}
+                </div>
               </div>
             )}
           </div>
@@ -421,6 +613,7 @@ const DriverProfile: React.FC<DriverProfileProps> = ({ id }) => {
                       type="text"
                       value={newName}
                       onChange={(e) => setNewName(e.target.value)}
+                      className="results-input"
                     />
                     <button onClick={handleSaveName} className="edit-button">
                       <span className="icon-16pt">save</span>
@@ -475,104 +668,160 @@ const DriverProfile: React.FC<DriverProfileProps> = ({ id }) => {
               )}
             </div>
             <div className="info-wrapper">
-              Fav Team:{" "}
+              Nationality:{" "}
               {canEdit ? (
-                isEditingTeam ? (
+                isEditingNationality ? (
                   <>
-                    <select
-                      value={newTeam}
-                      onChange={(e) => setNewTeam(e.target.value)}
+                    <input
+                      type="text"
+                      value={newNationality}
+                      onChange={(e) => setNewNationality(e.target.value)}
+                    />
+                    <button
+                      onClick={handleSaveNationality}
+                      className="edit-button"
                     >
-                      <option value="">select team</option>
-                      {teams.map((team) => (
-                        <option key={team.id} value={team.id}>
-                          {team.shortName}
-                        </option>
-                      ))}
-                    </select>
-                    <button onClick={handleSaveTeam} className="edit-button">
                       <span className="icon-16pt">save</span>
                     </button>
                   </>
                 ) : (
                   <>
-                    {getTeamNameById(driverProfile.favoriteTeam || "")}
-                    <button onClick={handleEditTeam} className="edit-button">
-                      <span className="icon-16pt">edit</span>
-                    </button>
-                  </>
-                )
-              ) : (
-                getTeamNameById(driverProfile.favoriteTeam || "")
-              )}
-            </div>
-            <div className="info-wrapper">
-              Fav Driver:{" "}
-              {canEdit ? (
-                isEditingDriver ? (
-                  <>
-                    <select
-                      value={newDriver}
-                      onChange={(e) => setNewDriver(e.target.value)}
+                    {driverProfile.nationality || "Unknown"}
+                    <button
+                      onClick={handleEditNationality}
+                      className="edit-button"
                     >
-                      <option value="">select Driver</option>
-                      {drivers
-                        .slice()
-                        .sort((a, b) => a.name.localeCompare(b.name))
-                        .map((driver) => (
-                          <option key={driver.id} value={driver.id}>
-                            {driver.name}
-                          </option>
-                        ))}
-                    </select>
-                    <button onClick={handleSaveDriver} className="edit-button">
-                      <span className="icon-16pt">save</span>
-                    </button>
-                  </>
-                ) : (
-                  <>
-                    {getDriverNameById(driverProfile.favoriteDriver || "") || "Unknown"}
-                    <button onClick={handleEditDriver} className="edit-button">
                       <span className="icon-16pt">edit</span>
                     </button>
                   </>
                 )
               ) : (
-                driverProfile.favoriteDriver || "Unknown"
+                driverProfile.nationality || "Unknown"
               )}
             </div>
-            <div className="info-wrapper">
-              Fav Track:{" "}
-              {canEdit ? (
-                isEditingTrack ? (
-                  <>
-                    <select
-                      value={newTrack}
-                      onChange={(e) => setNewTrack(e.target.value)}
-                    >
-                      <option value="">select track</option>
-                      {races.map((race) => (
-                        <option key={race.name} value={race.name}>
-                          {race.name}
-                        </option>
-                      ))}
-                    </select>
-                    <button onClick={handleSaveTrack} className="edit-button">
-                      <span className="icon-16pt">save</span>
-                    </button>
-                  </>
-                ) : (
-                  <>
-                    {driverProfile.favoriteTrack || "Unknown"}
-                    <button onClick={handleEditTrack} className="edit-button">
-                      <span className="icon-16pt">edit</span>
-                    </button>
-                  </>
-                )
-              ) : (
-                driverProfile.favoriteTrack || "Unknown"
-              )}
-            </div>
+            {driverProfile.isPlayer && (
+              <>
+                <div className="info-wrapper">
+                  Fav Team:{" "}
+                  {canEdit ? (
+                    isEditingTeam ? (
+                      <>
+                        <select
+                          value={newTeam}
+                          onChange={(e) => setNewTeam(e.target.value)}
+                        >
+                          <option value="">select team</option>
+                          {teams.map((team) => (
+                            <option key={team.id} value={team.id}>
+                              {team.shortName}
+                            </option>
+                          ))}
+                        </select>
+                        <button
+                          onClick={handleSaveTeam}
+                          className="edit-button"
+                        >
+                          <span className="icon-16pt">save</span>
+                        </button>
+                      </>
+                    ) : (
+                      <>
+                        {getTeamNameById(driverProfile.favoriteTeam || "")}
+                        <button
+                          onClick={handleEditTeam}
+                          className="edit-button"
+                        >
+                          <span className="icon-16pt">edit</span>
+                        </button>
+                      </>
+                    )
+                  ) : (
+                    getTeamNameById(driverProfile.favoriteTeam || "")
+                  )}
+                </div>
+                <div className="info-wrapper">
+                  Fav Driver:{" "}
+                  {canEdit ? (
+                    isEditingDriver ? (
+                      <>
+                        <select
+                          value={newDriver}
+                          onChange={(e) => setNewDriver(e.target.value)}
+                        >
+                          <option value="">select Driver</option>
+                          {drivers
+                            .slice()
+                            .sort((a, b) => a.name.localeCompare(b.name))
+                            .map((driver) => (
+                              <option key={driver.id} value={driver.id}>
+                                {driver.name}
+                              </option>
+                            ))}
+                        </select>
+                        <button
+                          onClick={handleSaveDriver}
+                          className="edit-button"
+                        >
+                          <span className="icon-16pt">save</span>
+                        </button>
+                      </>
+                    ) : (
+                      <>
+                        {getDriverNameById(
+                          driverProfile.favoriteDriver || ""
+                        ) || "Unknown"}
+                        <button
+                          onClick={handleEditDriver}
+                          className="edit-button"
+                        >
+                          <span className="icon-16pt">edit</span>
+                        </button>
+                      </>
+                    )
+                  ) : (
+                    driverProfile.favoriteDriver || "Unknown"
+                  )}
+                </div>
+                <div className="info-wrapper">
+                  Fav Track:{" "}
+                  {canEdit ? (
+                    isEditingTrack ? (
+                      <>
+                        <select
+                          value={newTrack}
+                          onChange={(e) => setNewTrack(e.target.value)}
+                        >
+                          <option value="">select track</option>
+                          {races.map((race) => (
+                            <option key={race.name} value={race.name}>
+                              {race.name}
+                            </option>
+                          ))}
+                        </select>
+                        <button
+                          onClick={handleSaveTrack}
+                          className="edit-button"
+                        >
+                          <span className="icon-16pt">save</span>
+                        </button>
+                      </>
+                    ) : (
+                      <>
+                        {driverProfile.favoriteTrack || "Unknown"}
+                        <button
+                          onClick={handleEditTrack}
+                          className="edit-button"
+                        >
+                          <span className="icon-16pt">edit</span>
+                        </button>
+                      </>
+                    )
+                  ) : (
+                    driverProfile.favoriteTrack || "Unknown"
+                  )}
+                </div>
+              </>
+            )}
           </div>
           <div className="">
             <h2 className="display-6">Current Season Stats</h2>
@@ -594,6 +843,15 @@ const DriverProfile: React.FC<DriverProfileProps> = ({ id }) => {
               {Object.keys(season.driverPoints).findIndex(
                 (driverId) => driverId === driverProfile.id
               ) + 1}
+            </div>
+            <div className="info-wrapper">
+              Seat:{" "}
+              {driverProfile.isPlayer
+                ? getSeatOfDriver(
+                    season.playerData[driverProfile.id]?.teamId,
+                    driverProfile.id
+                  )
+                : getSeatOfDriver(driverProfile.teamId, driverProfile.id)}
             </div>
           </div>
         </div>

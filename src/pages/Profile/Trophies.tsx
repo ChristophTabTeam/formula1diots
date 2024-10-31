@@ -113,14 +113,17 @@ const Trophies: React.FC<TrophiesProps> = ({
                           alt="2nd"
                           className="trophies-img"
                         />
-                      ) : (
+                      ) : trophy.place === 3 ? (
                         <img
                           src={thirdPlace}
                           alt="3rd"
                           className="trophies-img"
                         />
+                      ) : (
+                        <></>
                       )}
-                      {trophy.raceId.replace("-", " ")}
+                      {trophy.raceId.replace("-", " ")}<br/>
+                      Season {trophy.seasonId}
                     </li>
                   ))
                 : trophies
