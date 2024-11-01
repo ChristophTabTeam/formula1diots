@@ -55,6 +55,14 @@ export function CreateSeasonStep4({
     }
   };
 
+  const addAllRaces = () => {
+    for (const race of races) {
+      setSelectedRaces((prevSelectedRaces) => [
+        ...prevSelectedRaces, race.name,
+      ]);
+    }
+  }
+
   if (loading) {
     return <Loading />;
   }
@@ -62,6 +70,9 @@ export function CreateSeasonStep4({
   return (
     <div className="create-season-wrapper">
       <h1 className="display-1">Select Grand Prix</h1>
+      <button className="btn-primary" onClick={addAllRaces}>
+        Add All Races
+      </button>
       <div className="create-season-race-select-grid">
         <div className="available-races">
           <h2>Available Races</h2>

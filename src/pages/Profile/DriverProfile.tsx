@@ -86,7 +86,7 @@ const DriverProfile: React.FC<DriverProfileProps> = ({ id }) => {
         const seasonsSnapshot = await getDocs(seasonsCollection);
         const seasons = seasonsSnapshot.docs.map((doc) => doc.data() as Season);
         const activeSeason = seasons.find((season) => season.isActiveSeason);
-        if (!activeSeason) {
+        if (seasons.length === 0) {
           window.location.href = "/create-season";
           return;
         }
