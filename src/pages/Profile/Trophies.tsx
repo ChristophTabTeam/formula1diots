@@ -18,9 +18,9 @@ interface TrophiesProps {
 const Trophies: React.FC<TrophiesProps> = ({
   currentSeason,
   seasons,
-    trophies,
-    fastestLaps,
-    races,
+  trophies,
+  fastestLaps,
+  races,
 }) => {
   const [activeSeasonTab, setActiveSeasonTab] = useState<string | null>(
     currentSeason.id
@@ -99,35 +99,37 @@ const Trophies: React.FC<TrophiesProps> = ({
           <div className="trophies">
             <ul className="trophies-list">
               {activeSeasonTab === null
-                ? trophies.map((trophy) => (
-                    <li key={trophy.raceId} className="trophies-list-item">
-                      {trophy.place === 1 ? (
-                        <img
-                          src={firstPlace}
-                          alt="1st"
-                          className="trophies-img"
-                        />
-                      ) : trophy.place === 2 ? (
-                        <img
-                          src={secondPlace}
-                          alt="2nd"
-                          className="trophies-img"
-                        />
-                      ) : trophy.place === 3 ? (
-                        <img
-                          src={thirdPlace}
-                          alt="3rd"
-                          className="trophies-img"
-                        />
-                      ) : (
-                        <></>
-                      )}
-                      {trophy.raceId.replace("-", " ")}<br/>
-                      Season {trophy.seasonId}
-                    </li>
-                  ))
+                ? trophies
+                    .filter((s) => s.place <= 3)
+                    .map((trophy) => (
+                      <li key={trophy.raceId} className="trophies-list-item">
+                        {trophy.place === 1 ? (
+                          <img
+                            src={firstPlace}
+                            alt="1st"
+                            className="trophies-img"
+                          />
+                        ) : trophy.place === 2 ? (
+                          <img
+                            src={secondPlace}
+                            alt="2nd"
+                            className="trophies-img"
+                          />
+                        ) : (
+                          <img
+                            src={thirdPlace}
+                            alt="3rd"
+                            className="trophies-img"
+                          />
+                        )}
+                        {trophy.raceId.replace("-", " ")}
+                        <br />
+                        Season {trophy.seasonId}
+                      </li>
+                    ))
                 : trophies
                     .filter((s) => s.seasonId === activeSeasonTab)
+                    .filter((s) => s.place <= 3)
                     .map((trophy) => (
                       <li key={trophy.raceId} className="trophies-list-item">
                         {trophy.place === 1 ? (
