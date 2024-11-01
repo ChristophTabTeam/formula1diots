@@ -2,7 +2,12 @@ import { useEffect, useState } from "react";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../../../firebase/firebaseConfig";
 import { Race } from "../../../interfaces/Race";
-import { DragDropContext, Droppable, Draggable, DropResult } from "@hello-pangea/dnd";
+import {
+  DragDropContext,
+  Droppable,
+  Draggable,
+  DropResult,
+} from "@hello-pangea/dnd";
 import Loading from "../../../components/Loading";
 
 interface CreateSeasonStep4Props {
@@ -58,10 +63,21 @@ export function CreateSeasonStep4({
   const addAllRaces = () => {
     for (const race of races) {
       setSelectedRaces((prevSelectedRaces) => [
-        ...prevSelectedRaces, race.name,
+        ...prevSelectedRaces,
+        race.name,
       ]);
     }
-  }
+  };
+
+  const handleRemoveAllSelectedRaces = () => {
+    setSelectedRaces([]);
+  };
+
+  const handleRemoveSelectedRace = (raceId: string) => {
+    setSelectedRaces((prevSelectedRaces) =>
+      prevSelectedRaces.filter((selectedRace) => selectedRace !== raceId)
+    );
+  };
 
   if (loading) {
     return <Loading />;
@@ -70,9 +86,14 @@ export function CreateSeasonStep4({
   return (
     <div className="create-season-wrapper">
       <h1 className="display-1">Select Grand Prix</h1>
-      <button className="btn-primary" onClick={addAllRaces}>
-        Add All Races
-      </button>
+      <div className="btn-wrapper">
+        <button className="btn-primary" onClick={addAllRaces}>
+          Add All Races
+        </button>
+        <button className="btn-primary" onClick={handleRemoveAllSelectedRaces}>
+          Remove All Races
+        </button>
+      </div>
       <div className="create-season-race-select-grid">
         <div className="available-races">
           <h2>Available Races</h2>
@@ -108,7 +129,11 @@ export function CreateSeasonStep4({
                   className="create-season-races-list"
                 >
                   {selectedRaces.map((raceId, index) => (
-                    <Draggable key={`${raceId}-${index}`} draggableId={`${raceId}-${index}`} index={index}>
+                    <Draggable
+                      key={`${raceId}-${index}`}
+                      draggableId={`${raceId}-${index}`}
+                      index={index}
+                    >
                       {(provided) => (
                         <li
                           ref={provided.innerRef}
@@ -117,6 +142,12 @@ export function CreateSeasonStep4({
                           className="selected-race-item btn-primary"
                         >
                           {raceId}
+                          <div
+                            className="delete-race-button"
+                            onClick={() => handleRemoveSelectedRace(raceId)}
+                          >
+                            <span className="icon-16pt">delete</span>
+                          </div>
                         </li>
                       )}
                     </Draggable>
