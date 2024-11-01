@@ -3,6 +3,7 @@ import f1Logo from "../assets/F1.svg";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../firebase/firebaseConfig";
 import Loading from "../components/Loading";
+import { RaceResults, SeasonRace } from "../interfaces/SeasonRace";
 
 interface Driver {
   id: string;
@@ -18,42 +19,14 @@ interface Team {
   points: number;
 }
 
-// interface SeasonRace {
-//   raceId: string;
-//   isFinished: boolean;
-//   order: number;
-//   raceResults: RaceResults;
-// }
-
-// interface RaceResults {
-//   p1: string;
-//   p2: string;
-//   p3: string;
-//   p4: string;
-//   p5: string;
-//   p6: string;
-//   p7: string;
-//   p8: string;
-//   p9: string;
-//   p10: string;
-//   p11: string;
-//   p12: string;
-//   p13: string;
-//   p14: string;
-//   p15: string;
-//   p16: string;
-//   p17: string;
-//   p18: string;
-//   p19: string;
-//   p20: string;
-// }
-
 const Home: React.FC = () => {
   const [drivers, setDrivers] = useState<Driver[]>([]);
   const [teams, setTeams] = useState<Team[]>([]);
   const [seasonName, setSeasonName] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(true);
-  // const [lastRaceResults, setLastRaceResults] = useState<RaceResults>();
+  const [lastRaceResults, setLastRaceResults] = useState<RaceResults>();
+  const [lastRaceId, setLastRaceId] = useState<string>("");
+  const [lastRace, setLastRace] = useState<boolean>(false);
 
   useEffect(() => {
     // Daten aus Firestore abrufen
@@ -69,25 +42,33 @@ const Home: React.FC = () => {
         const seasonData = seasonSnapshot.docs[0].data(); // Annahme: Nur eine aktive Saison
         setSeasonName(seasonData.name);
 
-        // const lastRaceResultsData = collection(
-        //   db,
-        //   "seasons",
-        //   seasonData.id,
-        //   "races"
-        // );
-        // const lastRaceResultsSnapshot = await getDocs(lastRaceResultsData);
-        // const lastRaceResultsRef = lastRaceResultsSnapshot.docs.map(
-        //   (doc) => doc.data() as SeasonRace
-        // );
-        // const lastRaceResultsFiltered = lastRaceResultsRef.filter(
-        //   (i) => i.isFinished
-        // );
-        // const lastRaceResultsSorted = lastRaceResultsFiltered.sort(
-        //   (a, b) => a.order - b.order
-        // );
-        // setLastRaceResults(
-        //   lastRaceResultsSorted[lastRaceResultsSorted.length - 1].raceResults
-        // );
+        const lastRaceResultsData = collection(
+          db,
+          "seasons",
+          seasonData.id,
+          "races"
+        );
+        const lastRaceResultsSnapshot = await getDocs(lastRaceResultsData);
+        const lastRaceResultsRef = lastRaceResultsSnapshot.docs.map(
+          (doc) => doc.data() as SeasonRace
+        );
+        const lastRaceResultsFiltered = lastRaceResultsRef.filter(
+          (i) => i.isFinished
+        );
+        if (lastRaceResultsFiltered.length === 0) {
+          setLastRace(false);
+        } else {
+          setLastRace(true);
+          const lastRaceResultsSorted = lastRaceResultsFiltered.sort(
+            (a, b) => a.order - b.order
+          );
+          setLastRaceId(
+            lastRaceResultsSorted[lastRaceResultsSorted.length - 1].raceId
+          );
+          setLastRaceResults(
+            lastRaceResultsSorted[lastRaceResultsSorted.length - 1].raceResults
+          );
+        }
 
         // Abrufen der Fahrer-, Team- und Spieler-Daten
         const driversCollection = collection(db, "drivers");
@@ -143,11 +124,11 @@ const Home: React.FC = () => {
   // Team-Ranking sortieren (absteigend nach Punkten)
   const teamRankings = [...teams].sort((a, b) => b.points - a.points);
 
-  // const getDriverNameById = (driverId: string) => {
-  //   if (!driverId) return "NaN"; // Return "NaN" if driverId is not defined
-  //   const driver = drivers.find((d) => d.id === driverId);
-  //   return driver ? driver.name : "NaN";
-  // };
+  const getDriverNameById = (driverId: string) => {
+    if (!driverId) return "NaN"; // Return "NaN" if driverId is not defined
+    const driver = drivers.find((d) => d.id === driverId);
+    return driver ? driver.name : "NaN";
+  };
 
   if (loading) {
     return <Loading />;
@@ -221,30 +202,27 @@ const Home: React.FC = () => {
           </div>
         </div>
       </div>
-      {/* {lastRaceResults && (
+      {lastRace && lastRaceResults && (
         <div className="carousel-container">
           <div className="carousel">
-            <div className="carousel-container">
-              <div className="carousel">
-                {[...Array(20)].map((_, index) => {
-                  const positionKey = `p${index + 1}`;
-                  const driverId = lastRaceResults
-                    ? lastRaceResults[positionKey]
-                    : "";
-                  return (
-                    <div className="carousel-item" key={positionKey}>
-                      <div className="driver-position">{index + 1}</div>
-                      <div className="carousel-driver-name">
-                        {getDriverNameById(driverId)}
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
+            <div className="carousel-item grand-prix">
+              Grand Prix von {lastRaceId}
             </div>
+            {[...Array(20)].map((_, index) => {
+              const positionKey = `P${index + 1}` as keyof RaceResults;
+              const driverId = lastRaceResults[positionKey] || "";
+              return (
+                <div className="carousel-item" key={positionKey}>
+                  <div className="driver-position">P{index + 1}</div>
+                  <div className="carousel-driver-name">
+                    {getDriverNameById(driverId)}
+                  </div>
+                </div>
+              );
+            })}
           </div>
         </div>
-      )} */}
+      )}
     </>
   );
 };

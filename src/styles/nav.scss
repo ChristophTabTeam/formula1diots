@@ -117,7 +117,9 @@
     }
     .nav-scrollable {
       /* Never collapse the sidebar for wide screens */
-      display: block;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
       /* Allow sidebar to scroll for tall menus */
       height: calc(100vh - 3.5rem);
       overflow-y: auto;

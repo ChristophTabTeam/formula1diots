@@ -175,6 +175,11 @@
   align-items: center;
   padding: 10px;
   text-align: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  &:hover {
+    transform: scale(1.1);
+  }
 }
 
 .trophies-img {
@@ -198,6 +203,11 @@
   border-radius: 10px;
   background-color: variables.$table-background-light;
   padding: 10px 20px;
+  cursor: pointer;
+  transition: all 0.2s;
+  &:hover {
+    transform: scale(1.01);
+  }
 }
 
 //stats

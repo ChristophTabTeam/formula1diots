@@ -46,6 +46,10 @@ const Trophies: React.FC<TrophiesProps> = ({
     });
   };
 
+  const handleRedirectToRace = (seasonId: string, raceId: string) => {
+    window.location.href = `/season/${seasonId}/race/${raceId}`;
+  };
+
   return (
     <div className="trophies-wrapper">
       <h1 className="display-4">Trophies & Achievements</h1>
@@ -102,7 +106,13 @@ const Trophies: React.FC<TrophiesProps> = ({
                 ? trophies
                     .filter((s) => s.place <= 3)
                     .map((trophy) => (
-                      <li key={trophy.raceId} className="trophies-list-item">
+                      <li
+                        key={trophy.raceId}
+                        className="trophies-list-item"
+                        onClick={() =>
+                          handleRedirectToRace(trophy.seasonId, trophy.raceId)
+                        }
+                      >
                         {trophy.place === 1 ? (
                           <img
                             src={firstPlace}
@@ -131,7 +141,13 @@ const Trophies: React.FC<TrophiesProps> = ({
                     .filter((s) => s.seasonId === activeSeasonTab)
                     .filter((s) => s.place <= 3)
                     .map((trophy) => (
-                      <li key={trophy.raceId} className="trophies-list-item">
+                      <li
+                        key={trophy.raceId}
+                        className="trophies-list-item"
+                        onClick={() =>
+                          handleRedirectToRace(trophy.seasonId, trophy.raceId)
+                        }
+                      >
                         {trophy.place === 1 ? (
                           <img
                             src={firstPlace}
@@ -165,6 +181,12 @@ const Trophies: React.FC<TrophiesProps> = ({
                     <li
                       key={fastestLap.raceId}
                       className="fastest-laps-list-item"
+                      onClick={() =>
+                        handleRedirectToRace(
+                          fastestLap.seasonId,
+                          fastestLap.raceId
+                        )
+                      }
                     >
                       {getRaceById(fastestLap.raceId)?.fullName} - P
                       {fastestLap.place} - {fastestLap.tyre} -{" "}
@@ -177,6 +199,12 @@ const Trophies: React.FC<TrophiesProps> = ({
                       <li
                         key={fastestLap.raceId}
                         className="fastest-laps-list-item"
+                        onClick={() =>
+                          handleRedirectToRace(
+                            fastestLap.seasonId,
+                            fastestLap.raceId
+                          )
+                        }
                       >
                         {getRaceById(fastestLap.raceId)?.fullName} - P
                         {fastestLap.place} - {fastestLap.tyre} -{" "}

@@ -191,7 +191,7 @@ const SeasonResults: React.FC<SeasonResultsProps> = ({
   return (
     <div className="container-large">
       <div className="table-wrapper">
-        <div className="table-mark season-result-table-mask">
+        <div className="table-mask season-result-table-mask">
           {seasonData && (
             <table className="leaderboard-table season-results-table">
               <thead>
@@ -202,12 +202,19 @@ const SeasonResults: React.FC<SeasonResultsProps> = ({
                     return (
                       <th key={race.raceId}>
                         <a
-                          className={
+                          className={`table-race-id ${
+                            race.isFinished ? "is-finished" : ""
+                          }`}
+                          href={
                             race.isFinished
-                              ? "table-race-id is-finished"
-                              : "table-race-id"
+                              ? `/season/${seasonId}/race/${race.raceId}`
+                              : undefined
                           }
-                          href={`/season/${seasonId}/race/${race.raceId}`}
+                          onClick={(e) => {
+                            if (!race.isFinished) {
+                              e.preventDefault(); // Verhindert das Klicken, wenn das Rennen nicht beendet ist
+                            }
+                          }}
                         >
                           <img
                             className="country-flag-small"

@@ -34,6 +34,7 @@ const RaceResultsEntry: React.FC<RaceResultsEntryProps> = ({ seasonId }) => {
   const [loading, setLoading] = useState<boolean>(true);
   const [raceId, setRaceId] = useState<string>("");
   const [drivers, setDrivers] = useState<{ id: string; name: string }[]>([]);
+  const [dnfStatus, setDnfStatus] = useState<{ [key: string]: boolean }>({});
 
   useEffect(() => {
     setLoading(true);
@@ -121,6 +122,13 @@ const RaceResultsEntry: React.FC<RaceResultsEntryProps> = ({ seasonId }) => {
     }));
   };
 
+  const handleDnfChange = (driverId: string, isDnf: boolean) => {
+    setDnfStatus((prevStatus) => ({
+      ...prevStatus,
+      [driverId]: isDnf,
+    }));
+  };
+
   const handleSaveResults = async () => {
     if (!raceId) {
       console.error("Kein gültiges Rennen gefunden, raceId ist leer.");
@@ -130,6 +138,7 @@ const RaceResultsEntry: React.FC<RaceResultsEntryProps> = ({ seasonId }) => {
 
     setIsSaving(true);
     try {
+      const currentDate = new Date();
       const raceDocRef = doc(
         collection(db, "seasons", seasonId, "races"),
         raceId
@@ -187,7 +196,7 @@ const RaceResultsEntry: React.FC<RaceResultsEntryProps> = ({ seasonId }) => {
                 raceId,
                 points,
                 seasonId,
-                date: new Date(),
+                date: currentDate,
               },
               { merge: true }
             );
@@ -208,7 +217,7 @@ const RaceResultsEntry: React.FC<RaceResultsEntryProps> = ({ seasonId }) => {
                 position: i,
                 lapTime: qualifyingResults[`P${i}LapTime`] || "",
                 seasonId,
-                date: new Date(),
+                date: currentDate,
               },
               { merge: true }
             );
@@ -221,7 +230,7 @@ const RaceResultsEntry: React.FC<RaceResultsEntryProps> = ({ seasonId }) => {
             await setDoc(trophyDocRef, {
               raceId,
               place: i,
-              date: new Date(),
+              date: currentDate,
               seasonId,
             });
           }
@@ -230,43 +239,56 @@ const RaceResultsEntry: React.FC<RaceResultsEntryProps> = ({ seasonId }) => {
         // Punkt für die schnellste Runde vergeben
         if (fastestLap) {
           const fastestLapPoints = 1;
-        
+
           // Überprüfen, ob der Fahrer innerhalb der Top 10 ist
-          const fastestLapPosition = Object.values(raceResults).indexOf(fastestLap) + 1;
+          const fastestLapPosition =
+            Object.values(raceResults).indexOf(fastestLap) + 1;
           if (fastestLapPosition > 0 && fastestLapPosition <= 10) {
             // Fahrer-Punkte aktualisieren
-            driverPoints[fastestLap] = (driverPoints[fastestLap] || 0) + fastestLapPoints;
-        
+            driverPoints[fastestLap] =
+              (driverPoints[fastestLap] || 0) + fastestLapPoints;
+
             // Team-ID herausfinden
             const teamId = Object.keys(teamPoints).find(
               (team) =>
                 teamPoints[team].driver1 === fastestLap ||
                 teamPoints[team].driver2 === fastestLap
             );
-        
+
             // Team-Punkte aktualisieren
             if (teamId) {
               teamPoints[teamId].points =
                 (teamPoints[teamId].points || 0) + fastestLapPoints;
             }
-        
+
             // Firestore aktualisieren - All-Time Punkte für die schnellste Runde im `points` Collection des Fahrers
-            const pointsCollection = collection(db, "drivers", fastestLap, "points");
+            const pointsCollection = collection(
+              db,
+              "drivers",
+              fastestLap,
+              "points"
+            );
             const pointsSnapshot = await getDocs(pointsCollection);
             const pointsData = pointsSnapshot.docs.map((doc) => ({
               id: doc.id,
               ...doc.data(),
             })) as (DriverPoints & { id: string })[];
-        
+
             // Bestehendes Dokument für die `raceId` suchen
             const pointsDoc = pointsData.find((doc) => doc.raceId === raceId);
-        
+
             if (pointsDoc) {
               // Dokument mit bestehender `raceId` aktualisieren
-              const pointsRef = doc(db, "drivers", fastestLap, "points", pointsDoc.id);
+              const pointsRef = doc(
+                db,
+                "drivers",
+                fastestLap,
+                "points",
+                pointsDoc.id
+              );
               await updateDoc(pointsRef, {
                 points: pointsDoc.points + fastestLapPoints,
-                date: new Date(),
+                date: currentDate,
               });
             } else {
               // Neues Dokument hinzufügen, falls kein Dokument mit der `raceId` gefunden wurde
@@ -274,22 +296,42 @@ const RaceResultsEntry: React.FC<RaceResultsEntryProps> = ({ seasonId }) => {
                 raceId,
                 points: fastestLapPoints,
                 seasonId,
-                date: new Date(),
+                date: currentDate,
               });
             }
-        
+
             // Eintrag in die `fastestLaps`-Collection des Fahrers erstellen
-            const fastestLapCollection = collection(db, "drivers", fastestLap, "fastestLaps");
+            const fastestLapCollection = collection(
+              db,
+              "drivers",
+              fastestLap,
+              "fastestLaps"
+            );
             await addDoc(fastestLapCollection, {
               raceId,
               laptime: fastestLapTime,
               tyre: fastestLapTyre,
-              date: new Date(),
+              date: currentDate,
               place: fastestLapPosition,
               seasonId,
             });
           } else {
-            console.log("Fastest Lap point not awarded as driver is not in the Top 10.");
+            console.log(
+              "Fastest Lap point not awarded as driver is not in the Top 10."
+            );
+          }
+        }
+
+        for (const [driverId] of Object.entries(raceResults)) {
+          if (dnfStatus[driverId]) {
+            // Prüfen, ob der Fahrer ein DNF hat
+            const dnfCollectionRef = collection(db, "drivers", driverId, "dnf");
+            await addDoc(dnfCollectionRef, {
+              raceId,
+              seasonId,
+              date: currentDate,
+              dnf: true,
+            });
           }
         }
 
@@ -298,9 +340,9 @@ const RaceResultsEntry: React.FC<RaceResultsEntryProps> = ({ seasonId }) => {
           driverPoints,
           teams: teamPoints,
         });
-      }
 
-      alert("Ergebnisse erfolgreich gespeichert!");
+        window.location.reload();
+      }
     } catch (error) {
       console.error("Fehler beim Speichern der Ergebnisse:", error);
       alert(
@@ -405,6 +447,7 @@ const RaceResultsEntry: React.FC<RaceResultsEntryProps> = ({ seasonId }) => {
                 <thead>
                   <tr>
                     <th>Pos.</th>
+                    <th>DNF</th>
                     <th>Driver</th>
                   </tr>
                 </thead>
@@ -412,6 +455,20 @@ const RaceResultsEntry: React.FC<RaceResultsEntryProps> = ({ seasonId }) => {
                   {[...Array(20)].map((_, index) => (
                     <tr key={`race-${index + 1}`}>
                       <td>P{index + 1}:</td>
+                      <td>
+                        <label>
+                          <input
+                            type="checkbox"
+                            onChange={(e) =>
+                              handleDnfChange(
+                                raceResults[`P${index + 1}`],
+                                e.target.checked
+                              )
+                            }
+                            checked={!!dnfStatus[raceResults[`P${index + 1}`]]}
+                          />
+                        </label>
+                      </td>
                       <td>
                         <label>
                           <select

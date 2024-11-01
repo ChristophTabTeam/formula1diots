@@ -191,8 +191,13 @@
 .table-race-id {
     color: grey;
     text-decoration: none;
+    cursor: default;
+    &:hover {
+        color: grey;
+    }
     &.is-finished {
         color: white;
+        
     }
 }
 

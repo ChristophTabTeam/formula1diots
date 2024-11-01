@@ -1,455 +1,470 @@
 @use "variables";
 
-html, body {
-    font-family: 'Roboto', Helvetica, Arial, sans-serif;
+html,
+body {
+  font-family: "Roboto", Helvetica, Arial, sans-serif;
 }
 
-a, .btn-link {
-    color: #006bb7;
+a,
+.btn-link {
+  color: #006bb7;
 }
 
 a:hover {
-    color: inherit;
+  color: inherit;
 }
 
 .page {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-  }
-  
-  main {
-    flex: 1;
-    min-height: 100vh;
-    padding: 16px 48px;
-  }
-  
-  .sidebar {
-    background: #343434;
-  }
-  
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+main {
+  flex: 1;
+  min-height: 100vh;
+  padding: 16px 48px;
+}
+
+.sidebar {
+  background: #343434;
+}
+
+.top-row {
+  background-color: #f7f7f7;
+  border-bottom: 1px solid #d6d5d5;
+  justify-content: flex-end;
+  height: 3.5rem;
+  display: flex;
+  align-items: center;
+}
+
+.top-row ::deep a,
+.top-row ::deep .btn-link {
+  white-space: nowrap;
+  margin-left: 1.5rem;
+  text-decoration: none;
+}
+
+.top-row ::deep a:hover,
+.top-row ::deep .btn-link:hover {
+  text-decoration: underline;
+}
+
+.top-row ::deep a:first-child {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@media (max-width: 640.98px) {
   .top-row {
-    background-color: #f7f7f7;
-    border-bottom: 1px solid #d6d5d5;
-    justify-content: flex-end;
-    height: 3.5rem;
-    display: flex;
-    align-items: center;
+    justify-content: space-between;
   }
-  
-  .top-row ::deep a, .top-row ::deep .btn-link {
-    white-space: nowrap;
-    margin-left: 1.5rem;
-    text-decoration: none;
+  .top-row ::deep a,
+  .top-row ::deep .btn-link {
+    margin-left: 0;
   }
-  
-  .top-row ::deep a:hover, .top-row ::deep .btn-link:hover {
-    text-decoration: underline;
+}
+@media (min-width: 641px) {
+  .page {
+    flex-direction: row;
   }
-  
-  .top-row ::deep a:first-child {
-    overflow: hidden;
-    text-overflow: ellipsis;
+  .sidebar {
+    width: 250px;
+    height: 100vh;
+    position: sticky;
+    top: 0;
   }
-  
-  @media (max-width: 640.98px) {
-    .top-row {
-      justify-content: space-between;
-    }
-    .top-row ::deep a, .top-row ::deep .btn-link {
-      margin-left: 0;
-    }
+  .top-row {
+    position: sticky;
+    top: 0;
+    z-index: 1;
   }
-  @media (min-width: 641px) {
-    .page {
-      flex-direction: row;
-    }
-    .sidebar {
-      width: 250px;
-      height: 100vh;
-      position: sticky;
-      top: 0;
-    }
-    .top-row {
-      position: sticky;
-      top: 0;
-      z-index: 1;
-    }
-    .top-row.auth ::deep a:first-child {
-      flex: 1;
-      text-align: right;
-      width: 0;
-    }
-    .top-row, article {
-      padding-left: 2rem !important;
-      padding-right: 1.5rem !important;
-    }
+  .top-row.auth ::deep a:first-child {
+    flex: 1;
+    text-align: right;
+    width: 0;
   }
-  
+  .top-row,
+  article {
+    padding-left: 2rem !important;
+    padding-right: 1.5rem !important;
+  }
+}
 
 .inner-container {
-    margin: 0 auto;
+  margin: 0 auto;
 
-    &._1000px {
-        max-width: 1000px;
-    }
+  &._1000px {
+    max-width: 1000px;
+  }
 }
 
 .container-large {
-    max-width: 1550px;
-    margin: 0 auto;
+  max-width: 1550px;
+  margin: 0 auto;
 }
 
 .btn-wrapper {
-    display: flex;
-    gap: 20px;
+  display: flex;
+  gap: 20px;
 }
 
 .btn-primary {
-    color: #fff;
-    background-color: variables.$table-background-dark;
-    border: none;
-    border-bottom: variables.$accent-red 3px solid;
-    padding: 10px 20px;
-    font-size: 20px;
-    border-radius: 10px;
+  color: #fff;
+  background-color: variables.$table-background-dark;
+  border: none;
+  border-bottom: variables.$accent-red 3px solid;
+  padding: 10px 20px;
+  font-size: 20px;
+  border-radius: 10px;
 }
 
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+.btn:focus,
+.btn:active:focus,
+.btn-link.nav-link:focus,
+.form-control:focus,
+.form-check-input:focus {
   box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
 }
 
 .content {
-    padding-top: 1.1rem;
+  padding-top: 1.1rem;
 }
 
 h1:focus {
-    outline: none;
+  outline: none;
 }
 
 .home-head {
-    display: flex;
-    align-items: center;
-    gap: 20px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
 }
 
 .f1-logo-home {
-    height: 50px;
+  height: 50px;
 }
 
 .version-wrapper {
-    font-size: 14px;
+  font-size: 14px;
+  color: white !important;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  & > a {
     color: white !important;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    & > a {
-        color: white !important;
-    }
-    & > p {
-        margin: 0;
-    }
+  }
+  & > p {
+    margin: 0;
+  }
 }
 
 .changelog-wrapper {
-    font-size: 20px;
-    &>p {
-        font-size: 1.5em;
-        font-weight: 600;
-    }
+  font-size: 20px;
+  & > p {
+    font-size: 1.5em;
+    font-weight: 600;
+  }
 }
 
-.valid.modified:not([type=checkbox]) {
-    outline: 1px solid #26b050;
+.valid.modified:not([type="checkbox"]) {
+  outline: 1px solid #26b050;
 }
 
 .invalid {
-    outline: 1px solid #e50000;
+  outline: 1px solid #e50000;
 }
 
 .validation-message {
-    color: #e50000;
+  color: #e50000;
 }
 
 .darker-border-checkbox.form-check-input {
-    border-color: #929292;
+  border-color: #929292;
 }
 
 .loading-wrapper {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
 }
 
 .login-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
 }
 
 .login-card {
-    background: variables.$table-background-dark;
-    padding: 50px;
-    color: white;
-    max-width: 400px;
-    width: 100%;
-    border-top: 5px variables.$accent-red solid;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
+  background: variables.$table-background-dark;
+  padding: 50px;
+  color: white;
+  max-width: 400px;
+  width: 100%;
+  border-top: 5px variables.$accent-red solid;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
 .login-title {
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
 .login-image {
-    width: 100px;
-    margin: 0 auto;
+  width: 100px;
+  margin: 0 auto;
 }
 
 .login-form {
-    display: flex;
-    flex-direction: column;
-    gap: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
 }
 
 .form-group {
-    display: flex;
-    flex-direction: column;
-    gap: 3px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
 }
 
 .form-label {
-    font-size: 25px;
+  font-size: 25px;
 }
 
 .form-input {
-    padding: 10px;
-    font-size: 20px;
-    border-radius: 10px;
-    border: none;
-    background: variables.$table-background-light;
-    color: white;
+  padding: 10px;
+  font-size: 20px;
+  border-radius: 10px;
+  border: none;
+  background: variables.$table-background-light;
+  color: white;
 }
 
 .login-button {
-    background: variables.$accent-red;
-    padding: 10px 20px;
-    font-size: 20px;
-    border-radius: 10px;
-    color: white;
-    font-weight: 600;
-    border: none;
+  background: variables.$accent-red;
+  padding: 10px 20px;
+  font-size: 20px;
+  border-radius: 10px;
+  color: white;
+  font-weight: 600;
+  border: none;
 }
 
 .home-headline-wraper {
-    display: flex;
-    width: 100%;
-    justify-content: space-between;
-    align-items: center;
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .home-race-overview-wrapper {
-    padding: 50px 0;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 50px;
+  padding: 50px 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 50px;
 }
 
 .home-wrapper {
-    padding-bottom: 100px;
+  padding-bottom: 100px;
 }
 
 .last-next-race-wrapper {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .fastest-lap-wrapper {
-    max-width: 400px;
-    margin: 0 auto;
-    padding: 20px 0;
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 20px 0;
 }
 
 .fastest-lap-select {
-    width: 100%;
-    padding: 10px;
-    background: variables.$fastest-lap;
-    font-size: 20px;
-    border: none;
-    font-weight: 600;
-    color: white;
-    outline: none;
-    border-radius: 20px;
-    &> option {
-        background: white;
-        color: black;
-    }
+  width: 100%;
+  padding: 10px;
+  background: variables.$fastest-lap;
+  font-size: 20px;
+  border: none;
+  font-weight: 600;
+  color: white;
+  outline: none;
+  border-radius: 20px;
+  & > option {
+    background: white;
+    color: black;
+  }
 }
 
 .grid-grid {
-    max-width: 600px;
-    margin: 0 auto;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 50px;
-    padding: 50px 0;
-    & > .grid-column:nth-child(2) {
-        margin-top: 50px;
-    }
+  max-width: 600px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 50px;
+  padding: 50px 0;
+  & > .grid-column:nth-child(2) {
+    margin-top: 50px;
+  }
 }
 
 .grid-column {
-    display: flex;
-    flex-direction: column;
-    gap: 50px;
+  display: flex;
+  flex-direction: column;
+  gap: 50px;
 }
 
 .grid-box {
-    border: 5px variables.$accent-red solid;
-    border-radius: 20px;
-    padding: 30px 10px 50px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    position: relative;
-    background: variables.$table-background-dark;
-    color: white;
+  border: 5px variables.$accent-red solid;
+  border-radius: 20px;
+  padding: 30px 10px 50px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  background: variables.$table-background-dark;
+  color: white;
 }
 
 .grid-select {
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-    left: 0;
-    text-align: center;
-    font-size: 20px;
-    outline: none;
-    border: none;
-    padding: 10px 0;
-    background: variables.$table-background-light;
-    color: white;
-    border-radius: 15px;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  left: 0;
+  text-align: center;
+  font-size: 20px;
+  outline: none;
+  border: none;
+  padding: 10px 0;
+  background: variables.$table-background-light;
+  color: white;
+  border-radius: 15px;
 }
 
 .grid-save-wrapper {
-    max-width: 400px;
-    margin: 0 auto;
-    padding: 20px 0 100px;
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 20px 0 100px;
 }
 
 .save-button {
-    width: 100%;
-    padding: 20px;
-    font-size: 25px;
-    background: variables.$table-background-light;
-    border-radius: 20px;
-    color: white;
-    font-weight: 600;
+  width: 100%;
+  padding: 20px;
+  font-size: 25px;
+  background: variables.$table-background-light;
+  border-radius: 20px;
+  color: white;
+  font-weight: 600;
 }
 
 .track-map-wrapper {
-    position: absolute;
-    top: 20px;
-    right: 20px;
+  position: absolute;
+  top: 20px;
+  right: 20px;
 }
 
 .track-map {
-    width: 400px;
+  width: 400px;
 }
 
 .carousel-container {
-    overflow: hidden;
-    width: 100%;
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    background-color: variables.$table-background-dark;
+  overflow: hidden;
+  width: 100%;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  background-color: variables.$table-background-dark;
 }
 
 .carousel {
-    display: flex;
-    gap: 100px;
-    animation: scroll 60s linear infinite;
-    width: min-content;
+  display: grid;
+  grid-template-columns: max-content repeat(20, 1fr);
+  gap: 100px;
+  animation: scroll 90s linear infinite;
+  width: min-content; // Breite automatisch anpassen
 }
 
 .carousel-item {
-    padding: 20px 0;
-    color: white;
-    font-size: 25px;
-    font-weight: 600;
-    line-height: 1em;
-    display: flex;
-    gap: 20px;
-    margin-right: 0;
-    & > :first-child {
-        border-right: 2px solid white;
+  padding: 20px 0;
+  color: white;
+  font-size: 25px;
+  font-weight: 600;
+  line-height: 1em;
+  display: flex !important;
+  gap: 20px;
+  margin-right: 0;
+  width: max-content;
+  &.grand-prix {
+    white-space: nowrap;
+  }
+  & > :first-child {
+      border-right: 2px solid white;
     }
     & > div {
         padding: 0 25px 0 10px;
-    }
+        width: max-content;
+  }
 }
 
 @keyframes scroll {
-    0% {
-        transform: translateX(100vw);
-    }
+  0% {
+    transform: translateX(100vw);
+  }
 
-    100% {
-        transform: translateX(-100%);
-    }
+  100% {
+    transform: translateX(-100%);
+  }
 }
 
 .settings-grid {
-    max-width: 1000px;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 70px;
-    margin: 0 auto;
-    padding: 50px 0;
+  max-width: 1000px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 70px;
+  margin: 0 auto;
+  padding: 50px 0;
 }
 
 .settings-card {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    background: variables.$table-background-light;
-    padding: 60px;
-    gap: 20px;
-    color: white !important;
-    font-size: 30px;
-    text-decoration: none;
-    border-radius: 20px;
-    &>:visited {
-        color: white;
-    }
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  background: variables.$table-background-light;
+  padding: 60px;
+  gap: 20px;
+  color: white !important;
+  font-size: 30px;
+  text-decoration: none;
+  border-radius: 20px;
+  & > :visited {
+    color: white;
+  }
 }
 
 .settings-icon {
-    width: 70px;
+  width: 70px;
 }
 
 .view-wrapper {
-    display: flex;
-    justify-content: center;
-    gap: 100px;
-    padding: 50px;
+  display: flex;
+  justify-content: center;
+  gap: 100px;
+  padding: 50px;
 }
 
 .arrow {
-    width: 30px;
+  width: 30px;
 }
 
 .grid-2-columns {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
 }

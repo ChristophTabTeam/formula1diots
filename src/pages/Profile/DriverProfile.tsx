@@ -19,6 +19,7 @@ import { FastestLap } from "../../interfaces/FastestLap";
 import { Race } from "../../interfaces/Race";
 import { DriverPoints } from "../../interfaces/DriverPoints";
 import { Qualifying } from "../../interfaces/Qualifying";
+import { DNF } from "../../interfaces/DNF";
 
 interface DriverProfileProps {
   id: string;
@@ -38,6 +39,7 @@ const DriverProfile: React.FC<DriverProfileProps> = ({ id }) => {
   const [qualifyings, setQualifyings] = useState<Qualifying[]>([]);
   const [races, setRaces] = useState<Race[]>([]);
   const [driverPoints, setDriverPoints] = useState<DriverPoints[]>([]);
+  const [dnfs, setDnfs] = useState<DNF[]>([]);
   const [isEditingName, setIsEditingName] = useState(false);
   const [newName, setNewName] = useState("");
   const [isEditingBirthdate, setIsEditingBirthdate] = useState(false);
@@ -207,6 +209,24 @@ const DriverProfile: React.FC<DriverProfileProps> = ({ id }) => {
       }
     };
 
+    const fetchDnfs = async () => {
+      try {
+        if (driverProfile?.id) {
+          const dnfsCollection = collection(
+            db,
+            "drivers",
+            driverProfile.id,
+            "dnfs"
+          );
+          const dnfsSnapshot = await getDocs(dnfsCollection);
+          const dnfs = dnfsSnapshot.docs.map((doc) => doc.data() as DNF);
+          setDnfs(dnfs);
+        }
+      } catch (error) {
+        console.error("Error fetching dnfs:", error);
+      }
+    };
+
     const checkIfOwner = () => {
       if (user?.email?.replace("@formula1diots.de", "") === id) {
         setIsOwner(true);
@@ -230,6 +250,7 @@ const DriverProfile: React.FC<DriverProfileProps> = ({ id }) => {
     fetchRaces();
     fetchDriverPoints();
     fetchQualifyings();
+    fetchDnfs();
     checkIfOwner();
     setLoading(false);
   }, [driverProfile?.id, driverProfile?.isPlayer, id, user?.email]);
@@ -463,48 +484,60 @@ const DriverProfile: React.FC<DriverProfileProps> = ({ id }) => {
     return Math.max(100 - avgQualifyingPosition * 5, 0);
   };
 
+  // Neue Funktion zur Berechnung des DNF-Faktors
+  const calculateDnfPenalty = (dnfCount: number, racesParticipated: number) => {
+    if (racesParticipated === 0) return 0;
+    const dnfRate = dnfCount / racesParticipated; // Anteil der DNFs
+    return Math.min(dnfRate * 30, 30); // Maximaler DNF-Abzug: 30 Punkte
+  };
+
   const calculateOverallRating = (
     racesParticipated: number,
     positions: number[],
     fastestLaps: number,
-    qualifyingPositions: number[]
+    qualifyingPositions: number[],
+    dnfCount: number
   ) => {
-    // Berechnung der einzelnen Attribute
     const experience = calculateExperience(racesParticipated);
     const racecraft = calculateRacecraft(positions);
     const pace = calculatePace(fastestLaps, racesParticipated);
     const qualifyingSkill = calculateQualifyingSkill(qualifyingPositions);
 
-    // Erfahrungsfaktor basierend auf der Anzahl der Rennen (z.B. maximal 1.0 bei vielen Rennen)
-    const experienceFactor = Math.sqrt(racesParticipated) / 10; // Beispiel: Max 1.0 bei ca. 100 Rennen
+    // Erfahrungsfaktor basierend auf der Anzahl der Rennen
+    const experienceFactor = Math.sqrt(racesParticipated) / 10;
 
-    // Gesamt-Rating mit Basiswert und Erfahrungsfaktor
+    // DNF-Strafpunkte berechnen und anwenden
+    const dnfPenalty = calculateDnfPenalty(dnfCount, racesParticipated);
+
+    // Gesamt-Rating mit Basiswert und Erfahrungsfaktor, abzüglich des DNF-Penalty
     const calculatedRating =
       baseRating +
       experienceFactor *
         (experience * 0.2 +
           racecraft * 0.3 +
           pace * 0.3 +
-          qualifyingSkill * 0.2);
+          qualifyingSkill * 0.2) -
+      dnfPenalty;
 
-    // Sicherstellen, dass das Rating zwischen 0 und 100 liegt
-    return Math.min(Math.max(Math.round(calculatedRating), 0), 100);
+    return Math.min(Math.max(Math.round(calculatedRating), 0), 100); // Begrenzung zwischen 0 und 100
   };
 
   const calculateRating = () => {
-    if (!trophies || !fastestLaps || !qualifyings) return 65;
+    if (!trophies || !fastestLaps || !qualifyings || !dnfs) return 65;
     const racesParticipated = trophies.length;
     const positions = trophies.map((trophy) => trophy.place);
     const fastestLapsCount = fastestLaps.length;
     const qualifyingPositions = qualifyings.map(
       (qualifying) => qualifying.position
     );
+    const dnfCount = dnfs.length; // Anzahl der DNFs
 
     return calculateOverallRating(
       racesParticipated,
       positions,
       fastestLapsCount,
-      qualifyingPositions
+      qualifyingPositions,
+      dnfCount
     );
   };
 
@@ -824,7 +857,7 @@ const DriverProfile: React.FC<DriverProfileProps> = ({ id }) => {
             )}
           </div>
           <div className="">
-            <h2 className="display-6">Current Season Stats</h2>
+            <h2 className="display-6">Current Season</h2>
             <div className="info-wrapper">
               {driverProfile.isPlayer ? (
                 <span>

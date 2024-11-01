@@ -3,7 +3,7 @@ import "../styles/nav.scss";
 import { useAuth } from "../context/authcontext";
 
 const Nav: React.FC = () => {
-  const {logout, user} = useAuth();
+  const { logout, user } = useAuth();
   const [userId, setUserId] = useState<string | null>(null);
 
   useEffect(() => {
@@ -11,7 +11,6 @@ const Nav: React.FC = () => {
       setUserId(user.email.replace("@formula1diots.de", ""));
     }
   }, [user]);
-
 
   const handleLogout = async () => {
     await logout();
@@ -47,33 +46,25 @@ const Nav: React.FC = () => {
             Profil
           </a>
         </div>
-
-        {/* <div className="nav-item px-3">
-          <a className="nav-link" href="/infos">
-            <span className="icon-20pt" aria-hidden="true">
-              info
-            </span>{" "}
-            Infos
-          </a>
-        </div> */}
-
+      </nav>
+      <nav className="lower-nav">
         {/* <div className="nav-item px-3">
           <a className="nav-link" href="/settings">
             <span className="icon-20pt" aria-hidden="true">
               settings
             </span>{" "}
-            Einstellungen
+            Settings
           </a>
         </div> */}
-      </nav>
-      <div className="nav-item px-3">
-        <div className="nav-link" onClick={handleLogout}>
-          <span className="icon-20pt" aria-hidden="true">
-            logout
-          </span>{" "}
-          Logout
+        <div className="nav-item px-3">
+          <div className="nav-link" onClick={handleLogout}>
+            <span className="icon-20pt" aria-hidden="true">
+              logout
+            </span>{" "}
+            Logout
+          </div>
         </div>
-      </div>
+      </nav>
     </div>
   );
 };
