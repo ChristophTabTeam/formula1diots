@@ -6,13 +6,13 @@ import { getAuth } from "firebase/auth";
 import { getStorage } from "firebase/storage";
 
 const firebaseConfig = {
-  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
-  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
-  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
-  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
-  appId: import.meta.env.VITE_FIREBASE_APP_ID,
-  measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID,
+  apiKey: "AIzaSyAXFkJIo3IQz0qLVbSlr2YKqetPEw18u5I",
+  authDomain: "formula1diots.firebaseapp.com",
+  projectId: "formula1diots",
+  storageBucket: "formula1diots.appspot.com",
+  messagingSenderId: "291759333922",
+  appId: "1:291759333922:web:ac8b11e2dc2fedafd5207b",
+  measurementId: "G-L4WLTLKXVK"
 };
 
 // Initialize Firebase
