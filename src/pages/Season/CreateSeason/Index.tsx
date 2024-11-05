@@ -4,6 +4,7 @@ import { CreateSeasonStep2 } from "./CreateSeasonStep2";
 import { CreateSeasonStep3 } from "./CreateSeasonStep3";
 import { CreateSeasonStep4 } from "./CreateSeasonStep4";
 import { CreateSeasonStep5 } from "./CreateSeasonStep5";
+import { SeasonRules } from "../../../interfaces/SeasonRules";
 
 const CreateSeason: React.FC = () => {
   const [step, setStep] = useState(1);
@@ -14,6 +15,7 @@ const CreateSeason: React.FC = () => {
   const [teams, setTeams] = useState<{
     [teamId: string]: { points: number; driver1: string; driver2: string };
   }>({});
+  const [seasonRules, setSeasonRules] = useState<SeasonRules | null>(null); // seasonRules state
 
   // Funktion zum nächsten Schritt wechseln
   const nextStep = (data?: any) => {
@@ -30,9 +32,9 @@ const CreateSeason: React.FC = () => {
         }
         break;
       case 3:
-        if (data?.includeDrivers !== undefined) {
+        if (data?.includeDrivers !== undefined && data?.rules) {
           setIncludeDrivers(data.includeDrivers);
-          setTeams(data.updatedTeams);
+          setSeasonRules(data.rules); // seasonRules aus Schritt 3 speichern
         }
         break;
       case 4:
@@ -57,15 +59,21 @@ const CreateSeason: React.FC = () => {
       {step === 2 && (
         <CreateSeasonStep2
           seasonName={seasonName}
-          nextStep={(selectedDrivers, teams) => nextStep({ selectedDrivers, teams })}
+          nextStep={(selectedDrivers, teams) =>
+            nextStep({ selectedDrivers, teams })
+          }
           previousStep={previousStep}
         />
       )}
       {step === 3 && (
         <CreateSeasonStep3
-          selectedDrivers={selectedDrivers}
-          teams={teams}
-          nextStep={(includeDrivers, updatedTeams) => nextStep({ includeDrivers, updatedTeams })}
+          nextStep={(
+            includeDrivers: boolean,
+            updatedTeams: {
+              [teamId: string]: { driver1: string; driver2: string };
+            },
+            rules: SeasonRules
+          ) => nextStep({ includeDrivers, updatedTeams, rules })} // rules übergeben
           previousStep={previousStep}
         />
       )}
@@ -82,6 +90,7 @@ const CreateSeason: React.FC = () => {
           selectedRaces={selectedRaces}
           teams={teams}
           includeDrivers={includeDrivers}
+          seasonRules={seasonRules} // seasonRules an Schritt 5 übergeben
           onFinish={() => alert("Saison erfolgreich erstellt!")}
           previousStep={previousStep}
         />

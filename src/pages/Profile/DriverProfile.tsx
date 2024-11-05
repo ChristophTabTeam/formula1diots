@@ -547,7 +547,7 @@ const DriverProfile: React.FC<DriverProfileProps> = ({ id }) => {
     <div className="profile-grid">
       {driverProfile && season && (
         <div className="profile-card">
-          <h1 className="display-4">Profile</h1>
+          <h1 className="display-4 f1-regular">Profile</h1>
           <div className="profile-rating-wrapper">
             <div className="profile-pic-wrapper">
               {profileImageUrl ? (
@@ -591,12 +591,12 @@ const DriverProfile: React.FC<DriverProfileProps> = ({ id }) => {
             </div>
             {driverProfile.isPlayer ? (
               <div className="rating-wrapper">
-                <h2 className="display-6">Rating</h2>
+                <h2 className="display-6 f1-regular">Rating</h2>
                 <div className="rating">{calculateRating()}</div>
               </div>
             ) : (
               <div className="rating-wrapper">
-                <h2 className="display-6">Rating</h2>
+                <h2 className="display-6 f1-regular">Rating</h2>
                 <div className="rating">
                   {canEdit ? (
                     isEditingRating ? (
@@ -636,7 +636,7 @@ const DriverProfile: React.FC<DriverProfileProps> = ({ id }) => {
           </div>
 
           <div className="">
-            <h2 className="display-6">Personal Info</h2>
+            <h2 className="display-6 f1-regular">Personal Info</h2>
             <div className="info-wrapper">
               Name:{" "}
               {canEdit ? (
@@ -785,6 +785,7 @@ const DriverProfile: React.FC<DriverProfileProps> = ({ id }) => {
                           {drivers
                             .slice()
                             .sort((a, b) => a.name.localeCompare(b.name))
+                            .filter((driver) => driver.isPlayer !== true)
                             .map((driver) => (
                               <option key={driver.id} value={driver.id}>
                                 {driver.name}
@@ -857,7 +858,7 @@ const DriverProfile: React.FC<DriverProfileProps> = ({ id }) => {
             )}
           </div>
           <div className="">
-            <h2 className="display-6">Current Season</h2>
+            <h2 className="display-6 f1-regular">Current Season</h2>
             <div className="info-wrapper">
               {driverProfile.isPlayer ? (
                 <span>

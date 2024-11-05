@@ -81,3 +81,36 @@
   font-weight: 900;
   src: url('../font/Roboto-BlackItalic.ttf') format('truetype');
 }
+
+@font-face {
+  font-family: 'Formula1-Bold';
+  font-style: normal;
+  font-weight: 700;
+  src: url('../font/Formula1-Bold.otf') format('opentype');
+}
+
+@font-face {
+  font-family: 'Formula1-Regular';
+  font-style: normal;
+  font-weight: 400;
+  src: url('../font/Formula1-Regular.otf') format('opentype');
+}
+
+@font-face {
+  font-family: 'Formula1-Wide';
+  font-style: normal;
+  font-weight: 400;
+  src: url('../font/Formula1-Wide.otf') format('opentype');
+}
+
+.f1-bold {
+  font-family: 'Formula1-Bold', Helvetica, Arial, sans-serif;
+}
+
+.f1-regular {
+  font-family: 'Formula1-Regular', Helvetica, Arial, sans-serif;
+}
+
+.f1-wide {
+  font-family: 'Formula1-Wide', Helvetica, Arial, sans-serif;
+}

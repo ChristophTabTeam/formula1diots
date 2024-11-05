@@ -21,13 +21,15 @@ export function CreateSeasonStep2({
 }: CreateSeasonStep2Props) {
   const [drivers, setDrivers] = useState<Driver[]>([]);
   const [allDrivers, setAllDrivers] = useState<Driver[]>([]);
-  const [selectedDrivers, setSelectedDrivers] = useState([] as string[]);
-  //   const [manualAssignment, setManualAssignment] = useState(true);
-  const [teams, setTeams] = useState([] as Team[]);
+  const [selectedDrivers, setSelectedDrivers] = useState<string[]>([]);
+  const [teams, setTeams] = useState<Team[]>([]);
   const [assignedTeams, setAssignedTeams] = useState<{
     [teamId: string]: { driver1: string; driver2: string };
   }>({});
+  const [includeDrivers, setIncludeDrivers] = useState(false);
+  const [teamAssigned, setTeamAssigned] = useState(false);
   const [loading, setLoading] = useState<boolean>(false);
+  const [revealedTeams, setRevealedTeams] = useState<Set<string>>(new Set());
 
   useEffect(() => {
     const fetchTeams = async () => {
@@ -42,17 +44,11 @@ export function CreateSeasonStep2({
       const allDrivers = driversSnapshot.docs.map(
         (doc) => doc.data() as Driver
       );
-      const filteredDrivers = new Array<Driver>();
-      for (const driver of driversSnapshot.docs.map(
-        (doc) => doc.data() as Driver
-      )) {
-        if (driver.isPlayer) {
-          filteredDrivers.push(driver);
-        }
-      }
+      const filteredDrivers = allDrivers.filter((driver) => driver.isPlayer);
       setAllDrivers(allDrivers);
       setDrivers(filteredDrivers);
     };
+
     setLoading(true);
     fetchDrivers();
     fetchTeams();
@@ -60,44 +56,77 @@ export function CreateSeasonStep2({
   }, []);
 
   const assignDriversToTeams = () => {
-    const updatedTeams = { ...assignedTeams }; // Kopiere die Teams in ein neues Objekt
+    const updatedTeams: {
+      [teamId: string]: { driver1: string; driver2: string };
+    } = {};
 
     selectedDrivers.forEach((driverId) => {
       let teamAssigned = false;
 
       while (!teamAssigned) {
         const randomTeamIndex = Math.floor(Math.random() * teams.length);
-        const randomSeatIndex = Math.floor(Math.random() * 2); // This will be either 0 or 1
+        const randomSeatIndex = Math.floor(Math.random() * 2);
         const selectedTeam = teams[randomTeamIndex];
 
-        // Prüfe, ob der Teamplatz frei ist (driver1 oder driver2)
-        if (randomSeatIndex === 0) {
-          if (!updatedTeams[selectedTeam.id]?.driver1) {
-            updatedTeams[selectedTeam.id] = {
-              ...updatedTeams[selectedTeam.id],
-              driver1: driverId,
-            };
-            teamAssigned = true;
-          }
-        } else {
-          if (!updatedTeams[selectedTeam.id]?.driver2) {
-            updatedTeams[selectedTeam.id] = {
-              ...updatedTeams[selectedTeam.id],
-              driver2: driverId,
-            };
-            teamAssigned = true;
-          }
+        if (randomSeatIndex === 0 && !updatedTeams[selectedTeam.id]?.driver1) {
+          updatedTeams[selectedTeam.id] = {
+            driver1: driverId,
+            driver2: updatedTeams[selectedTeam.id]?.driver2 || "",
+          };
+          teamAssigned = true;
+        } else if (
+          randomSeatIndex === 1 &&
+          !updatedTeams[selectedTeam.id]?.driver2
+        ) {
+          updatedTeams[selectedTeam.id] = {
+            driver1: updatedTeams[selectedTeam.id]?.driver1 || "",
+            driver2: driverId,
+          };
+          teamAssigned = true;
         }
       }
     });
 
-    setAssignedTeams(updatedTeams); // Aktualisierte Teams setzen
+    if (includeDrivers) {
+      allDrivers.forEach((driver) => {
+        if (!selectedDrivers.includes(driver.id)) {
+          const team = updatedTeams[driver.teamId] || {};
+
+          if (driver.seat === 0 && !team.driver1) {
+            updatedTeams[driver.teamId] = {
+              driver1: driver.id,
+              driver2: team.driver2 || "",
+            };
+          } else if (driver.seat === 1 && !team.driver2) {
+            updatedTeams[driver.teamId] = {
+              driver1: team.driver1 || "",
+              driver2: driver.id,
+            };
+          }
+        }
+      });
+    }
+
+    setAssignedTeams(updatedTeams);
+    setTeamAssigned(true);
+    console.log("Assigned Teams:", updatedTeams);
+  };
+
+  const handleRevealTeam = (teamId: string) => {
+    setRevealedTeams((prev) => {
+      const newRevealed = new Set(prev);
+      if (newRevealed.has(teamId)) {
+        newRevealed.delete(teamId);
+      } else {
+        newRevealed.add(teamId);
+      }
+      return newRevealed;
+    });
   };
 
   const handleSubmit = () => {
     if (selectedDrivers.length > 0 && Object.keys(assignedTeams).length > 0) {
       nextStep(selectedDrivers, assignedTeams);
-      console.log("Assigned Teams:", assignedTeams);
     } else {
       alert(
         "Bitte wählen Sie mindestens einen Spieler aus und weisen Sie die Spieler den Teams zu."
@@ -105,9 +134,9 @@ export function CreateSeasonStep2({
     }
   };
 
-  const driverName = (driverId: string) => {
+  const getDriverById = (driverId: string) => {
     const driver = allDrivers.find((driver) => driver.id === driverId);
-    return driver?.name || driverId;
+    return driver || null;
   };
 
   if (loading) {
@@ -115,7 +144,7 @@ export function CreateSeasonStep2({
   }
 
   return (
-    <div className="create-season-wrapper">
+    <div className="create-season-wrapper justify-top">
       <h1 className="display-1">Select Players for Season "{seasonName}"</h1>
       <ul className="create-season-list">
         {drivers.map((driver) => (
@@ -146,72 +175,105 @@ export function CreateSeasonStep2({
                   }
                 }}
               />
-              {!driver.name ? driver.id : driver.name}
+              {driver.name || driver.id}
             </label>
           </li>
         ))}
       </ul>
-      {/* <div>
-        <label>
+      <div className="create-season-list-item">
+        <label className={includeDrivers ? "checked" : ""}>
           <input
-            type="radio"
-            checked={manualAssignment}
-            onChange={() => setManualAssignment(true)}
+            type="checkbox"
+            checked={includeDrivers}
+            onChange={(e) => setIncludeDrivers(e.target.checked)}
           />
-          Spieler manuell Teams/Slots zuordnen
+          Yes, add AI-Drivers
         </label>
-        <label>
-          <input
-            type="radio"
-            checked={!manualAssignment}
-            onChange={() => setManualAssignment(false)}
-          />
-          Zufällige Zuordnung
-        </label>
-      </div> */}
-      <button onClick={assignDriversToTeams} className="btn-primary">
-        Assign players to teams
-      </button>
+      </div>
+      {!teamAssigned ? (
+        <button onClick={assignDriversToTeams} className="btn-primary">
+          Assign players to teams
+        </button>
+      ) : (
+        <button onClick={assignDriversToTeams} className="btn-primary">
+          Reassign players to teams
+        </button>
+      )}
 
-      {/* Zeige zugewiesene Teams an */}
       {Object.keys(assignedTeams).length > 0 && (
-        <div className="create-season-wrapper">
-          <h2>Assigned Teams</h2>
-          <ul className="create-season-teams-list">
-            {teams.map((team) => (
-              <li key={team.id}>
-                <div className="table-wrapper">
-                  <table className="leaderboard-table">
-                    <thead>
-                      <tr>
-                        <th colSpan={2}>
-                          <strong>{team.name}</strong>:
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td>Driver 1:</td>
-                        <td>
-                          {driverName(assignedTeams[team.id]?.driver1) ||
-                            "free"}
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>Driver 2:</td>
-                        <td>
-                          {driverName(assignedTeams[team.id]?.driver2) ||
-                            "free"}
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
+        <div className="team-grid" style={{ width: "100%" }}>
+          {teams
+            .sort((a, b) => a.listOrder - b.listOrder)
+            .map((team) => (
+              <div
+                key={team.id}
+                className="team-box"
+                style={{
+                  borderLeft: `8px solid ${team.teamColor}`,
+                }}
+              >
+                <div
+                  className={`driver-wrapper ${
+                    revealedTeams.has(team.id) ? "revealed" : "blurred"
+                  }`}
+                  onClick={() => handleRevealTeam(team.id)}
+                  style={{
+                    filter: revealedTeams.has(team.id) ? "none" : "blur(40px)",
+                    transition: "filter 0.5s",
+                    cursor: "pointer",
+                  }}
+                >
+                  <p className="team-name">{team.shortName}</p>
+                  <div
+                    className="driver-box"
+                    style={{
+                      backgroundColor: "white",
+                      backgroundImage: `url("${
+                        getDriverById(assignedTeams[team.id]?.driver1)
+                          ?.profilePictureUrl || ""
+                      }")`,
+                      backgroundSize: "cover",
+                      backgroundPosition: "center",
+                    }}
+                  >
+                    <a
+                      href={`/profile/${assignedTeams[team.id]?.driver1}`}
+                      target="_blank"
+                    >
+                      <p className="driver-name">
+                        {getDriverById(assignedTeams[team.id]?.driver1)?.name ||
+                          "free"}
+                      </p>
+                    </a>
+                  </div>
+                  <div
+                    className="driver-box"
+                    style={{
+                      backgroundColor: "white",
+                      backgroundImage: `url("${
+                        getDriverById(assignedTeams[team.id]?.driver2)
+                          ?.profilePictureUrl || ""
+                      }")`,
+                      backgroundSize: "cover",
+                      backgroundPosition: "center",
+                    }}
+                  >
+                    <a
+                      href={`/profile/${assignedTeams[team.id]?.driver2}`}
+                      target="_blank"
+                    >
+                      <p className="driver-name">
+                        {getDriverById(assignedTeams[team.id]?.driver2)?.name ||
+                          "free"}
+                      </p>
+                    </a>
+                  </div>
                 </div>
-              </li>
+              </div>
             ))}
-          </ul>
         </div>
       )}
+
       <div className="btn-wrapper">
         <button onClick={previousStep} className="btn-primary">
           Back

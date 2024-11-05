@@ -1,17 +1,8 @@
 // authContext/index.tsx
-import { createContext, useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { auth } from "../../firebase/firebaseConfig";
 import { onAuthStateChanged, User } from "firebase/auth";
-
-type AuthContextType = {
-    isAuthenticated: boolean;
-    user: User | null;
-    login: () => void;
-    logout: () => void;
-    displayName: string | null;
-}
-
-export const AuthContext = createContext<AuthContextType | undefined>(undefined);
+import { AuthContext } from "./context";
 
 // eslint-disable-next-line react-refresh/only-export-components
 export function useAuth() {

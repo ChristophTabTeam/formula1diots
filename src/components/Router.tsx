@@ -14,6 +14,9 @@ import ChangePassword from "../pages/Auth/ChangePassword";
 import DriverProfile from "../pages/Profile/DriverProfile";
 import SeasonResults from "../pages/Season/SeasonResults";
 import RaceResults from "../pages/Season/RaceResults";
+import Rules from "../pages/Season/Rules";
+import Statistic from "../pages/Season/Statistic";
+import FastestLap from "../pages/Season/FastestLaps";
 
 const routes: { [key: string]: () => React.JSX.Element } = {
   "/login": () => <Login />,
@@ -58,6 +61,30 @@ const routes: { [key: string]: () => React.JSX.Element } = {
     return (
       <PrivateRoute>
         <DriverLineup seasonId={seasonId} />
+      </PrivateRoute>
+    );
+  },
+  "/season/:seasonId/rules": () => {
+    const seasonId = window.location.pathname.split("/")[2];
+    return (
+      <PrivateRoute>
+        <Rules seasonId={seasonId} />
+      </PrivateRoute>
+    );
+  },
+  "/season/:seasonId/statistic": () => {
+    const seasonId = window.location.pathname.split("/")[2];
+    return (
+      <PrivateRoute>
+        <Statistic seasonId={seasonId} />
+      </PrivateRoute>
+    );
+  },
+  "/season/:seasonId/fastest-laps": () => {
+    const seasonId = window.location.pathname.split("/")[2];
+    return (
+      <PrivateRoute>
+        <FastestLap seasonId={seasonId} />
       </PrivateRoute>
     );
   },

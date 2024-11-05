@@ -196,7 +196,7 @@ const SeasonResults: React.FC<SeasonResultsProps> = ({
             <table className="leaderboard-table season-results-table">
               <thead>
                 <tr>
-                  <th>Season {seasonData.name}</th>
+                  <th>Driver</th>
                   {seasonRaces.map((race) => {
                     const raceData = races.find((r) => r.name === race.raceId);
                     return (

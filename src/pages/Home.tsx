@@ -139,15 +139,15 @@ const Home: React.FC = () => {
       <div className="container">
         <div className="home-header">
           <div className="home-headline-wraper">
-            <h1 className="display-1 home-head">
+            <div className="home-head">
               <img src={f1Logo} className="f1-logo-home" alt="F1 Logo" />
-              Formula1diots
-            </h1>
+              <h1 className="display-1">Formula1diots</h1>
+            </div>
             <h2 className="display-4">Season {seasonName}</h2>
           </div>
         </div>
         <div className="home-wrapper">
-          <div>
+          <div className="home-column">
             <h3 className="display-6">Driver Standings</h3>
             <div className="table-wrapper">
               <div className="table-mask">
@@ -177,7 +177,7 @@ const Home: React.FC = () => {
               </div>
             </div>
           </div>
-          <div>
+          <div className="home-column">
             <h3 className="display-6">Team Standings</h3>
             <div className="table-wrapper">
               <table className="leaderboard-table">

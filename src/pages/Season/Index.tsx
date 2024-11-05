@@ -1,34 +1,37 @@
 import React, { useEffect, useState } from "react";
-import racingFlag from "../../assets/racing-flag-svgrepo-com.svg";
-import calendarAdd from "../../assets/calendar_add_on_24dp_FFF_FILL0_wght400_GRAD0_opsz24.svg";
-import calendarView from "../../assets/date_range_24dp_FFF_FILL0_wght400_GRAD0_opsz24.svg";
-import groupe from "../../assets/groups_24dp_FILL0_wght400_GRAD0_opsz24.svg"
-import {
-  getFirestore,
-  collection,
-  query,
-  where,
-  getDocs,
-} from "firebase/firestore";
+import { collection, getDocs } from "firebase/firestore";
 import type { Season } from "../../interfaces/Season";
 import Loading from "../../components/Loading";
+import { db } from "../../firebase/firebaseConfig";
 
 const Season: React.FC = () => {
-  const [season, setSeason] = useState<Season[]>([]);
+  const [season, setSeason] = useState<Season>();
+  const [, setSeasons] = useState<Season[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchActiveSeason = async () => {
-      const db = getFirestore();
-      const q = query(
-        collection(db, "seasons"),
-        where("isActiveSeason", "==", true)
-      );
-      const querySnapshot = await getDocs(q);
-      querySnapshot.forEach(() => {
-        setSeason(querySnapshot.docs.map((doc) => doc.data() as Season));
-      });
+      try {
+        const seasonsCollection = collection(db, "seasons");
+        const seasonsSnapshot = await getDocs(seasonsCollection);
+        const seasonsData = seasonsSnapshot.docs.map(
+          (doc) => doc.data() as Season
+        );
+        if (seasonsData.length === 0) {
+          window.location.href = "/create-season";
+        }
+        setSeasons(seasonsData);
+        const activeSeason = seasonsData.filter(
+          (season) => season.isActiveSeason === true
+        );
+        if (activeSeason.length > 0) {
+          setSeason(activeSeason[0]);
+        }
+      } catch (error) {
+        console.error("Error fetching active season: ", error);
+      }
     };
+
     setLoading(true);
     fetchActiveSeason();
     setLoading(false);
@@ -40,31 +43,64 @@ const Season: React.FC = () => {
 
   return (
     <div className="container">
-      <div className="home-header">
-        <h1 className="display-2">Season Options</h1>
-      </div>
+      <h3 className="display-2" style={{ marginBottom: "30px" }}>
+        Season {season && season.id}
+      </h3>
       <div className="settings-grid">
-        <a className="settings-card" href="/create-season">
-          <img src={calendarAdd} className="settings-icon" />
+        <a className="settings-card settings-grid-one" href="/create-season">
           Create Season
         </a>
-        {season.length > 0 && (
-          <a className="settings-card" href={`/season/${season[0].id}`}>
-            <img src={calendarView} className="settings-icon" />
+        {season && (
+          <a
+            className="settings-card settings-grid-two"
+            href={`/season/${season.id}`}
+          >
             Season Results
           </a>
         )}
-        {season.length > 0 && (
-          <a href={`/season/${season[0].id}/results-entry`} className="settings-card">
-            <img src={racingFlag} className="settings-icon" />
-            Result Entry
+        {season && (
+          <a
+            href={`/season/${season.id}/results-entry`}
+            className="settings-card settings-grid-three"
+          >
+            <p>Result Entry</p>
           </a>
         )}
-        {season.length > 0 && (
-        <a href={`/season/${season[0].id}/driver-lineup`} className="settings-card">
-          <img src={groupe} className="settings-icon" />
-          Driver Lineup
-        </a>
+        {season && (
+          <a
+            href={`/season/${season.id}/driver-lineup`}
+            className="settings-card settings-grid-four"
+          >
+            <p>Driver Lineup</p>
+          </a>
+        )}
+        {season && (
+          <a
+            href={`/season/${season.id}/statistic`}
+            className="settings-card settings-grid-five"
+          >
+            <p>Statistic</p>
+          </a>
+        )}
+        {season && (
+          <a
+            href={`/season/${season.id}/fastest-laps`}
+            className="settings-card settings-grid-six"
+          >
+            <div style={{ display: "flex", flexDirection: "column" }}>
+              <span>Fastest Lap</span>
+            </div>
+          </a>
+        )}
+        {season && (
+          <a
+            href={`/season/${season.id}/rules`}
+            className="settings-card settings-grid-seven"
+          >
+            <div style={{ display: "flex", flexDirection: "column" }}>
+              <span>Rules</span>
+            </div>
+          </a>
         )}
       </div>
     </div>

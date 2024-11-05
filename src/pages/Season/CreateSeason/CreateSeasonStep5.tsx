@@ -3,8 +3,10 @@ import { doc, setDoc, collection, writeBatch, getDocs } from 'firebase/firestore
 import { db } from '../../../firebase/firebaseConfig';
 import { Season } from '../../../interfaces/Season';
 import { Driver } from '../../../interfaces/Driver';
+import { SeasonRules } from '../../../interfaces/SeasonRules';
 import Loading from '../../../components/Loading';
 import { useAuth } from '../../../context/authcontext';
+import { defaultSeasonRules } from './SeasonRulesDefault';
 
 interface CreateSeasonStep5Props {
   seasonName: string;
@@ -12,6 +14,7 @@ interface CreateSeasonStep5Props {
   selectedRaces: string[];
   teams: { [teamId: string]: { points: number; driver1: string | null; driver2: string | null } };
   includeDrivers: boolean;
+  seasonRules: SeasonRules | null;
   onFinish: () => void;
   previousStep: () => void;
 }
@@ -21,6 +24,7 @@ export function CreateSeasonStep5({
   selectedDrivers,
   selectedRaces,
   teams,
+  seasonRules,
   onFinish,
   previousStep,
 }: CreateSeasonStep5Props) {
@@ -50,10 +54,10 @@ export function CreateSeasonStep5({
   const handleCreateSeason = async () => {
     setIsSaving(true);
     try {
-      // Initialisiere die Punkte der Fahrer und Teams
       const driverPoints: { [driverId: string]: number } = {};
       const playerData: { [playerId: string]: { teamId: string; slot: string } } = {};
       const updatedTeams = { ...teams };
+
       Object.keys(updatedTeams).forEach((teamId) => {
         if (!teamId || teamId === 'undefined') {
           console.error('Ungültige Team-ID gefunden:', teamId);
@@ -81,7 +85,6 @@ export function CreateSeasonStep5({
       });
   
       const isActiveSeason = !seasons.some((season) => season.isActiveSeason);
-      // Saison-Dokument basierend auf dem Season-Interface erstellen
       const season: Season = {
         id: seasonName,
         name: seasonName,
@@ -93,10 +96,18 @@ export function CreateSeasonStep5({
         addedBy: user?.email?.replace('@formula1diots.de', '') || 'Unbekannt',
       };
   
-      // Dokument in Firestore speichern
       const seasonDocRef = doc(db, 'seasons', seasonName);
       await setDoc(seasonDocRef, season);
   
+      if (!seasonRules) {
+        console.warn("seasonRules sind null in Step 5, Standardwerte werden verwendet");
+        seasonRules = defaultSeasonRules; // Temporärer Fallback
+      }
+      // Hinzufügen der Rules in eine Collection innerhalb des Season Dokuments
+      const rulesDocRef = doc(collection(seasonDocRef, 'rules'), 'seasonRules');
+      seasonRules.seasonId = seasonName;
+      await setDoc(rulesDocRef, seasonRules);
+
       // Rennen in separate Collection innerhalb der Season speichern
       const batch = writeBatch(db);
       selectedRaces.forEach((raceId, index) => {
@@ -155,9 +166,8 @@ export function CreateSeasonStep5({
         });
       });
       await batch.commit();
-  
-      alert('Saison erfolgreich erstellt!');
-      onFinish(); // Weiterleitung oder Abschluss nach Erstellung der Saison
+      window.location.href = '/';
+      onFinish(); 
     } catch (error) {
       console.error('Fehler beim Erstellen der Saison:', error);
       alert('Fehler beim Erstellen der Saison. Bitte versuchen Sie es erneut.');
@@ -176,7 +186,7 @@ export function CreateSeasonStep5({
       <button onClick={handleCreateSeason} disabled={isSaving} className='btn-primary'>
         {isSaving ? 'Speichern...' : 'Season erstellen'}
       </button>
-      <button onAbort={previousStep} className='btn-primary'>Back</button>
+      <button onClick={previousStep} className='btn-primary'>Back</button>
     </div>
   );
 }

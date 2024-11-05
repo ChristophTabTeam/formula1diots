@@ -12,7 +12,7 @@ function AppContent() {
           <Nav />
           <div className="version-wrapper">
             {/* <a href="/changelog">Changelog</a> */}
-            <p>Version 1.0.0</p>
+            <p>Version 1.0.5</p>
           </div>
         </div>
       )}
