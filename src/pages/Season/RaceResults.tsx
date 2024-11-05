@@ -141,7 +141,6 @@ const RaceResults: React.FC<RaceResultsProps> = ({ raceId, seasonId }) => {
   };
 
   const calculatePoints = (position: string, fastestLapId: string): number => {
-    // Punktesystem für die Top 10
     const pointsDistribution: { [key: string]: number } = {
       p1: 25,
       p2: 18,
@@ -155,10 +154,8 @@ const RaceResults: React.FC<RaceResultsProps> = ({ raceId, seasonId }) => {
       p10: 1,
     };
 
-    // Punkte für die Position
     const basePoints = pointsDistribution[position.toLowerCase()] || 0;
 
-    // 1 Extrapunkt für die schnellste Runde, falls in den Top 10
     const extraPoint =
       position.toLowerCase() in pointsDistribution &&
       seasonRace?.raceResults[position as keyof RaceResults] === fastestLapId
@@ -167,6 +164,33 @@ const RaceResults: React.FC<RaceResultsProps> = ({ raceId, seasonId }) => {
 
     return basePoints + extraPoint;
   };
+
+  const timeToSeconds = (time: string): number => {
+    const [minutes, rest] = time.split(":");
+    const [seconds, milliseconds] = rest.split(".");
+    return (
+      parseInt(minutes, 10) * 60 +
+      parseInt(seconds, 10) +
+      parseInt(milliseconds, 10) / 1000
+    );
+  };
+
+  const secondsToTime = (seconds: number): string => {
+    const mins = Math.floor(seconds / 60);
+    const secs = Math.floor(seconds % 60);
+    const millis = Math.round((seconds % 1) * 1000);
+  
+    // Formatierung der Minuten und Sekunden ohne führende Nullen
+    const minsStr = mins > 0 ? `${mins}:` : ""; // Minuten nur anzeigen, wenn > 0
+    const secsStr = secs > 0 || mins > 0 ? `${secs}.` : `0.`; // Sekunden nur anzeigen, wenn > 0 oder wenn es Minuten gibt
+    const millisStr = String(millis).padStart(3, "0"); // Millisekunden immer auf 3 Stellen auffüllen
+  
+    return `${minsStr}${secsStr}${millisStr}`;
+  };
+
+  const leaderTime = seasonRace?.qualifyingResults?.P1LapTime
+    ? timeToSeconds(seasonRace.qualifyingResults.P1LapTime)
+    : null;
 
   if (loading) return <Loading />;
 
@@ -271,9 +295,21 @@ const RaceResults: React.FC<RaceResultsProps> = ({ raceId, seasonId }) => {
                     })()}
                   </td>
                   <td>
-                    {seasonRace?.qualifyingResults[
-                      `${position}LapTime` as keyof QualifyingResults
-                    ] || "--"}
+                    {position === "P1" || !leaderTime
+                      ? seasonRace?.qualifyingResults[
+                          `${position}LapTime` as keyof QualifyingResults
+                        ] || "--"
+                      : seasonRace?.qualifyingResults[
+                          `${position}LapTime` as keyof QualifyingResults
+                        ]
+                      ? `+${secondsToTime(
+                          timeToSeconds(
+                            seasonRace?.qualifyingResults[
+                              `${position}LapTime` as keyof QualifyingResults
+                            ] || "0"
+                          ) - leaderTime
+                        )}`
+                      : "--"}
                   </td>
                 </tr>
               ))}

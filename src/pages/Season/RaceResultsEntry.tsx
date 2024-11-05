@@ -20,6 +20,7 @@ interface RaceFetchData {
   id: string;
   isFinished: boolean;
   order: number;
+  qualifyingResults: { [key: string]: string };
 }
 
 const RaceResultsEntry: React.FC<RaceResultsEntryProps> = ({ seasonId }) => {
@@ -86,7 +87,13 @@ const RaceResultsEntry: React.FC<RaceResultsEntryProps> = ({ seasonId }) => {
             const racesDataSorted = racesDataFiltered.sort(
               (a, b) => a.order - b.order
             );
-            setRaceId(racesDataSorted[0].id);
+            const selectedRace = racesDataSorted[0];
+            setRaceId(selectedRace.id);
+
+            // Wenn Qualifying-Ergebnisse bereits gespeichert sind, diese in den State laden
+            if (selectedRace.qualifyingResults) {
+              setQualifyingResults(selectedRace.qualifyingResults);
+            }
           } else {
             console.warn("Keine offenen Rennen gefunden.");
           }
@@ -127,6 +134,41 @@ const RaceResultsEntry: React.FC<RaceResultsEntryProps> = ({ seasonId }) => {
       ...prevStatus,
       [driverId]: isDnf,
     }));
+  };
+
+  const handleSaveQualifyingResults = async () => {
+    if (!raceId) {
+      console.error("Kein gültiges Rennen gefunden, raceId ist leer.");
+      alert("Es wurde kein Rennen gefunden, das bearbeitet werden kann.");
+      return;
+    }
+
+    setIsSaving(true);
+    try {
+      const raceDocRef = doc(
+        collection(db, "seasons", seasonId, "races"),
+        raceId
+      );
+      await setDoc(
+        raceDocRef,
+        {
+          qualifyingResults: {
+            ...qualifyingResults,
+          },
+          hasQualifyingSaved: true,
+        },
+        { merge: true }
+      );
+
+      alert("Qualifying-Ergebnisse erfolgreich gespeichert!");
+    } catch (error) {
+      console.error("Fehler beim Speichern der Qualifying-Ergebnisse:", error);
+      alert(
+        "Fehler beim Speichern der Qualifying-Ergebnisse. Bitte versuchen Sie es erneut."
+      );
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   const handleSaveResults = async () => {
@@ -572,11 +614,18 @@ const RaceResultsEntry: React.FC<RaceResultsEntryProps> = ({ seasonId }) => {
             }}
           >
             <button
+              onClick={handleSaveQualifyingResults}
+              disabled={isSaving}
+              className="custom-file-upload btn-primary"
+            >
+              {isSaving ? "Saving..." : "Save Qualifying Results"}
+            </button>
+            <button
               onClick={handleSaveResults}
               disabled={isSaving}
               className="custom-file-upload btn-primary delete"
             >
-              {isSaving ? "Speichern..." : "Ergebnisse speichern"}
+              {isSaving ? "Saving..." : "Save Results"}
             </button>
           </div>
         </div>

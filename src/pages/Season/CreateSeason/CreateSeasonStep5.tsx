@@ -116,6 +116,7 @@ export function CreateSeasonStep5({
           raceId,
           order: index + 1,
           isFinished: false,
+          hasQualifyingSaved: false,
           qualifyingResults: {
             P1: null, P1LapTime: null,
             P2: null, P2LapTime: null,

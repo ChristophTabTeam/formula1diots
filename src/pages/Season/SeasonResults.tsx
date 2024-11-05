@@ -5,84 +5,10 @@ import { Season } from "../../interfaces/Season";
 import { Race } from "../../interfaces/Race";
 import Loading from "../../components/Loading";
 import { Driver } from "../../interfaces/Driver";
+import { RaceResults, SeasonRace } from "../../interfaces/SeasonRace";
 
 interface SeasonResultsProps {
   seasonId: string;
-}
-
-interface SeasonRace {
-  raceId: string;
-  isFinished: boolean;
-  order: number;
-  qualifyingResults: QualifyingResults;
-  raceResults: RaceResults;
-}
-
-interface QualifyingResults {
-  p1: string;
-  p1LapTime: string;
-  p2: string;
-  p2LapTime: string;
-  p3: string;
-  p3LapTime: string;
-  p4: string;
-  p4LapTime: string;
-  p5: string;
-  p5LapTime: string;
-  p6: string;
-  p6LapTime: string;
-  p7: string;
-  p7LapTime: string;
-  p8: string;
-  p8LapTime: string;
-  p9: string;
-  p9LapTime: string;
-  p10: string;
-  p10LapTime: string;
-  p11: string;
-  p11LapTime: string;
-  p12: string;
-  p12LapTime: string;
-  p13: string;
-  p13LapTime: string;
-  p14: string;
-  p14LapTime: string;
-  p15: string;
-  p15LapTime: string;
-  p16: string;
-  p16LapTime: string;
-  p17: string;
-  p17LapTime: string;
-  p18: string;
-  p18LapTime: string;
-  p19: string;
-  p19LapTime: string;
-  p20: string;
-  p20LapTime: string;
-}
-
-interface RaceResults {
-  p1: string;
-  p2: string;
-  p3: string;
-  p4: string;
-  p5: string;
-  p6: string;
-  p7: string;
-  p8: string;
-  p9: string;
-  p10: string;
-  p11: string;
-  p12: string;
-  p13: string;
-  p14: string;
-  p15: string;
-  p16: string;
-  p17: string;
-  p18: string;
-  p19: string;
-  p20: string;
-  fastestLap: string;
 }
 
 const SeasonResults: React.FC<SeasonResultsProps> = ({
@@ -203,16 +129,18 @@ const SeasonResults: React.FC<SeasonResultsProps> = ({
                       <th key={race.raceId}>
                         <a
                           className={`table-race-id ${
-                            race.isFinished ? "is-finished" : ""
+                            race.isFinished || race.hasQualifyingSaved
+                              ? "is-finished"
+                              : ""
                           }`}
                           href={
-                            race.isFinished
+                            race.isFinished || race.hasQualifyingSaved
                               ? `/season/${seasonId}/race/${race.raceId}`
                               : undefined
                           }
                           onClick={(e) => {
-                            if (!race.isFinished) {
-                              e.preventDefault(); // Verhindert das Klicken, wenn das Rennen nicht beendet ist
+                            if (!race.isFinished && !race.hasQualifyingSaved) {
+                              e.preventDefault(); // Verhindert das Klicken, wenn das Rennen nicht beendet ist und keine Qualifikation gespeichert ist
                             }
                           }}
                         >
