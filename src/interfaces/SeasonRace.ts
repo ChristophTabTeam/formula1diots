@@ -5,6 +5,9 @@ export interface SeasonRace {
   qualifyingResults: QualifyingResults;
   raceResults: RaceResults;
   hasQualifyingSaved?: boolean;
+  dnfs: { [key: string]: boolean }
+  raceDate: Date;
+  qualifyingDate: Date;
 }
 
 export interface QualifyingResults {

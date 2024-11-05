@@ -179,18 +179,32 @@ const RaceResults: React.FC<RaceResultsProps> = ({ raceId, seasonId }) => {
     const mins = Math.floor(seconds / 60);
     const secs = Math.floor(seconds % 60);
     const millis = Math.round((seconds % 1) * 1000);
-  
+
     // Formatierung der Minuten und Sekunden ohne führende Nullen
     const minsStr = mins > 0 ? `${mins}:` : ""; // Minuten nur anzeigen, wenn > 0
     const secsStr = secs > 0 || mins > 0 ? `${secs}.` : `0.`; // Sekunden nur anzeigen, wenn > 0 oder wenn es Minuten gibt
     const millisStr = String(millis).padStart(3, "0"); // Millisekunden immer auf 3 Stellen auffüllen
-  
+
     return `${minsStr}${secsStr}${millisStr}`;
   };
 
   const leaderTime = seasonRace?.qualifyingResults?.P1LapTime
     ? timeToSeconds(seasonRace.qualifyingResults.P1LapTime)
     : null;
+
+  const formatDate = (date: any): string => {
+    // Überprüfe, ob es sich bereits um ein Date-Objekt handelt
+    const validDate =
+      date instanceof Date ? date : date.toDate ? date.toDate() : null;
+
+    if (!validDate) return "Ungültiges Datum";
+
+    return validDate.toLocaleDateString("de-DE", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+    });
+  };
 
   if (loading) return <Loading />;
 
@@ -199,7 +213,10 @@ const RaceResults: React.FC<RaceResultsProps> = ({ raceId, seasonId }) => {
   return (
     <div className="race-results-wrapper">
       <h1 className="display-2">{race?.fullName}</h1>
-      <h2 className="display-4">Race Results</h2>
+      <h2 className="display-4">
+        Race Results{" "}
+        {seasonRace?.raceDate && ` - ${formatDate(seasonRace.raceDate)}`}{" "}
+      </h2>
       <div className="table-wrapper" style={{ marginBottom: 40 }}>
         <div className="table-mask">
           <table className="leaderboard-table">
@@ -217,13 +234,14 @@ const RaceResults: React.FC<RaceResultsProps> = ({ raceId, seasonId }) => {
                   seasonRace?.raceResults[position as keyof RaceResults] || "";
                 const isFastestLap =
                   driverId === seasonRace?.raceResults.fastestLap;
+                const isDnf = seasonRace?.dnfs?.[driverId] || false; // Prüfen, ob der Fahrer DNF hat
 
                 return (
                   <tr
                     key={position}
                     className={isFastestLap ? "fastest-lap" : ""}
                   >
-                    <td>{position.toUpperCase()}</td>
+                    <td>{isDnf ? "DNF" : position.toUpperCase()}</td>{" "}
                     <td>{getDriverById(driverId)?.name}</td>
                     <td>
                       {(() => {
@@ -239,10 +257,12 @@ const RaceResults: React.FC<RaceResultsProps> = ({ raceId, seasonId }) => {
                       })()}
                     </td>
                     <td>
-                      {calculatePoints(
-                        position,
-                        seasonRace?.raceResults.fastestLap || ""
-                      )}
+                      {isDnf
+                        ? "--" // Keine Punkte für DNF
+                        : calculatePoints(
+                            position,
+                            seasonRace?.raceResults.fastestLap || ""
+                          )}
                     </td>
                   </tr>
                 );
@@ -252,7 +272,10 @@ const RaceResults: React.FC<RaceResultsProps> = ({ raceId, seasonId }) => {
         </div>
       </div>
 
-      <h2 className="display-4">Qualifying Results</h2>
+      <h2 className="display-4">
+        Qualifying Results{" "}
+        {seasonRace?.qualifyingDate && ` - ${formatDate(seasonRace.qualifyingDate)}`}
+      </h2>
       <div className="table-wrapper">
         <div className="table-mask">
           <table className="leaderboard-table">

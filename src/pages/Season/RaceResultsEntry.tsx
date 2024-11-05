@@ -129,10 +129,10 @@ const RaceResultsEntry: React.FC<RaceResultsEntryProps> = ({ seasonId }) => {
     }));
   };
 
-  const handleDnfChange = (driverId: string, isDnf: boolean) => {
+  const handleDnfChange = (position: string, isDnf: boolean) => {
     setDnfStatus((prevStatus) => ({
       ...prevStatus,
-      [driverId]: isDnf,
+      [position]: isDnf,
     }));
   };
 
@@ -156,6 +156,7 @@ const RaceResultsEntry: React.FC<RaceResultsEntryProps> = ({ seasonId }) => {
             ...qualifyingResults,
           },
           hasQualifyingSaved: true,
+          qualifyingDate: new Date(),
         },
         { merge: true }
       );
@@ -196,6 +197,8 @@ const RaceResultsEntry: React.FC<RaceResultsEntryProps> = ({ seasonId }) => {
             fastestLap,
           },
           isFinished: true,
+          raceDate: currentDate,
+          dnfs: dnfStatus,
         },
         { merge: true }
       );
@@ -494,50 +497,55 @@ const RaceResultsEntry: React.FC<RaceResultsEntryProps> = ({ seasonId }) => {
                   </tr>
                 </thead>
                 <tbody>
-                  {[...Array(20)].map((_, index) => (
-                    <tr key={`race-${index + 1}`}>
-                      <td>P{index + 1}:</td>
-                      <td>
-                        <label>
-                          <input
-                            type="checkbox"
-                            onChange={(e) =>
-                              handleDnfChange(
-                                raceResults[`P${index + 1}`],
-                                e.target.checked
-                              )
-                            }
-                            checked={!!dnfStatus[raceResults[`P${index + 1}`]]}
-                          />
-                        </label>
-                      </td>
-                      <td>
-                        <label>
-                          <select
-                            onChange={(e) =>
-                              handleRaceChange(`${index + 1}`, e.target.value)
-                            }
-                            value={raceResults[`P${index + 1}`] || ""}
-                            className="results-input select"
-                          >
-                            <option value="">select Driver</option>
-                            {drivers
-                              .slice()
-                              .sort((a, b) => a.name.localeCompare(b.name))
-                              .map((driver) => (
-                                <option
-                                  key={driver.id}
-                                  value={driver.id}
-                                  disabled={usedRaceDrivers.includes(driver.id)}
-                                >
-                                  {driver.name}
-                                </option>
-                              ))}
-                          </select>
-                        </label>
-                      </td>
-                    </tr>
-                  ))}
+                  {[...Array(20)].map((_, index) => {
+                    const position = `P${index + 1}`; // Position als Schlüssel für die `raceResults` und `dnfStatus` verwenden
+                    const driverId = raceResults[position]; // Fahrer-ID für die jeweilige Position
+
+                    return (
+                      <tr key={`race-${position}`}>
+                        <td>{position}</td>
+                        <td>
+                          <label className="switch">
+                            <input
+                              type="checkbox"
+                              onChange={(e) =>
+                                handleDnfChange(position, e.target.checked)
+                              }
+                              checked={!!dnfStatus[position]}
+                            />
+                            <span className="switch-span"></span>
+                          </label>
+                        </td>
+                        <td>
+                          <label>
+                            <select
+                              onChange={(e) =>
+                                handleRaceChange(position, e.target.value)
+                              }
+                              value={driverId || ""}
+                              className="results-input select"
+                            >
+                              <option value="">select Driver</option>
+                              {drivers
+                                .slice()
+                                .sort((a, b) => a.name.localeCompare(b.name))
+                                .map((driver) => (
+                                  <option
+                                    key={driver.id}
+                                    value={driver.id}
+                                    disabled={usedRaceDrivers.includes(
+                                      driver.id
+                                    )}
+                                  >
+                                    {driver.name}
+                                  </option>
+                                ))}
+                            </select>
+                          </label>
+                        </td>
+                      </tr>
+                    );
+                  })}
                 </tbody>
               </table>
             </div>
