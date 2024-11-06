@@ -123,10 +123,14 @@ const RaceResultsEntry: React.FC<RaceResultsEntryProps> = ({ seasonId }) => {
   };
 
   const handleRaceChange = (position: string, driverId: string) => {
-    setRaceResults((prevResults) => ({
-      ...prevResults,
-      [`P${position}`]: driverId,
-    }));
+    setRaceResults((prevResults) => {
+      const updatedResults = {
+        ...prevResults,
+        [position]: driverId, // Sicherstellen, dass `position` den korrekten Schlüssel darstellt
+      };
+      console.log("Updated raceResults:", updatedResults);
+      return updatedResults;
+    });
   };
 
   const handleDnfChange = (position: string, isDnf: boolean) => {
