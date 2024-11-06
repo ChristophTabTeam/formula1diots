@@ -211,7 +211,59 @@ const RaceResults: React.FC<RaceResultsProps> = ({ raceId, seasonId }) => {
       return "DNF";
     }
     return position.toUpperCase();
-  }
+  };
+
+  const compareQualiPosToRacePos = (driverId: string) => {
+    const qualiPos = seasonRace?.qualifyingResults
+      ? Object.keys(seasonRace.qualifyingResults).find(
+          (key) =>
+            seasonRace?.qualifyingResults[key as keyof QualifyingResults] ===
+            driverId
+        )
+      : undefined;
+
+    const racePos = seasonRace?.raceResults
+      ? Object.keys(seasonRace.raceResults).find(
+          (key) => seasonRace.raceResults[key as keyof RaceResults] === driverId
+        )
+      : undefined;
+
+    return qualiPos && racePos
+      ? parseInt(qualiPos.slice(1)) - parseInt(racePos.slice(1))
+      : null;
+  };
+
+  const getComparision = (driverId: string) => {
+    const comparison = compareQualiPosToRacePos(driverId);
+    if (comparison === null) return null;
+    if (comparison === 0) {
+      return (
+        <div className="comparison">
+          <span className="icon-20pt" aria-hidden="true">
+            horizontal_rule
+          </span>
+        </div>
+      );
+    } else if (comparison > 0) {
+      return (
+        <div className="comparison">
+          <span className="icon-20pt green-text" aria-hidden="true">
+            keyboard_arrow_up
+          </span>
+          <span className="comparison-number">{comparison}</span>
+        </div>
+      );
+    } else {
+      return (
+        <div className="comparison">
+          <span className="icon-20pt red-text" aria-hidden="true">
+            keyboard_arrow_down
+          </span>
+          <span className="comparison-number">{comparison * -1}</span>
+        </div>
+      );
+    }
+  };
 
   if (loading) return <Loading />;
 
@@ -248,7 +300,10 @@ const RaceResults: React.FC<RaceResultsProps> = ({ raceId, seasonId }) => {
                     key={position}
                     className={isFastestLap ? "fastest-lap" : ""}
                   >
-                    <td>{getPosOrDnf(position)}</td>{" "}
+                    <td className="position-td">
+                      {getPosOrDnf(position)}
+                      {getComparision(driverId)}
+                    </td>
                     <td>{getDriverById(driverId)?.name}</td>
                     <td>
                       {(() => {
@@ -281,7 +336,8 @@ const RaceResults: React.FC<RaceResultsProps> = ({ raceId, seasonId }) => {
 
       <h2 className="display-4">
         Qualifying Results{" "}
-        {seasonRace?.qualifyingDate && ` - ${formatDate(seasonRace.qualifyingDate)}`}
+        {seasonRace?.qualifyingDate &&
+          ` - ${formatDate(seasonRace.qualifyingDate)}`}
       </h2>
       <div className="table-wrapper">
         <div className="table-mask">
