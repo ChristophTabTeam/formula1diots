@@ -105,11 +105,6 @@ const routes: { [key: string]: () => React.JSX.Element } = {
       </PrivateRoute>
     );
   },
-  // "/season/:seasonId/race/:id": () => (
-  //   <PrivateRoute>
-  //     <RaceView />
-  //   </PrivateRoute>
-  // ),
 };
 
 const PrivateRoute = ({ children }: { children: React.JSX.Element }) => {

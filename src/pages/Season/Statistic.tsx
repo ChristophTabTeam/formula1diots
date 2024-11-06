@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../../firebase/firebaseConfig";
 import { Line } from "react-chartjs-2";
@@ -17,7 +17,6 @@ import { Driver } from "../../interfaces/Driver";
 import { Race } from "../../interfaces/Race";
 import { SeasonRace } from "../../interfaces/SeasonRace";
 
-// Registrierung der Chart.js-Module
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -29,7 +28,7 @@ ChartJS.register(
 );
 
 interface RaceResult {
-  [position: string]: string | null; // z.B. { P1: "driver1", P2: "driver2" }
+  [position: string]: string | null;
 }
 
 interface StatisticProps {
@@ -42,6 +41,8 @@ const Statistic: React.FC<StatisticProps> = ({ seasonId }) => {
   const [driversData, setDriversData] = useState<Driver[]>([]);
   const [seasonRaces, setSeasonRaces] = useState<SeasonRace[]>([]);
   const [races, setRaces] = useState<Race[]>([]);
+  const chartRef = useRef<ChartJS<"line">>(null);
+  const [toggledDrivers, setToggledDrivers] = useState<boolean>(true);
 
   useEffect(() => {
     const fetchRaceResults = async () => {
@@ -49,14 +50,13 @@ const Statistic: React.FC<StatisticProps> = ({ seasonId }) => {
         const racesCollectionRef = collection(db, "seasons", seasonId, "races");
         const racesSnapshot = await getDocs(racesCollectionRef);
 
-        // Definiere den Typ für die Renndaten mit `order` und `raceResults`
         const raceResults = racesSnapshot.docs
           .map((doc) => {
             const data = doc.data();
             return {
               order: data.order,
               raceResults: data.raceResults as RaceResult,
-              fastestLap: data.raceResults.fastestLap || null, // Schnellste Runde als Fahrer-ID
+              fastestLap: data.raceResults.fastestLap || null,
             };
           })
           .sort((a, b) => a.order - b.order);
@@ -79,7 +79,6 @@ const Statistic: React.FC<StatisticProps> = ({ seasonId }) => {
           P10: 1,
         };
 
-        // Berechnung der Punkteentwicklung
         raceResults.forEach((result, raceIndex) => {
           const top10Drivers: Set<string> = new Set();
           for (const [position, driverId] of Object.entries(
@@ -126,7 +125,7 @@ const Statistic: React.FC<StatisticProps> = ({ seasonId }) => {
         allDrivers.docs.forEach((doc) => {
           const driverId = doc.id;
           if (!driverPoints[driverId]) {
-            driverPoints[driverId] = new Array(raceResults.length + 1).fill(0); // Initialisiere Punkte für alle Rennen mit 0
+            driverPoints[driverId] = new Array(raceResults.length + 1).fill(0);
           }
         });
 
@@ -177,9 +176,18 @@ const Statistic: React.FC<StatisticProps> = ({ seasonId }) => {
     return race?.threeLetterCode || null;
   };
 
+  const toggleAllDrivers = (visibility: boolean) => {
+    if (chartRef.current) {
+      chartRef.current.data.datasets.forEach((dataset) => {
+        dataset.hidden = !visibility;
+        setToggledDrivers(visibility);
+      });
+      chartRef.current.update();
+    }
+  };
+
   if (loading) return <Loading />;
 
-  // Daten für das Liniendiagramm vorbereiten
   const chartData = {
     labels: [
       "Start",
@@ -189,20 +197,46 @@ const Statistic: React.FC<StatisticProps> = ({ seasonId }) => {
       ),
     ],
     datasets: Object.entries(pointsData)
-      .filter(([driverId]) => !driverId.startsWith("P")) // Nur Fahrer-IDs, keine Positionen wie "P1"
+      .filter(([driverId]) => !driverId.startsWith("P"))
       .map(([driverId, points]) => ({
         label: getDriverById(driverId)?.name || driverId,
         data: points,
         fill: false,
-        borderColor: `#${Math.floor(Math.random() * 16777215).toString(16)}`, // zufällige Farbe für jeden Fahrer
+        borderColor: `#${Math.floor(Math.random() * 16777215).toString(16)}`,
         tension: 0.2,
       })),
   };
 
   return (
     <div>
-      <h1 className="display-4">Season Statistic</h1>
+      <div
+        style={{
+          display: "flex",
+          gap: "10px",
+          marginBottom: "10px",
+          alignItems: "center",
+          justifyContent: "space-between",
+        }}
+      >
+        <h1 className="display-4">Season Statistic</h1>
+          {toggledDrivers ? (
+            <button
+            className="btn-primary"
+            onClick={() => toggleAllDrivers(false)}
+            >
+            Hide All Drivers
+          </button>
+          ) : (
+            <button
+            className="btn-primary"
+            onClick={() => toggleAllDrivers(true)}
+            >
+            Show All Drivers
+          </button>
+          )}
+      </div>
       <Line
+        ref={chartRef}
         data={chartData}
         options={{ responsive: true, plugins: { legend: { position: "top" } } }}
       />

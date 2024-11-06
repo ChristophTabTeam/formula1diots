@@ -84,8 +84,12 @@ const Season: React.FC = () => {
         )}
         {season && (
           <a
-            href={`/season/${season.id}/fastest-laps`}
-            className="settings-card settings-grid-six"
+            // href={`/season/${season.id}/fastest-laps`}
+            href={undefined}
+            className="settings-card disabled settings-grid-six"
+            onClick={(e) => {
+              e.preventDefault();
+            }}
           >
             <div style={{ display: "flex", flexDirection: "column" }}>
               <span>Fastest Lap</span>
