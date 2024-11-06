@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "../styles/nav.scss";
 import { useAuth } from "../context/authcontext";
+import f1Logo from "../assets/F1.svg";
 
 const Nav: React.FC = () => {
   const { logout, user } = useAuth();
@@ -23,6 +24,10 @@ const Nav: React.FC = () => {
   return (
     <div className="nav-scrollable position-relative">
       <nav className="flex-column">
+        <a className="nav-logo-wrapper" href="/">
+          <img src={f1Logo} alt="F1Diots Logo" />
+          <p>Formula1diots</p>
+        </a>
         <div className="nav-item px-3">
           <a className={`nav-link ${path === "" ? "active" : ""}`} href="/">
             <span className="icon-20pt" aria-hidden="true">
@@ -41,6 +46,18 @@ const Nav: React.FC = () => {
               calendar_month
             </span>{" "}
             Season
+          </a>
+        </div>
+
+        <div className="nav-item px-3">
+          <a
+            className={`nav-link ${path === "races" ? "active" : ""}`}
+            href="/races"
+          >
+            <span className="icon-20pt" aria-hidden="true">
+              flag
+            </span>{" "}
+            Races
           </a>
         </div>
 

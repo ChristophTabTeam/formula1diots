@@ -9,6 +9,7 @@ import './styles/table.scss'
 import './styles/material-icons.scss'
 import './styles/funnel.scss'
 import './styles/profile.scss'
+import './styles/races.scss'
 import './styles/team-driver.scss'
 import 'bootstrap/dist/css/bootstrap.min.css';
 

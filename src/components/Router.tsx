@@ -1,11 +1,8 @@
 import React from "react";
 import { useState, useEffect } from "react";
-
-// Deine Komponenten importieren (Home, Login, CreateSeason, etc.)
 import Home from "../pages/Home";
 import Login from "../pages/Auth/Login";
 import CreateSeason from "../pages/Season/CreateSeason/Index";
-// import RaceView from "../pages/RaceView";
 import { useAuth } from "../context/authcontext";
 import Season from "../pages/Season/Index";
 import RaceResultsEntry from "../pages/Season/RaceResultsEntry";
@@ -17,6 +14,8 @@ import RaceResults from "../pages/Season/RaceResults";
 import Rules from "../pages/Season/Rules";
 import Statistic from "../pages/Season/Statistic";
 import FastestLap from "../pages/Season/FastestLaps";
+import Races from "../pages/Races/Index";
+import RaceView from "../pages/Races/RaceView";
 
 const routes: { [key: string]: () => React.JSX.Element } = {
   "/login": () => <Login />,
@@ -94,6 +93,21 @@ const routes: { [key: string]: () => React.JSX.Element } = {
     return (
       <PrivateRoute>
         <RaceResults seasonId={seasonId} raceId={raceId} />
+      </PrivateRoute>
+    );
+  },
+  "/races": () => {
+    return (
+      <PrivateRoute>
+        <Races />
+      </PrivateRoute>
+    );
+  },
+  "/races/:id": () => {
+    const id = window.location.pathname.split("/")[2];
+    return (
+      <PrivateRoute>
+        <RaceView id={id} />
       </PrivateRoute>
     );
   },

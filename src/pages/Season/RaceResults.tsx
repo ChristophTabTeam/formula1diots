@@ -206,6 +206,13 @@ const RaceResults: React.FC<RaceResultsProps> = ({ raceId, seasonId }) => {
     });
   };
 
+  const getPosOrDnf = (position: string) => {
+    if (seasonRace?.dnfs?.[position as keyof RaceResults] === true) {
+      return "DNF";
+    }
+    return position.toUpperCase();
+  }
+
   if (loading) return <Loading />;
 
   if (error) return <div>{error}</div>;
@@ -241,7 +248,7 @@ const RaceResults: React.FC<RaceResultsProps> = ({ raceId, seasonId }) => {
                     key={position}
                     className={isFastestLap ? "fastest-lap" : ""}
                   >
-                    <td>{isDnf ? "DNF" : position.toUpperCase()}</td>{" "}
+                    <td>{getPosOrDnf(position)}</td>{" "}
                     <td>{getDriverById(driverId)?.name}</td>
                     <td>
                       {(() => {

@@ -36,6 +36,29 @@ main {
 
 .sidebar {
   background: #343434;
+  border-top: variables.$accent-red 3px solid;
+}
+
+.nav-logo-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 20px 0 0 0;
+  color: white;
+  font-family: 'Formula1-Regular';
+  gap: 15px;
+  font-size: 20px;
+  & > img {
+    height: 30px;
+  }
+  & > p {
+    margin: 0;
+  }
+  &:hover {
+    text-decoration: none;
+    color: white;
+  }
 }
 
 .top-row {
@@ -100,6 +123,14 @@ main {
   }
 }
 
+.uppercase {
+  text-transform: uppercase;
+}
+
+a {
+  text-decoration: none !important;
+}
+
 .inner-container {
   margin: 0 auto;
 
@@ -126,6 +157,12 @@ main {
   padding: 10px 20px;
   font-size: 20px;
   border-radius: 10px;
+  text-decoration: none;
+  transition: all .3s;
+  &:hover {
+    color: white;
+    background-color: variables.$accent-red;
+  }
 }
 
 .btn:focus,

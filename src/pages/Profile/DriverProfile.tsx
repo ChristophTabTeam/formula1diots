@@ -719,7 +719,9 @@ const DriverProfile: React.FC<DriverProfileProps> = ({ id }) => {
                   </>
                 ) : (
                   <>
-                    {driverProfile.nationality || "Unknown"}
+                    {driverProfile.nationality && driverProfile.nationality.length > 25
+                        ? `${driverProfile.nationality.substring(0, 25)}...`
+                        : driverProfile.nationality || ""}
                     <button
                       onClick={handleEditNationality}
                       className="edit-button"
@@ -729,7 +731,9 @@ const DriverProfile: React.FC<DriverProfileProps> = ({ id }) => {
                   </>
                 )
               ) : (
-                driverProfile.nationality || "Unknown"
+                driverProfile.nationality && driverProfile.nationality.length > 25
+                  ? `${driverProfile.nationality.substring(0, 25)}...`
+                  : driverProfile.nationality || "Unknown"
               )}
             </div>
             {driverProfile.isPlayer && (
@@ -813,7 +817,7 @@ const DriverProfile: React.FC<DriverProfileProps> = ({ id }) => {
                       </>
                     )
                   ) : (
-                    driverProfile.favoriteDriver || "Unknown"
+                    getDriverNameById(driverProfile.favoriteDriver || "") || "Unknown"
                   )}
                 </div>
                 <div className="info-wrapper">

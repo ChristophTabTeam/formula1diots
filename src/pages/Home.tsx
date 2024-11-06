@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import f1Logo from "../assets/F1.svg";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../firebase/firebaseConfig";
 import Loading from "../components/Loading";
@@ -139,11 +138,23 @@ const Home: React.FC = () => {
       <div className="container">
         <div className="home-header">
           <div className="home-headline-wraper">
-            <div className="home-head">
-              <img src={f1Logo} className="f1-logo-home" alt="F1 Logo" />
-              <h1 className="display-1">Formula1diots</h1>
+            <h1 className="display-4 f1-regular uppercase">Season {seasonName}</h1>
+            <div className="btn-wrapper">
+              {lastRaceId && (
+                <a
+                  className="btn-primary"
+                  href={`/season/${seasonName}/race/${lastRaceId}`}
+                >
+                  ← Last Race
+                </a>
+              )}
+              <a
+                className="btn-primary"
+                href={`/season/${seasonName}/results-entry`}
+              >
+                Next Race →
+              </a>
             </div>
-            <h2 className="display-4">Season {seasonName}</h2>
           </div>
         </div>
         <div className="home-wrapper">

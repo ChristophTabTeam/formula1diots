@@ -133,10 +133,10 @@ const RaceResultsEntry: React.FC<RaceResultsEntryProps> = ({ seasonId }) => {
     });
   };
 
-  const handleDnfChange = (position: string, isDnf: boolean) => {
+  const handleDnfChange = (driverId: string, isDnf: boolean) => {
     setDnfStatus((prevStatus) => ({
       ...prevStatus,
-      [position]: isDnf,
+      [driverId]: isDnf,
     }));
   };
 

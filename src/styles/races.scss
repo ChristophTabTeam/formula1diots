@@ -1,0 +1,28 @@
+@use "variables.scss";
+
+.races-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+
+.races-card {
+    background: variables.$table-background-dark;
+    color: variables.$white;
+    padding: 20px 30px 20px;
+    border-top: 4px solid variables.$accent-red;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    transition: all 0.3s;
+    &:hover {
+        color: white;
+        background: variables.$table-background-light;
+    }
+    &>div {
+        aspect-ratio: 16/9;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: contain;
+    }
+}

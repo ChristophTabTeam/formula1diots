@@ -101,7 +101,7 @@
 .race-info-grid-column {
     display: flex;
     flex-direction: column;
-    gap: 70px;
+    gap: 50px;
 }
 
 .race-info-wrapper {
@@ -166,6 +166,10 @@
 
 .race-setup-wrapper {
     max-width: 850px;
+    padding-top: 50px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
 }
 
 .race-setup-inner-wrapper {
