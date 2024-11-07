@@ -452,10 +452,10 @@ const RaceResultsEntry: React.FC<RaceResultsEntryProps> = ({ seasonId }) => {
 
   return (
     <div>
-      <h1 className="display-2">Enter results for {raceId}</h1>
+      <h1 className="display-3 f1-regular">Enter results for {raceId.replace("-", " ")}</h1>
       <div className="home-wrapper" style={{ paddingBottom: 0, gap: 20 }}>
         <div className="">
-          <h2 className="display-6">Qualifying Results</h2>
+          <h2 className="display-6 f1-regular">Qualifying Results</h2>
           <div className="table-wrapper">
             <div className="table-mask">
               <table className="leaderboard-table">
@@ -528,7 +528,7 @@ const RaceResultsEntry: React.FC<RaceResultsEntryProps> = ({ seasonId }) => {
           </div>
         </div>
         <div className="">
-          <h2 className="display-6">Race Results</h2>
+          <h2 className="display-6 f1-regular">Race Results</h2>
           <div className="table-wrapper">
             <div className="table-mask">
               <table className="leaderboard-table">
@@ -598,7 +598,7 @@ const RaceResultsEntry: React.FC<RaceResultsEntryProps> = ({ seasonId }) => {
           className="table-wrapper"
           style={{
             display: "grid",
-            gridTemplateColumns: "1fr 1fr",
+            gridTemplateColumns: "auto 1fr",
             alignItems: "center",
             justifyContent: "space-between",
             gridColumn: "span 2",
@@ -610,10 +610,10 @@ const RaceResultsEntry: React.FC<RaceResultsEntryProps> = ({ seasonId }) => {
               display: "flex",
               justifyContent: "space-between",
               alignItems: "center",
-              gap: 20,
+              gap: 40,
             }}
           >
-            <h2 className="display-6">Fastest Lap</h2>
+            <h2 className="display-6 f1-regular">Fastest Lap</h2>
             <label style={{ display: "flex", gap: 20, alignItems: "center" }}>
               <select
                 value={fastestLap}

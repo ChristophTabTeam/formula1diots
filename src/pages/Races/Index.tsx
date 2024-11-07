@@ -32,7 +32,7 @@ const Races: React.FC = () => {
                 {race.pathToCountryFlag && (
                   <div style={{backgroundImage: `url(${race.pathToCountryFlag})`}} />
                 )}
-                <h2 className="races-card-title f1-regular">{race.name}</h2>
+                <h2 className="races-card-title f1-regular">{race.name.replace("-", " ")}</h2>
               </a>
             ))}
       </div>

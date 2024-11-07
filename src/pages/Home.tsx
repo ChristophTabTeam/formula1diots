@@ -222,7 +222,7 @@ const Home: React.FC = () => {
         <div className="carousel-container">
           <div className="carousel">
             <div className="carousel-item grand-prix">
-              {lastRaceId} Grand Prix
+              {lastRaceId.replace("-", " ")} Grand Prix
             </div>
             {[...Array(20)].map((_, index) => {
               const positionKey = `P${index + 1}` as keyof RaceResults;

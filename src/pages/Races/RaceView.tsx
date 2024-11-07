@@ -89,7 +89,7 @@ const RaceView: React.FC<RaceViewProps> = ({ id }) => {
 
   return (
     <div className="container">
-      <h1 className="display-2 f1-regular">{race.name} Grand Prix</h1>
+      <h1 className="display-2 f1-regular">{race.name.replace("-", " ")} Grand Prix</h1>
       <h2 className="display-4 f1-regular">{race.fullName}</h2>
       <div className="race-grid-2-columns">
         <div className="race-info-grid">

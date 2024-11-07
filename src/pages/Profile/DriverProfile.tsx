@@ -930,7 +930,7 @@ const DriverProfile: React.FC<DriverProfileProps> = ({ id }) => {
                           <option value="">select track</option>
                           {races.map((race) => (
                             <option key={race.name} value={race.name}>
-                              {race.name}
+                              {race.name.replace("-", " ")}
                             </option>
                           ))}
                         </select>
@@ -943,7 +943,7 @@ const DriverProfile: React.FC<DriverProfileProps> = ({ id }) => {
                       </>
                     ) : (
                       <>
-                        {driverProfile.favoriteTrack || "Unknown"}
+                        {driverProfile?.favoriteTrack?.replace("-", " ") || "Unknown"}
                         <button
                           onClick={handleEditTrack}
                           className="edit-button"
