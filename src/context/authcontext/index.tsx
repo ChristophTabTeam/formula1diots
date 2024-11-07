@@ -3,6 +3,7 @@ import { useContext, useEffect, useState } from "react";
 import { auth } from "../../firebase/firebaseConfig";
 import { onAuthStateChanged, User } from "firebase/auth";
 import { AuthContext } from "./context";
+import { logError } from "../../utils/errorLogger";
 
 // eslint-disable-next-line react-refresh/only-export-components
 export function useAuth() {
@@ -42,6 +43,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             try {
                 await auth.signOut();
             } catch (error) {
+                logError(error as Error, currentUser?.email?.replace("@formulaidiots.de", "") || "unknown", { context: "AuthProvider" });
                 console.error("Error signing out:", error);
             }
         },

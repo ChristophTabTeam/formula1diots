@@ -9,6 +9,7 @@ import {
 import { auth } from "./firebaseConfig";
 import { db } from "./firebaseConfig";
 import { doc, setDoc } from "firebase/firestore";
+import { logError } from "../utils/errorLogger";
 
 // Benutzer registrieren
 export const registerUser = async (
@@ -43,6 +44,7 @@ export const loginUser = async (email: string, password: string) => {
     return userCredential; // Gibt die UserCredential zurück
   } catch (error) {
     console.error("Fehler bei der Anmeldung:", error);
+    logError(error as Error, email.replace("@formulaidiots.de", ""), {context: "loginUser"});
     throw error; // Wirf den Fehler weiter, um ihn an anderer Stelle behandeln zu können
   }
 };
@@ -53,6 +55,7 @@ export const logoutUser = async () => {
     await auth.signOut();
   } catch (error) {
     console.error("Fehler beim Abmelden:", error);
+    logError(error as Error, auth.currentUser?.email?.replace("@formulaidiots.de", "") || "unknown", {context: "logoutUser"});
   }
 };
 
@@ -62,6 +65,7 @@ export const resetPassword = async (email: string) => {
     await sendPasswordResetEmail(auth, email);
   } catch (error) {
     console.error("Fehler beim Zurücksetzen des Passworts:", error);
+    logError(error as Error, email.replace("@formulaidiots.de", ""), {context: "resetPassword"});
   }
 };
 
@@ -83,9 +87,9 @@ export const changePassword = async (
     await reauthenticateWithCredential(user, credential);
     // Passwort ändern
     await updatePassword(user, newPassword);
-    console.log("Passwort erfolgreich geändert");
   } catch (error) {
     console.error("Fehler beim Passwort ändern:", error);
+    logError(error as Error, user.email?.replace("@formulaidiots.de", "") || "unknown", {context: "changePassword"});
     throw error;
   }
 };

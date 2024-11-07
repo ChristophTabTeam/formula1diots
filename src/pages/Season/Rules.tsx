@@ -3,16 +3,22 @@ import { SeasonRules } from "../../interfaces/SeasonRules";
 import { collection, doc, getDocs, updateDoc } from "firebase/firestore";
 import { db } from "../../firebase/firebaseConfig";
 import Loading from "../../components/Loading";
+import { useAuth } from "../../context/authcontext";
+import { logError } from "../../utils/errorLogger";
 
 interface RulesProps {
   seasonId: string;
 }
 
 const Rules: React.FC<RulesProps> = ({ seasonId }) => {
+  const { user } = useAuth();
+
   const [activeMenu, setActiveMenu] = useState<string>("lobbyOptions");
   const [seasonRules, setSeasonRules] = useState<SeasonRules>();
   const [loading, setLoading] = useState<boolean>(false);
   const [isSaving, setIsSaving] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchSeasonRules = async () => {
@@ -28,12 +34,17 @@ const Rules: React.FC<RulesProps> = ({ seasonId }) => {
         setSeasonRules(seasonRulesData[0]);
       } catch (error) {
         console.error("Error fetching season rules data:", error);
+        logError(
+          error as Error,
+          user?.email?.replace("@formulaidiots.de", "") || "unknown",
+          { context: "Rules", error: "Error fetching season rules data" }
+        );
       }
     };
     setLoading(true);
     fetchSeasonRules();
     setLoading(false);
-  }, [seasonId]);
+  }, [seasonId, user?.email]);
 
   const handleInputChange = (
     section: keyof SeasonRules,
@@ -58,10 +69,15 @@ const Rules: React.FC<RulesProps> = ({ seasonId }) => {
     try {
       const rulesDocRef = doc(db, "seasons", seasonId, "rules", "seasonRules");
       await updateDoc(rulesDocRef, { ...seasonRules });
-      alert("Rules successfully saved!");
+      setSuccess("Rules successfully saved!");
     } catch (error) {
       console.error("Error saving season rules:", error);
-      alert("Error saving rules. Please try again.");
+      logError(
+        error as Error,
+        user?.email?.replace("@formulaidiots.de", "") || "unknown",
+        { context: "Rules", error: "Error saving season rules" }
+      );
+      setError("Error saving rules. Please try again.");
     } finally {
       setIsSaving(false);
     }
@@ -723,6 +739,8 @@ const Rules: React.FC<RulesProps> = ({ seasonId }) => {
         >
           {isSaving ? "Saving..." : "Save Changes"}
         </button>
+        {error && <p className="error-message">{error}</p>}
+        {success && <p className="success-message">{success}</p>}
       </div>
     </div>
   );

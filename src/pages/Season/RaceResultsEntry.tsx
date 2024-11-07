@@ -11,6 +11,8 @@ import {
 import { db } from "../../firebase/firebaseConfig";
 import Loading from "../../components/Loading";
 import { DriverPoints } from "../../interfaces/DriverPoints";
+import { useAuth } from "../../context/authcontext";
+import { logError } from "../../utils/errorLogger";
 
 interface RaceResultsEntryProps {
   seasonId: string;
@@ -24,6 +26,8 @@ interface RaceFetchData {
 }
 
 const RaceResultsEntry: React.FC<RaceResultsEntryProps> = ({ seasonId }) => {
+  const { user } = useAuth();
+
   const [qualifyingResults, setQualifyingResults] = useState<{
     [key: string]: string;
   }>({});
@@ -32,10 +36,12 @@ const RaceResultsEntry: React.FC<RaceResultsEntryProps> = ({ seasonId }) => {
   const [fastestLapTime, setFastestLapTime] = useState<string>("");
   const [fastestLapTyre, setFastestLapTyre] = useState<string>("");
   const [isSaving, setIsSaving] = useState<boolean>(false);
-  const [loading, setLoading] = useState<boolean>(true);
   const [raceId, setRaceId] = useState<string>("");
   const [drivers, setDrivers] = useState<{ id: string; name: string }[]>([]);
   const [dnfStatus, setDnfStatus] = useState<{ [key: string]: boolean }>({});
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);
 
   useEffect(() => {
     setLoading(true);
@@ -102,13 +108,18 @@ const RaceResultsEntry: React.FC<RaceResultsEntryProps> = ({ seasonId }) => {
         }
       } catch (error) {
         console.error("Fehler beim Abrufen der Saison-Daten:", error);
+        logError(
+          error as Error,
+          user?.email?.replace("@formulaidiots.de", "") || "unknown",
+          { context: "RaceResultsEntry", error: "Error fetching season data" }
+        );
       } finally {
         setLoading(false);
       }
     };
 
     fetchSeasonData();
-  }, [seasonId]);
+  }, [seasonId, user?.email]);
 
   const handleQualifyingChange = (
     position: string,
@@ -128,7 +139,6 @@ const RaceResultsEntry: React.FC<RaceResultsEntryProps> = ({ seasonId }) => {
         ...prevResults,
         [position]: driverId, // Sicherstellen, dass `position` den korrekten Schlüssel darstellt
       };
-      console.log("Updated raceResults:", updatedResults);
       return updatedResults;
     });
   };
@@ -143,7 +153,15 @@ const RaceResultsEntry: React.FC<RaceResultsEntryProps> = ({ seasonId }) => {
   const handleSaveQualifyingResults = async () => {
     if (!raceId) {
       console.error("Kein gültiges Rennen gefunden, raceId ist leer.");
-      alert("Es wurde kein Rennen gefunden, das bearbeitet werden kann.");
+      logError(
+        new Error("No valid Race found, raceId is empty."),
+        user?.email?.replace("@formulaidiots.de", "") || "unknown",
+        {
+          context: "RaceResultsEntry",
+          error: "No valid Race found, raceId is empty.",
+        }
+      );
+      setError("Es wurde kein Rennen gefunden, das bearbeitet werden kann.");
       return;
     }
 
@@ -165,10 +183,18 @@ const RaceResultsEntry: React.FC<RaceResultsEntryProps> = ({ seasonId }) => {
         { merge: true }
       );
 
-      alert("Qualifying-Ergebnisse erfolgreich gespeichert!");
+      setSuccess("Qualifying-Ergebnisse erfolgreich gespeichert!");
     } catch (error) {
       console.error("Fehler beim Speichern der Qualifying-Ergebnisse:", error);
-      alert(
+      logError(
+        error as Error,
+        user?.email?.replace("@formulaidiots.de", "") || "unknown",
+        {
+          context: "RaceResultsEntry",
+          error: "Error saving Qualifying Results",
+        }
+      );
+      setError(
         "Fehler beim Speichern der Qualifying-Ergebnisse. Bitte versuchen Sie es erneut."
       );
     } finally {
@@ -179,7 +205,15 @@ const RaceResultsEntry: React.FC<RaceResultsEntryProps> = ({ seasonId }) => {
   const handleSaveResults = async () => {
     if (!raceId) {
       console.error("Kein gültiges Rennen gefunden, raceId ist leer.");
-      alert("Es wurde kein Rennen gefunden, das bearbeitet werden kann.");
+      logError(
+        new Error("No valid Race found, raceId is empty."),
+        user?.email?.replace("@formulaidiots.de", "") || "unknown",
+        {
+          context: "RaceResultsEntry",
+          error: "No valid Race found, raceId is empty.",
+        }
+      );
+      setError("Es wurde kein Rennen gefunden, das bearbeitet werden kann.");
       return;
     }
 
@@ -203,6 +237,7 @@ const RaceResultsEntry: React.FC<RaceResultsEntryProps> = ({ seasonId }) => {
           isFinished: true,
           raceDate: currentDate,
           dnfs: dnfStatus,
+          setBy: user?.email?.replace("@formulaidiots.de", "") || "unknown",
         },
         { merge: true }
       );
@@ -364,10 +399,6 @@ const RaceResultsEntry: React.FC<RaceResultsEntryProps> = ({ seasonId }) => {
               place: fastestLapPosition,
               seasonId,
             });
-          } else {
-            console.log(
-              "Fastest Lap point not awarded as driver is not in the Top 10."
-            );
           }
         }
 
@@ -394,7 +425,15 @@ const RaceResultsEntry: React.FC<RaceResultsEntryProps> = ({ seasonId }) => {
       }
     } catch (error) {
       console.error("Fehler beim Speichern der Ergebnisse:", error);
-      alert(
+      logError(
+        error as Error,
+        user?.email?.replace("@formulaidiots.de", "") || "unknown",
+        {
+          context: "RaceResultsEntry",
+          error: "Error saving Results",
+        }
+      );
+      setError(
         "Fehler beim Speichern der Ergebnisse. Bitte versuchen Sie es erneut."
       );
     } finally {
@@ -640,6 +679,8 @@ const RaceResultsEntry: React.FC<RaceResultsEntryProps> = ({ seasonId }) => {
               {isSaving ? "Saving..." : "Save Results"}
             </button>
           </div>
+          {error && <p className="error">{error}</p>}
+          {success && <p className="success">{success}</p>}
         </div>
       </div>
     </div>

@@ -48,9 +48,6 @@ const Login: React.FC = () => {
             isPlayer: true,
             // Weitere Benutzerinformationen hier speichern
           });
-          console.log("Neuer Benutzer hinzugefügt.");
-        } else {
-          console.log("Benutzer existiert bereits.");
         }
 
         // Weiterleiten nach erfolgreichem Login

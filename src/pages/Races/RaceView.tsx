@@ -4,12 +4,15 @@ import { db } from "../../firebase/firebaseConfig";
 import { collection, doc, getDoc, getDocs } from "firebase/firestore";
 import Loading from "../../components/Loading";
 import { Tyre } from "../../interfaces/Tyre";
+import { logError } from "../../utils/errorLogger";
+import { useAuth } from "../../context/authcontext";
 
 interface RaceViewProps {
   id: string;
 }
 
 const RaceView: React.FC<RaceViewProps> = ({ id }) => {
+  const { user } = useAuth();
   const [race, setRace] = useState<Race>();
   const [tyres, setTyres] = useState<Tyre[]>([]);
   const [loading, setLoading] = useState(true);
@@ -24,9 +27,18 @@ const RaceView: React.FC<RaceViewProps> = ({ id }) => {
           const raceData = raceDocSnap.data() as Race;
           setRace(raceData);
         } else {
-          console.log("No such document!");
+          logError(
+            new Error("No such document!"),
+            user?.email?.replace("@formulaidiots.de", "") || "unknown",
+            { context: "RaceView" }
+          );
         }
       } catch (e) {
+        logError(
+          e as Error,
+          user?.email?.replace("@formulaidiots.de", "") || "unknown",
+          { context: "RaceView" }
+        );
         console.error("Error fetching document: ", e);
         setError("Error fetching document " + e);
       } finally {
@@ -42,13 +54,18 @@ const RaceView: React.FC<RaceViewProps> = ({ id }) => {
         setTyres(tyresData);
       } catch (e) {
         console.error("Error fetching document: ", e);
+        logError(
+          e as Error,
+          user?.email?.replace("@formulaidiots.de", "") || "unknown",
+          { context: "RaceView", error: "Error fetching document" }
+        );
         setError("Error fetching document " + e);
       }
     };
 
     fetchRace();
     fetchTyres();
-  }, [id]);
+  }, [id, user?.email]);
 
   const formatTrackDistance = (distance: string, laps: number) => {
     const totalDistance = parseFloat(distance.replace(" km", "")) * laps;
@@ -72,8 +89,8 @@ const RaceView: React.FC<RaceViewProps> = ({ id }) => {
 
   return (
     <div className="container">
-      <h1 className="display-2">Grand Prix of {race.name}</h1>
-      <h2 className="display-4">{race.fullName}</h2>
+      <h1 className="display-2 f1-regular">{race.name} Grand Prix</h1>
+      <h2 className="display-4 f1-regular">{race.fullName}</h2>
       <div className="race-grid-2-columns">
         <div className="race-info-grid">
           <div className="race-info-grid-column">

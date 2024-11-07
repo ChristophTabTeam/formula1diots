@@ -2,7 +2,7 @@
 
 .races-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(4, 1fr);
     gap: 20px;
 }
 
@@ -25,4 +25,9 @@
         background-repeat: no-repeat;
         background-size: contain;
     }
+}
+
+.races-card-title {
+    font-size: 24px;
+    font-weight: 700;
 }

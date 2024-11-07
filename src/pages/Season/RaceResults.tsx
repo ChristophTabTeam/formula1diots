@@ -10,6 +10,8 @@ import type {
 } from "../../interfaces/SeasonRace";
 import { Driver } from "../../interfaces/Driver";
 import Loading from "../../components/Loading";
+import { logError } from "../../utils/errorLogger";
+import { useAuth } from "../../context/authcontext";
 
 interface RaceResultsProps {
   raceId: string;
@@ -17,6 +19,8 @@ interface RaceResultsProps {
 }
 
 const RaceResults: React.FC<RaceResultsProps> = ({ raceId, seasonId }) => {
+  const { user } = useAuth();
+
   const [season, setSeason] = useState<Season>();
   const [seasonRace, setSeasonRace] = useState<SeasonRace>();
   const [race, setRace] = useState<Race>();
@@ -43,6 +47,14 @@ const RaceResults: React.FC<RaceResultsProps> = ({ raceId, seasonId }) => {
         }
       } catch (error) {
         console.error("Error fetching season:", error);
+        logError(
+          error as Error,
+          user?.email?.replace("@formulaidiots.de", "") || "unknown",
+          {
+            context: "RaceResults",
+            error: "Error fetching season data",
+          }
+        );
         setError("Error fetching season data");
       } finally {
         setLoading(false);
@@ -60,6 +72,14 @@ const RaceResults: React.FC<RaceResultsProps> = ({ raceId, seasonId }) => {
         }
       } catch (error) {
         console.error("Error fetching Races", error);
+        logError(
+          error as Error,
+          user?.email?.replace("@formulaidiots.de", "") || "unknown",
+          {
+            context: "RaceResults",
+            error: "Error fetching Races",
+          }
+        );
         setError("Error fetching");
         setLoading(false);
       }
@@ -79,6 +99,14 @@ const RaceResults: React.FC<RaceResultsProps> = ({ raceId, seasonId }) => {
         }
       } catch (error) {
         console.error("Error fetching Drivers", error);
+        logError(
+          error as Error,
+          user?.email?.replace("@formulaidiots.de", "") || "unknown",
+          {
+            context: "RaceResults",
+            error: "Error fetching Drivers",
+          }
+        );
         setError("Error fetching");
       }
     };
@@ -95,6 +123,14 @@ const RaceResults: React.FC<RaceResultsProps> = ({ raceId, seasonId }) => {
         }
       } catch (error) {
         console.error("Error fetching Teams", error);
+        logError(
+          error as Error,
+          user?.email?.replace("@formulaidiots.de", "") || "unknown",
+          {
+            context: "RaceResults",
+            error: "Error fetching Teams",
+          }
+        );
         setError("Error fetching");
       }
     };
@@ -105,7 +141,7 @@ const RaceResults: React.FC<RaceResultsProps> = ({ raceId, seasonId }) => {
     fetchDriverData();
     fetchTeamsData();
     setLoading(false);
-  }, [raceId, seasonId]);
+  }, [raceId, seasonId, user?.email]);
 
   const positions = [
     "P1",

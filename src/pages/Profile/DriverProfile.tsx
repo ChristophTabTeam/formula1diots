@@ -20,6 +20,7 @@ import { Race } from "../../interfaces/Race";
 import { DriverPoints } from "../../interfaces/DriverPoints";
 import { Qualifying } from "../../interfaces/Qualifying";
 import { DNF } from "../../interfaces/DNF";
+import { logError } from "../../utils/errorLogger";
 
 interface DriverProfileProps {
   id: string;
@@ -77,6 +78,11 @@ const DriverProfile: React.FC<DriverProfileProps> = ({ id }) => {
         }
       } catch (error) {
         console.error("Error fetching user data:", error);
+        logError(
+          error as Error,
+          user?.email?.replace("@formulaidiots.de", "") || "unknown",
+          { context: "DriverProfile", error: "Error fetching user data" }
+        );
       }
     };
 
@@ -94,6 +100,11 @@ const DriverProfile: React.FC<DriverProfileProps> = ({ id }) => {
         setSeason(activeSeason);
       } catch (error) {
         console.error("Error fetching season data:", error);
+        logError(
+          error as Error,
+          user?.email?.replace("@formulaidiots.de", "") || "unknown",
+          { context: "DriverProfile", error: "Error fetching season data" }
+        );
       }
     };
 
@@ -104,6 +115,11 @@ const DriverProfile: React.FC<DriverProfileProps> = ({ id }) => {
         setTeams(teamsSnapshot.docs.map((doc) => doc.data() as Team));
       } catch (error) {
         console.error("Error fetching team data:", error);
+        logError(
+          error as Error,
+          user?.email?.replace("@formulaidiots.de", "") || "unknown",
+          { context: "DriverProfile", error: "Error fetching team data" }
+        );
       }
     };
 
@@ -115,6 +131,11 @@ const DriverProfile: React.FC<DriverProfileProps> = ({ id }) => {
         setDrivers(drivers);
       } catch (error) {
         console.error("Error fetching driver data:", error);
+        logError(
+          error as Error,
+          user?.email?.replace("@formulaidiots.de", "") || "unknown",
+          { context: "DriverProfile", error: "Error fetching driver data" }
+        );
       }
     };
 
@@ -135,6 +156,11 @@ const DriverProfile: React.FC<DriverProfileProps> = ({ id }) => {
         }
       } catch (error) {
         console.error("Error fetching trophies:", error);
+        logError(
+          error as Error,
+          user?.email?.replace("@formulaidiots.de", "") || "unknown",
+          { context: "DriverProfile", error: "Error fetching trophies" }
+        );
       }
     };
 
@@ -155,6 +181,11 @@ const DriverProfile: React.FC<DriverProfileProps> = ({ id }) => {
         }
       } catch (error) {
         console.error("Error fetching fastest laps:", error);
+        logError(
+          error as Error,
+          user?.email?.replace("@formulaidiots.de", "") || "unknown",
+          { context: "DriverProfile", error: "Error fetching fastest laps" }
+        );
       }
     };
 
@@ -166,6 +197,11 @@ const DriverProfile: React.FC<DriverProfileProps> = ({ id }) => {
         setRaces(racesData);
       } catch (error) {
         console.error("Error fetching Races", error);
+        logError(
+          error as Error,
+          user?.email?.replace("@formulaidiots.de", "") || "unknown",
+          { context: "DriverProfile", error: "Error fetching Races" }
+        );
       }
     };
 
@@ -186,6 +222,11 @@ const DriverProfile: React.FC<DriverProfileProps> = ({ id }) => {
         }
       } catch (error) {
         console.error("Error fetching driver points:", error);
+        logError(
+          error as Error,
+          user?.email?.replace("@formulaidiots.de", "") || "unknown",
+          { context: "DriverProfile", error: "Error fetching driver points" }
+        );
       }
     };
 
@@ -206,6 +247,11 @@ const DriverProfile: React.FC<DriverProfileProps> = ({ id }) => {
         }
       } catch (error) {
         console.error("Error fetching qualifyings:", error);
+        logError(
+          error as Error,
+          user?.email?.replace("@formulaidiots.de", "") || "unknown",
+          { context: "DriverProfile", error: "Error fetching qualifyings" }
+        );
       }
     };
 
@@ -224,6 +270,11 @@ const DriverProfile: React.FC<DriverProfileProps> = ({ id }) => {
         }
       } catch (error) {
         console.error("Error fetching dnfs:", error);
+        logError(
+          error as Error,
+          user?.email?.replace("@formulaidiots.de", "") || "unknown",
+          { context: "DriverProfile", error: "Error fetching dnfs" }
+        );
       }
     };
 
@@ -270,6 +321,11 @@ const DriverProfile: React.FC<DriverProfileProps> = ({ id }) => {
         setProfileImageUrl(url);
       } catch (error) {
         console.error("Error uploading image:", error);
+        logError(
+          error as Error,
+          user?.email?.replace("@formulaidiots.de", "") || "unknown",
+          { context: "DriverProfile", error: "Error uploading image" }
+        );
       } finally {
         setLoading(false);
       }
@@ -294,6 +350,11 @@ const DriverProfile: React.FC<DriverProfileProps> = ({ id }) => {
         );
       } catch (error) {
         console.error("Error deleting image:", error);
+        logError(
+          error as Error,
+          user?.email?.replace("@formulaidiots.de", "") || "unknown",
+          { context: "DriverProfile", error: "Error deleting image" }
+        );
       }
     }
   };
@@ -332,6 +393,11 @@ const DriverProfile: React.FC<DriverProfileProps> = ({ id }) => {
         setIsEditingName(false);
       } catch (error) {
         console.error("Error updating name:", error);
+        logError(
+          error as Error,
+          user?.email?.replace("@formulaidiots.de", "") || "unknown",
+          { context: "DriverProfile", error: "Error updating name" }
+        );
       } finally {
         setLoading(false);
       }
@@ -353,6 +419,11 @@ const DriverProfile: React.FC<DriverProfileProps> = ({ id }) => {
         setIsEditingBirthdate(false);
       } catch (error) {
         console.error("Error updating birthdate:", error);
+        logError(
+          error as Error,
+          user?.email?.replace("@formulaidiots.de", "") || "unknown",
+          { context: "DriverProfile", error: "Error updating birthdate" }
+        );
       } finally {
         setLoading(false);
       }
@@ -372,6 +443,11 @@ const DriverProfile: React.FC<DriverProfileProps> = ({ id }) => {
         setIsEditingTeam(false);
       } catch (error) {
         console.error("Error updating team:", error);
+        logError(
+          error as Error,
+          user?.email?.replace("@formulaidiots.de", "") || "unknown",
+          { context: "DriverProfile", error: "Error updating team" }
+        );
       } finally {
         setLoading(false);
       }
@@ -393,6 +469,11 @@ const DriverProfile: React.FC<DriverProfileProps> = ({ id }) => {
         setIsEditingDriver(false);
       } catch (error) {
         console.error("Error updating driver slot:", error);
+        logError(
+          error as Error,
+          user?.email?.replace("@formulaidiots.de", "") || "unknown",
+          { context: "DriverProfile", error: "Error updating driver slot" }
+        );
       } finally {
         setLoading(false);
       }
@@ -414,6 +495,11 @@ const DriverProfile: React.FC<DriverProfileProps> = ({ id }) => {
         setIsEditingTrack(false);
       } catch (error) {
         console.error("Error updating track:", error);
+        logError(
+          error as Error,
+          user?.email?.replace("@formulaidiots.de", "") || "unknown",
+          { context: "DriverProfile", error: "Error updating track" }
+        );
       } finally {
         setLoading(false);
       }
@@ -435,6 +521,11 @@ const DriverProfile: React.FC<DriverProfileProps> = ({ id }) => {
         setIsEditingNationality(false);
       } catch (error) {
         console.error("Error updating Nationality:", error);
+        logError(
+          error as Error,
+          user?.email?.replace("@formulaidiots.de", "") || "unknown",
+          { context: "DriverProfile", error: "Error updating Nationality" }
+        );
       } finally {
         setLoading(false);
       }
@@ -454,6 +545,11 @@ const DriverProfile: React.FC<DriverProfileProps> = ({ id }) => {
         setIsEditingRating(false);
       } catch (error) {
         console.error("Error updating Rating:", error);
+        logError(
+          error as Error,
+          user?.email?.replace("@formulaidiots.de", "") || "unknown",
+          { context: "DriverProfile", error: "Error updating Rating" }
+        );
       } finally {
         setLoading(false);
       }
@@ -719,9 +815,10 @@ const DriverProfile: React.FC<DriverProfileProps> = ({ id }) => {
                   </>
                 ) : (
                   <>
-                    {driverProfile.nationality && driverProfile.nationality.length > 25
-                        ? `${driverProfile.nationality.substring(0, 25)}...`
-                        : driverProfile.nationality || ""}
+                    {driverProfile.nationality &&
+                    driverProfile.nationality.length > 25
+                      ? `${driverProfile.nationality.substring(0, 25)}...`
+                      : driverProfile.nationality || ""}
                     <button
                       onClick={handleEditNationality}
                       className="edit-button"
@@ -730,10 +827,11 @@ const DriverProfile: React.FC<DriverProfileProps> = ({ id }) => {
                     </button>
                   </>
                 )
+              ) : driverProfile.nationality &&
+                driverProfile.nationality.length > 25 ? (
+                `${driverProfile.nationality.substring(0, 25)}...`
               ) : (
-                driverProfile.nationality && driverProfile.nationality.length > 25
-                  ? `${driverProfile.nationality.substring(0, 25)}...`
-                  : driverProfile.nationality || "Unknown"
+                driverProfile.nationality || "Unknown"
               )}
             </div>
             {driverProfile.isPlayer && (
@@ -817,7 +915,8 @@ const DriverProfile: React.FC<DriverProfileProps> = ({ id }) => {
                       </>
                     )
                   ) : (
-                    getDriverNameById(driverProfile.favoriteDriver || "") || "Unknown"
+                    getDriverNameById(driverProfile.favoriteDriver || "") ||
+                    "Unknown"
                   )}
                 </div>
                 <div className="info-wrapper">

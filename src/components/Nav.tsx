@@ -2,19 +2,23 @@ import React, { useEffect, useState } from "react";
 import "../styles/nav.scss";
 import { useAuth } from "../context/authcontext";
 import f1Logo from "../assets/F1.svg";
+import { Driver } from "../interfaces/Driver";
 
-const Nav: React.FC = () => {
-  const { logout, user } = useAuth();
-  const [userId, setUserId] = useState<string | null>(null);
+interface NavProps {
+  darkMode: boolean;
+  toggleDarkMode: () => void;
+  userId: string;
+  driverProfile: Driver;
+}
+
+const Nav: React.FC<NavProps> = ({ darkMode, toggleDarkMode, userId, driverProfile }) => {
+  const { logout } = useAuth();
   const [path, setPath] = useState<string>("");
 
   useEffect(() => {
-    if (user && user.email) {
-      setUserId(user.email.replace("@formula1diots.de", ""));
-    }
     const windowPath = window.location.pathname.split("/")[1] || "";
     setPath(windowPath);
-  }, [user]);
+  }, []);
 
   const handleLogout = async () => {
     await logout();
@@ -29,7 +33,7 @@ const Nav: React.FC = () => {
           <p>Formula1diots</p>
         </a>
         <div className="nav-item px-3">
-          <a className={`nav-link ${path === "" ? "active" : ""}`} href="/">
+          <a className={`nav-link f1-regular ${path === "" ? "active" : ""}`} href="/">
             <span className="icon-20pt" aria-hidden="true">
               home
             </span>{" "}
@@ -39,7 +43,7 @@ const Nav: React.FC = () => {
 
         <div className="nav-item px-3">
           <a
-            className={`nav-link ${path === "season" ? "active" : ""}`}
+            className={`nav-link f1-regular ${path === "season" ? "active" : ""}`}
             href="/season"
           >
             <span className="icon-20pt" aria-hidden="true">
@@ -51,7 +55,7 @@ const Nav: React.FC = () => {
 
         <div className="nav-item px-3">
           <a
-            className={`nav-link ${path === "races" ? "active" : ""}`}
+            className={`nav-link f1-regular ${path === "races" ? "active" : ""}`}
             href="/races"
           >
             <span className="icon-20pt" aria-hidden="true">
@@ -63,27 +67,25 @@ const Nav: React.FC = () => {
 
         <div className="nav-item px-3">
           <a
-            className={`nav-link ${path === "profile" ? "active" : ""}`}
+            className={`nav-link f1-regular ${path === "profile" ? "active" : ""}`}
             href={`/profile/${userId}`}
           >
-            <span className="icon-20pt" aria-hidden="true">
-              person
-            </span>{" "}
+            <img src={driverProfile?.profilePictureUrl} alt="Profile" className="nav-profile-pic" />
             Profil
           </a>
         </div>
       </nav>
       <nav className="lower-nav">
-        {/* <div className="nav-item px-3">
-          <a className="nav-link" href="/settings">
-            <span className="icon-20pt" aria-hidden="true">
-              settings
-            </span>{" "}
-            Settings
-          </a>
-        </div> */}
+        <div className="nav-item nav-dark-mode-switch" style={{ color: "white"}}>
+          <span className="icon-20pt" aria-hidden="true">light_mode</span>
+          <label className="switch">
+            <input type="checkbox" checked={darkMode} onChange={toggleDarkMode} />
+            <span className="switch-span"></span>
+          </label>
+          <span className="icon-20pt" aria-hidden="true">dark_mode</span>
+        </div>
         <div className="nav-item px-3">
-          <div className="nav-link" onClick={handleLogout}>
+          <div className="nav-link f1-regular" onClick={handleLogout}>
             <span className="icon-20pt" aria-hidden="true">
               logout
             </span>{" "}

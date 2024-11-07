@@ -18,7 +18,7 @@ const Races: React.FC = () => {
 
   return (
     <div className="container">
-      <h1 className="display-2">Formula 1 Race Tracks</h1>
+      <h1 className="display-2 f1-regular">Formula 1 Race Tracks</h1>
       <div className="races-grid">
         {races &&
           races
@@ -32,7 +32,7 @@ const Races: React.FC = () => {
                 {race.pathToCountryFlag && (
                   <div style={{backgroundImage: `url(${race.pathToCountryFlag})`}} />
                 )}
-                <h2 className="display-6">{race.name}</h2>
+                <h2 className="races-card-title f1-regular">{race.name}</h2>
               </a>
             ))}
       </div>

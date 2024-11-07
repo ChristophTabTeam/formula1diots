@@ -6,6 +6,8 @@ import { Race } from "../../interfaces/Race";
 import Loading from "../../components/Loading";
 import { Driver } from "../../interfaces/Driver";
 import { RaceResults, SeasonRace } from "../../interfaces/SeasonRace";
+import { useAuth } from "../../context/authcontext";
+import { logError } from "../../utils/errorLogger";
 
 interface SeasonResultsProps {
   seasonId: string;
@@ -14,6 +16,8 @@ interface SeasonResultsProps {
 const SeasonResults: React.FC<SeasonResultsProps> = ({
   seasonId,
 }: SeasonResultsProps) => {
+  const { user } = useAuth();
+
   const [seasonData, setSeasonData] = useState<Season | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -41,6 +45,11 @@ const SeasonResults: React.FC<SeasonResultsProps> = ({
         }
       } catch (error) {
         console.error("Error fetching season:", error);
+        logError(
+          error as Error,
+          user?.email?.replace("@formulaidiots.de", "") || "unknown",
+          { context: "SeasonResults", error: "Error fetching season data" }
+        );
         setError("Error fetching season data");
       } finally {
         setLoading(false);
@@ -59,6 +68,11 @@ const SeasonResults: React.FC<SeasonResultsProps> = ({
         }
       } catch (error) {
         console.error("Error fetching Races", error);
+        logError(
+          error as Error,
+          user?.email?.replace("@formulaidiots.de", "") || "unknown",
+          { context: "SeasonResults", error: "Error fetching Races" }
+        );
         setError("Error fetching");
         setLoading(false);
       }
@@ -78,6 +92,11 @@ const SeasonResults: React.FC<SeasonResultsProps> = ({
         }
       } catch (error) {
         console.error("Error fetching Drivers", error);
+        logError(
+          error as Error,
+          user?.email?.replace("@formulaidiots.de", "") || "unknown",
+          { context: "SeasonResults", error: "Error fetching Drivers" }
+        );
         setError("Error fetching");
       }
     };
@@ -87,7 +106,7 @@ const SeasonResults: React.FC<SeasonResultsProps> = ({
     fetchRacesData();
     fetchDriverData();
     setLoading(false);
-  }, [seasonId]);
+  }, [seasonId, user?.email]);
 
   const getDriverNameById = (driverId: string) => {
     const driver = driverData.find((d) => d.id === driverId);

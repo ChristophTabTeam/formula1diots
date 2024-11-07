@@ -90,8 +90,7 @@ const CreateSeason: React.FC = () => {
           selectedRaces={selectedRaces}
           teams={teams}
           includeDrivers={includeDrivers}
-          seasonRules={seasonRules} // seasonRules an Schritt 5 übergeben
-          onFinish={() => alert("Saison erfolgreich erstellt!")}
+          seasonRules={seasonRules}
           previousStep={previousStep}
         />
       )}

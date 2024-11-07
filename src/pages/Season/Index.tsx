@@ -3,8 +3,12 @@ import { collection, getDocs } from "firebase/firestore";
 import type { Season } from "../../interfaces/Season";
 import Loading from "../../components/Loading";
 import { db } from "../../firebase/firebaseConfig";
+import { logError } from "../../utils/errorLogger";
+import { useAuth } from "../../context/authcontext";
 
 const Season: React.FC = () => {
+  const { user } = useAuth();
+
   const [season, setSeason] = useState<Season>();
   const [, setSeasons] = useState<Season[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
@@ -29,13 +33,14 @@ const Season: React.FC = () => {
         }
       } catch (error) {
         console.error("Error fetching active season: ", error);
+        logError(error as Error, user?.email?.replace("@formulaidiots.de", "") || "unknown" , {context: "Season", error: "Error fetching active season"});
       }
     };
 
     setLoading(true);
     fetchActiveSeason();
     setLoading(false);
-  }, []);
+  }, [user?.email]);
 
   if (loading) {
     return <Loading />;

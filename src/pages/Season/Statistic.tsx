@@ -16,6 +16,8 @@ import Loading from "../../components/Loading";
 import { Driver } from "../../interfaces/Driver";
 import { Race } from "../../interfaces/Race";
 import { SeasonRace } from "../../interfaces/SeasonRace";
+import { useAuth } from "../../context/authcontext";
+import { logError } from "../../utils/errorLogger";
 
 ChartJS.register(
   CategoryScale,
@@ -36,6 +38,8 @@ interface StatisticProps {
 }
 
 const Statistic: React.FC<StatisticProps> = ({ seasonId }) => {
+  const { user } = useAuth();
+
   const [loading, setLoading] = useState(false);
   const [pointsData, setPointsData] = useState<Record<string, number[]>>({});
   const [driversData, setDriversData] = useState<Driver[]>([]);
@@ -132,6 +136,11 @@ const Statistic: React.FC<StatisticProps> = ({ seasonId }) => {
         setPointsData(driverPoints);
       } catch (error) {
         console.error("Error fetching race results:", error);
+        logError(
+          error as Error,
+          user?.email?.replace("@formulaidiots.de", "") || "unknown",
+          { context: "Statistic", error: "Error fetching race results" }
+        );
       }
     };
 
@@ -145,6 +154,11 @@ const Statistic: React.FC<StatisticProps> = ({ seasonId }) => {
         setDriversData(driversData);
       } catch (error) {
         console.error("Error fetching drivers:", error);
+        logError(
+          error as Error,
+          user?.email?.replace("@formulaidiots.de", "") || "unknown",
+          { context: "Statistic", error: "Error fetching drivers" }
+        );
       }
     };
 
@@ -156,6 +170,11 @@ const Statistic: React.FC<StatisticProps> = ({ seasonId }) => {
         setRaces(racesData);
       } catch (error) {
         console.error("Error fetching Races", error);
+        logError(
+          error as Error,
+          user?.email?.replace("@formulaidiots.de", "") || "unknown",
+          { context: "Statistic", error: "Error fetching Races" }
+        );
       }
     };
 
@@ -164,7 +183,7 @@ const Statistic: React.FC<StatisticProps> = ({ seasonId }) => {
     fetchDrivers();
     fetchRaces();
     setLoading(false);
-  }, [seasonId]);
+  }, [seasonId, user?.email]);
 
   const getDriverById = (driverId: string) => {
     return driversData.find((driver) => driver.id === driverId);
@@ -219,21 +238,21 @@ const Statistic: React.FC<StatisticProps> = ({ seasonId }) => {
         }}
       >
         <h1 className="display-4">Season Statistic</h1>
-          {toggledDrivers ? (
-            <button
+        {toggledDrivers ? (
+          <button
             className="btn-primary"
             onClick={() => toggleAllDrivers(false)}
-            >
+          >
             Hide All Drivers
           </button>
-          ) : (
-            <button
+        ) : (
+          <button
             className="btn-primary"
             onClick={() => toggleAllDrivers(true)}
-            >
+          >
             Show All Drivers
           </button>
-          )}
+        )}
       </div>
       <Line
         ref={chartRef}

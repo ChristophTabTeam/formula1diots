@@ -4,6 +4,8 @@ import { db } from "../../firebase/firebaseConfig";
 import { Driver } from "../../interfaces/Driver";
 import type { FastestLap } from "../../interfaces/FastestLap";
 import Loading from "../../components/Loading";
+import { logError } from "../../utils/errorLogger";
+import { useAuth } from "../../context/authcontext";
 
 interface DriverFastestLaps {
   driverId: string;
@@ -17,6 +19,8 @@ interface FastestLapPageProps {
 }
 
 const FastestLap: React.FC<FastestLapPageProps> = ({ seasonId }) => {
+  const { user } = useAuth();
+
   const [fastestLapData, setFastestLapData] = useState<DriverFastestLaps[]>([]);
   const [drivers, setDrivers] = useState<Driver[]>([]);
   const [loading, setLoading] = useState(false);
@@ -59,6 +63,11 @@ const FastestLap: React.FC<FastestLapPageProps> = ({ seasonId }) => {
         setFastestLapData(driversData);
       } catch (error) {
         console.error("Error fetching fastest laps:", error);
+        logError(
+          error as Error,
+          user?.email?.replace("@formulaidiots.de", "") || "unknown",
+          { context: "FastestLap", error: "Error fetching fastest laps" }
+        );
       }
     };
 
@@ -71,6 +80,11 @@ const FastestLap: React.FC<FastestLapPageProps> = ({ seasonId }) => {
         setDrivers(driversData);
       } catch (error) {
         console.error("Error fetching drivers:", error);
+        logError(
+          error as Error,
+          user?.email?.replace("@formulaidiots.de", "") || "unknown",
+          { context: "FastestLap", error: "Error fetching drivers" }
+        );
       }
     };
 
@@ -78,7 +92,7 @@ const FastestLap: React.FC<FastestLapPageProps> = ({ seasonId }) => {
     fetchFastestLaps();
     fetchDrivers();
     setLoading(false);
-  }, [seasonId]);
+  }, [seasonId, user?.email]);
 
   const getDriverById = (driverId: string) => {
     return drivers.find((driver) => driver.id === driverId);

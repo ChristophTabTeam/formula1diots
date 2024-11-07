@@ -11,4 +11,5 @@ export interface Driver {
     favoriteTeam?: string;
     favoriteDriver?: string;
     rating?: number;
+    darkMode?: boolean;
 }

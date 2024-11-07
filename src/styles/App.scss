@@ -5,6 +5,18 @@ body {
   font-family: "Roboto", Helvetica, Arial, sans-serif;
 }
 
+.page {
+  &.dark {
+    background: linear-gradient(
+      45deg,
+      #3a3a3a,
+      #4a4a4a
+    );
+    color: white;
+  }
+}
+
+
 h3,
 h4,
 h5,
@@ -35,30 +47,24 @@ main {
 }
 
 .sidebar {
-  background: #343434;
+  background: variables.$table-background-dark;
   border-top: variables.$accent-red 3px solid;
 }
 
-.nav-logo-wrapper {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  padding: 20px 0 0 0;
-  color: white;
-  font-family: 'Formula1-Regular';
-  gap: 15px;
-  font-size: 20px;
-  & > img {
-    height: 30px;
-  }
-  & > p {
-    margin: 0;
-  }
-  &:hover {
-    text-decoration: none;
-    color: white;
-  }
+.error-message {
+  color: #e50000;
+  background-color: #e9a2a2;
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid #e50000;
+}
+
+.success-message {
+  color: #26b050;
+  background-color: #a2e9a2;
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid #26b050;
 }
 
 .top-row {
@@ -189,10 +195,6 @@ h1:focus {
   display: flex;
   align-items: center;
   gap: 20px;
-}
-
-.f1-logo-home {
-  height: 50px;
 }
 
 .version-wrapper {

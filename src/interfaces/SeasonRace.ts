@@ -7,6 +7,7 @@ export interface SeasonRace {
   hasQualifyingSaved?: boolean;
   dnfs: { [key: string]: boolean }
   raceDate: Date;
+  setBy?: string;
   qualifyingDate: Date;
 }
 

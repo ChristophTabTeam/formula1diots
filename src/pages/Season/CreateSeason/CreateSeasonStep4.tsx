@@ -22,6 +22,7 @@ export function CreateSeasonStep4({
   const [races, setRaces] = useState<Race[]>([]);
   const [selectedRaces, setSelectedRaces] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchRaces = async () => {
@@ -56,7 +57,7 @@ export function CreateSeasonStep4({
     if (selectedRaces.length > 0) {
       nextStep(selectedRaces);
     } else {
-      alert("Bitte wählen Sie mindestens eine Rennstrecke aus.");
+      setError("Bitte wählen Sie mindestens eine Rennstrecke aus.");
     }
   };
 
@@ -168,6 +169,7 @@ export function CreateSeasonStep4({
           Next
         </button>
       </div>
+      {error && <p className="error-message">{error}</p>}
     </div>
   );
 }

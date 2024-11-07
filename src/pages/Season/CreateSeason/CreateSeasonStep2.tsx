@@ -28,8 +28,9 @@ export function CreateSeasonStep2({
   }>({});
   const [includeDrivers, setIncludeDrivers] = useState(false);
   const [teamAssigned, setTeamAssigned] = useState(false);
-  const [loading, setLoading] = useState<boolean>(false);
   const [revealedTeams, setRevealedTeams] = useState<Set<string>>(new Set());
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchTeams = async () => {
@@ -109,7 +110,6 @@ export function CreateSeasonStep2({
 
     setAssignedTeams(updatedTeams);
     setTeamAssigned(true);
-    console.log("Assigned Teams:", updatedTeams);
   };
 
   const handleRevealTeam = (teamId: string) => {
@@ -128,7 +128,7 @@ export function CreateSeasonStep2({
     if (selectedDrivers.length > 0 && Object.keys(assignedTeams).length > 0) {
       nextStep(selectedDrivers, assignedTeams);
     } else {
-      alert(
+      setError(
         "Bitte wählen Sie mindestens einen Spieler aus und weisen Sie die Spieler den Teams zu."
       );
     }
@@ -282,6 +282,7 @@ export function CreateSeasonStep2({
           Next
         </button>
       </div>
+      {error && <p className="error-message">{error}</p>}
     </div>
   );
 }

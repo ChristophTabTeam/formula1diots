@@ -5,12 +5,16 @@ import Season from "./Index";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../../firebase/firebaseConfig";
 import Loading from "../../components/Loading";
+import { logError } from "../../utils/errorLogger";
+import { useAuth } from "../../context/authcontext";
 
 interface DriverLineupProps {
   seasonId: string;
 }
 
 const DriverLineup: React.FC<DriverLineupProps> = ({ seasonId }) => {
+  const { user } = useAuth();
+
   const [drivers, setDrivers] = useState<Driver[]>([]);
   const [teams, setTeams] = useState<Team[]>([]);
   const [season, setSeason] = useState<Season>();
@@ -27,6 +31,11 @@ const DriverLineup: React.FC<DriverLineupProps> = ({ seasonId }) => {
         setDrivers(driversData);
       } catch (error) {
         console.error("Error fetching drivers data:", error);
+        logError(
+          error as Error,
+          user?.email?.replace("@formulaidiots.de", "") || "unknown",
+          { context: "DriverLineup", error: "Error fetching drivers data" }
+        );
       }
     };
 
@@ -40,6 +49,11 @@ const DriverLineup: React.FC<DriverLineupProps> = ({ seasonId }) => {
         setTeams(teamsData);
       } catch (error) {
         console.error("Error fetching team data:", error);
+        logError(
+          error as Error,
+          user?.email?.replace("@formulaidiots.de", "") || "unknown",
+          { context: "DriverLineup", error: "Error fetching team data" }
+        );
       }
     };
 
@@ -56,6 +70,11 @@ const DriverLineup: React.FC<DriverLineupProps> = ({ seasonId }) => {
         setSeason(activeSeason);
       } catch (error) {
         console.error("Error fetching season data:", error);
+        logError(
+          error as Error,
+          user?.email?.replace("@formulaidiots.de", "") || "unknown",
+          { context: "DriverLineup", error: "Error fetching season data" }
+        );
       }
     };
 
@@ -64,7 +83,7 @@ const DriverLineup: React.FC<DriverLineupProps> = ({ seasonId }) => {
     fetchTeams();
     fetchSeason();
     setLoading(false);
-  }, [seasonId]);
+  }, [seasonId, user?.email]);
 
   const getDriverById = (driverId: string) => {
     return drivers.find((driver) => driver.id === driverId);

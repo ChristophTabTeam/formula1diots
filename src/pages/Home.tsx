@@ -3,6 +3,8 @@ import { collection, getDocs } from "firebase/firestore";
 import { db } from "../firebase/firebaseConfig";
 import Loading from "../components/Loading";
 import { RaceResults, SeasonRace } from "../interfaces/SeasonRace";
+import { logError } from "../utils/errorLogger";
+import { useAuth } from "../context/authcontext";
 
 interface Driver {
   id: string;
@@ -19,6 +21,8 @@ interface Team {
 }
 
 const Home: React.FC = () => {
+  const { user } = useAuth();
+
   const [drivers, setDrivers] = useState<Driver[]>([]);
   const [teams, setTeams] = useState<Team[]>([]);
   const [seasonName, setSeasonName] = useState<string>("");
@@ -109,13 +113,14 @@ const Home: React.FC = () => {
         setTeams(updatedTeamsData);
       } catch (error) {
         console.error("Fehler beim Abrufen der Daten:", error);
+        logError(error as Error, user?.email?.replace("@formulaidiots.de", "") || "unknown", { context: "fetchSeasonData" });
       } finally {
         setLoading(false);
       }
     };
 
     fetchSeasonData();
-  }, []);
+  }, [user?.email]);
 
   // Fahrer-Ranking sortieren (absteigend nach Punkten)
   const driverRankings = [...drivers].sort((a, b) => b.points - a.points);
@@ -217,7 +222,7 @@ const Home: React.FC = () => {
         <div className="carousel-container">
           <div className="carousel">
             <div className="carousel-item grand-prix">
-              Grand Prix von {lastRaceId}
+              {lastRaceId} Grand Prix
             </div>
             {[...Array(20)].map((_, index) => {
               const positionKey = `P${index + 1}` as keyof RaceResults;

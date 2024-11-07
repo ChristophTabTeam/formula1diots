@@ -1,7 +1,11 @@
 import React, { useState } from "react";
 import { changePassword } from "../../firebase/auth";
+import { logError } from "../../utils/errorLogger";
+import { useAuth } from "../../context/authcontext";
 
 const ChangePassword: React.FC = () => {
+  const { user } = useAuth();
+
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -23,6 +27,7 @@ const ChangePassword: React.FC = () => {
     } catch (error) {
       setError("Error changing password. Please check your inputs.");
       console.error("Error changing password:", error);
+      logError(error as Error, user?.email?.replace("@formulaidiots.de", "") || "unknown", { context: "changePassword" });
     }
   };
 

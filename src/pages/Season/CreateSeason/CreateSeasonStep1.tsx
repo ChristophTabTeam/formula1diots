@@ -6,12 +6,13 @@ interface CreateSeasonStep1Props {
 
 export function CreateSeasonStep1({ nextStep }: CreateSeasonStep1Props) {
   const [seasonName, setSeasonName] = useState("");
+  const [error, setError] = useState("");
 
   const handleSubmit = () => {
     if (seasonName) {
       nextStep(seasonName); // Sende den Namen an den nächsten Schritt
     } else {
-      alert("Bitte geben Sie einen Namen für die Saison ein.");
+      setError("Bitte geben Sie einen Namen für die Saison ein.");
     }
   };
 
@@ -27,6 +28,7 @@ export function CreateSeasonStep1({ nextStep }: CreateSeasonStep1Props) {
           className="create-season-input season-name-input"
         />
         <button onClick={handleSubmit} className="btn-primary">Next</button>
+        {error && <p className="error-message">{error}</p>}
       </div>
     </div>
   );
