@@ -52,7 +52,7 @@ const Trophies: React.FC<TrophiesProps> = ({
 
   return (
     <div className="trophies-wrapper">
-      <h1 className="display-4 f1-regular">Trophies & Achievements</h1>
+      <h1 className="display-6 f1-regular">Trophies & Achievements</h1>
       <div className="trophies-tabs">
         <div
           className={

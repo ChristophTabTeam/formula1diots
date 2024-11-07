@@ -16,6 +16,23 @@ body {
   }
 }
 
+/* Für WebKit-Browser (Chrome, Safari, Edge) */
+::-webkit-scrollbar {
+  width: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: variables.$table-background-dark;
+}
+
+::-webkit-scrollbar-thumb {
+  background: variables.$table-background-light;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
 
 h3,
 h4,

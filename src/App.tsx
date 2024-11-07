@@ -6,12 +6,12 @@ import { useAuth } from "./context/authcontext/useAuth";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "./firebase/firebaseConfig";
 import { Driver } from "./interfaces/Driver";
-import { DarkModeProvider, } from "./context/darkModeContext";
+import { DarkModeProvider } from "./context/darkModeContext";
 import { useDarkMode } from "./context/darkModeContext/useDarkMode";
 
 function AppContent() {
   const { isAuthenticated, user } = useAuth();
-  const { isDarkMode } = useDarkMode();  // Hole den Dark Mode Zustand aus dem Provider
+  const { isDarkMode } = useDarkMode(); // Hole den Dark Mode Zustand aus dem Provider
   const [userId, setUserId] = useState<string | null>(null);
   const [driverProfile, setDriverProfile] = useState<Driver>();
 
@@ -39,7 +39,7 @@ function AppContent() {
         <div className="sidebar">
           <Nav userId={userId || ""} driverProfile={driverProfile} />
           <div className="version-wrapper">
-            <p>Version 1.2.1</p>
+            <p>Version 1.2.2</p>
           </div>
         </div>
       )}

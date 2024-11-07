@@ -28,7 +28,7 @@ interface DriverProfileProps {
 
 const DriverProfile: React.FC<DriverProfileProps> = ({ id }) => {
   const { user } = useAuth();
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
   const [driverProfile, setDriverProfile] = useState<Driver>();
   const [profileImageUrl, setProfileImageUrl] = useState<string | null>(null);
   const [seasons, setSeasons] = useState<Season[]>([]);
@@ -291,7 +291,6 @@ const DriverProfile: React.FC<DriverProfileProps> = ({ id }) => {
       }
     };
 
-    setLoading(true);
     fetchUser();
     fetchSeason();
     fetchTeams();
@@ -643,7 +642,7 @@ const DriverProfile: React.FC<DriverProfileProps> = ({ id }) => {
     <div className="profile-grid">
       {driverProfile && season && (
         <div className="profile-card">
-          <h1 className="display-4 f1-regular">Profile</h1>
+          <h1 className="display-5 f1-regular">Profile</h1>
           <div className="profile-rating-wrapper">
             <div className="profile-pic-wrapper">
               {profileImageUrl ? (
@@ -977,9 +976,9 @@ const DriverProfile: React.FC<DriverProfileProps> = ({ id }) => {
             </div>
             <div className="info-wrapper">
               Position:{" "}
-              {Object.keys(season.driverPoints).findIndex(
-                (driverId) => driverId === driverProfile.id
-              ) + 1}
+              {Object.keys(season.driverPoints)
+                .sort((a, b) => season.driverPoints[b] - season.driverPoints[a])
+                .findIndex((driverId) => driverId === driverProfile.id) + 1}
             </div>
             <div className="info-wrapper">
               Seat:{" "}

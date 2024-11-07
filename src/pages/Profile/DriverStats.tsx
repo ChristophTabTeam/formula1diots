@@ -12,7 +12,7 @@ interface DriverStatsProps {
 const DriverStats: React.FC<DriverStatsProps> = ({ trophies, fastestLaps, driverPoints }) => {
   return (
     <div className="stats-wrapper">
-      <h2 className="display-4 f1-regular">Alltime Driver Stats</h2>
+      <h2 className="display-6 f1-regular">Alltime Driver Stats</h2>
       <div className="stats-grid">
         <div className="stats-card">
           <h3 className="display-6">Wins</h3>
