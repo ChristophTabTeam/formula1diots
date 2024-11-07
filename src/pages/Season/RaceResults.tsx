@@ -253,17 +253,19 @@ const RaceResults: React.FC<RaceResultsProps> = ({ raceId, seasonId }) => {
     const qualiPos = seasonRace?.qualifyingResults
       ? Object.keys(seasonRace.qualifyingResults).find(
           (key) =>
-            seasonRace?.qualifyingResults[key as keyof QualifyingResults] ===
+            seasonRace.qualifyingResults[key as keyof QualifyingResults] ===
             driverId
         )
       : undefined;
-
+  
     const racePos = seasonRace?.raceResults
-      ? Object.keys(seasonRace.raceResults).find(
-          (key) => seasonRace.raceResults[key as keyof RaceResults] === driverId
-        )
+      ? Object.keys(seasonRace.raceResults)
+          .filter((key) => key !== "fastestLap") // Filter out fastestLap
+          .find(
+            (key) => seasonRace.raceResults[key as keyof RaceResults] === driverId
+          )
       : undefined;
-
+  
     return qualiPos && racePos
       ? parseInt(qualiPos.slice(1)) - parseInt(racePos.slice(1))
       : null;
@@ -307,11 +309,12 @@ const RaceResults: React.FC<RaceResultsProps> = ({ raceId, seasonId }) => {
 
   return (
     <div className="race-results-wrapper">
-      <h1 className="display-2">{race?.fullName}</h1>
-      <h2 className="display-4">
+      <h1 className="display-2 f1-regular">{race?.name.replace("-", " ")} Grand Prix</h1>
+      <h2 className="display-4 f1-regular">{race?.fullName}</h2>
+      <h3 className="display-6" style={{ marginTop: "40px"}}>
         Race Results{" "}
         {seasonRace?.raceDate && ` - ${formatDate(seasonRace.raceDate)}`}{" "}
-      </h2>
+      </h3>
       <div className="table-wrapper" style={{ marginBottom: 40 }}>
         <div className="table-mask">
           <table className="leaderboard-table">
@@ -340,8 +343,8 @@ const RaceResults: React.FC<RaceResultsProps> = ({ raceId, seasonId }) => {
                       {getPosOrDnf(position)}
                       {getComparision(driverId)}
                     </td>
-                    <td>{getDriverById(driverId)?.name}</td>
-                    <td>
+                    <td className="f1-regular">{getDriverById(driverId)?.name}</td>
+                    <td className="f1-regular">
                       {(() => {
                         const driver = getDriverById(driverId);
                         if (driver && driver.isPlayer) {
@@ -354,7 +357,7 @@ const RaceResults: React.FC<RaceResultsProps> = ({ raceId, seasonId }) => {
                         return null;
                       })()}
                     </td>
-                    <td>
+                    <td className="f1-regular">
                       {isDnf
                         ? "--" // Keine Punkte für DNF
                         : calculatePoints(
@@ -370,11 +373,11 @@ const RaceResults: React.FC<RaceResultsProps> = ({ raceId, seasonId }) => {
         </div>
       </div>
 
-      <h2 className="display-4">
+      <h3 className="display-6">
         Qualifying Results{" "}
         {seasonRace?.qualifyingDate &&
           ` - ${formatDate(seasonRace.qualifyingDate)}`}
-      </h2>
+      </h3>
       <div className="table-wrapper">
         <div className="table-mask">
           <table className="leaderboard-table">
@@ -389,8 +392,8 @@ const RaceResults: React.FC<RaceResultsProps> = ({ raceId, seasonId }) => {
             <tbody>
               {positions.map((position) => (
                 <tr key={position}>
-                  <td>{position.toUpperCase()}</td>
-                  <td>
+                  <td className="position-td">{position.toUpperCase()}</td>
+                  <td className="f1-regular">
                     {
                       getDriverById(
                         seasonRace?.qualifyingResults[
@@ -399,7 +402,7 @@ const RaceResults: React.FC<RaceResultsProps> = ({ raceId, seasonId }) => {
                       )?.name
                     }
                   </td>
-                  <td>
+                  <td className="f1-regular">
                     {(() => {
                       const driver = getDriverById(
                         seasonRace?.qualifyingResults[
@@ -416,7 +419,7 @@ const RaceResults: React.FC<RaceResultsProps> = ({ raceId, seasonId }) => {
                       return null;
                     })()}
                   </td>
-                  <td>
+                  <td className="f1-regular">
                     {position === "P1" || !leaderTime
                       ? seasonRace?.qualifyingResults[
                           `${position}LapTime` as keyof QualifyingResults

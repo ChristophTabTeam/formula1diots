@@ -30,6 +30,8 @@ function AppContent() {
       }
     };
 
+
+
     fetchDriverProfile();
   }, [userId]);
 
@@ -37,9 +39,12 @@ function AppContent() {
     <div className={`page ${isDarkMode ? "dark" : ""}`}>
       {isAuthenticated && driverProfile && (
         <div className="sidebar">
-          <Nav userId={userId || ""} driverProfile={driverProfile} />
+          <Nav
+            userId={userId || ""}
+            driverProfile={driverProfile}
+          />
           <div className="version-wrapper">
-            <p>Version 1.2.2</p>
+            <p>Version 1.3.0</p>
           </div>
         </div>
       )}

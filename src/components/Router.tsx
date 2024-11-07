@@ -16,6 +16,7 @@ import Statistic from "../pages/Season/Statistic";
 import FastestLap from "../pages/Season/FastestLaps";
 import Races from "../pages/Races/Index";
 import RaceView from "../pages/Races/RaceView";
+import Rivalry from "../pages/Rivalry/Index";
 
 const routes: { [key: string]: () => React.JSX.Element } = {
   "/login": () => <Login />,
@@ -93,6 +94,14 @@ const routes: { [key: string]: () => React.JSX.Element } = {
     return (
       <PrivateRoute>
         <RaceResults seasonId={seasonId} raceId={raceId} />
+      </PrivateRoute>
+    );
+  },
+  "/rivalry/:seasonId": () => {
+    const seasonId = window.location.pathname.split("/")[2];
+    return (
+      <PrivateRoute>
+        <Rivalry seasonId={seasonId}/>
       </PrivateRoute>
     );
   },
