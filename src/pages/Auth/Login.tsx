@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { loginUser } from "../../firebase/auth";
-import { useAuth } from "../../context/authcontext";
+import { useAuth } from "../../context/authcontext/useAuth";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { db } from "../../firebase/firebaseConfig";
 import f1Logo from "../../assets/F1.svg";

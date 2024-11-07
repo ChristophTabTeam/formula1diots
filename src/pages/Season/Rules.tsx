@@ -3,7 +3,7 @@ import { SeasonRules } from "../../interfaces/SeasonRules";
 import { collection, doc, getDocs, updateDoc } from "firebase/firestore";
 import { db } from "../../firebase/firebaseConfig";
 import Loading from "../../components/Loading";
-import { useAuth } from "../../context/authcontext";
+import { useAuth } from "../../context/authcontext/useAuth";
 import { logError } from "../../utils/errorLogger";
 
 interface RulesProps {

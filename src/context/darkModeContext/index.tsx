@@ -1,16 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { DarkModeContext } from "./context";
-import { doc, updateDoc } from "firebase/firestore";
+import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { db } from "../../firebase/firebaseConfig";
+import { useAuth } from "../authcontext/useAuth";
 
 // DarkModeProvider-Komponente
 export const DarkModeProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  const [isDarkMode, setIsDarkMode] = useState<boolean>(() => {
-    // Initialisiere mit dem Wert aus dem localStorage, falls vorhanden
-    return localStorage.getItem("darkMode") === "true";
-  });
+  const { user } = useAuth();
+  const [isDarkMode, setIsDarkMode] = useState<boolean>(false);
 
   const toggleDarkMode = async (driverId: string) => {
     const newMode = !isDarkMode;
@@ -20,10 +19,26 @@ export const DarkModeProvider: React.FC<{ children: React.ReactNode }> = ({
   };
 
   useEffect(() => {
-    const page = document.getElementById("page");
-    if (page) {
-      page.classList.toggle("dark", isDarkMode);
-    }
+    const fetchDarkModeSetting = async () => {
+      if (user && user.email) {
+        const userId = user.email.replace("@formula1diots.de", "");
+        console.log("userId", userId);
+        const driverDocRef = doc(db, "drivers", userId);
+        const driverDoc = await getDoc(driverDocRef);
+        if (driverDoc.exists()) {
+          const darkMode = driverDoc.data()?.darkMode;
+          setIsDarkMode(darkMode ?? false); // Setze isDarkMode auf den Firestore-Wert oder auf false, falls undefined
+        }
+      } else {
+        console.error("User not logged in");
+      }
+    };
+
+    fetchDarkModeSetting();
+  }, [user]);
+
+  useEffect(() => {
+    document.body.classList.toggle("dark-mode", isDarkMode); // Dark Mode Klasse für den Body anpassen
   }, [isDarkMode]);
 
   return (

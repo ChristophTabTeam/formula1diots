@@ -4,7 +4,7 @@ import { db } from "../firebase/firebaseConfig";
 import Loading from "../components/Loading";
 import { RaceResults, SeasonRace } from "../interfaces/SeasonRace";
 import { logError } from "../utils/errorLogger";
-import { useAuth } from "../context/authcontext";
+import { useAuth } from "../context/authcontext/useAuth";
 
 interface Driver {
   id: string;

@@ -5,7 +5,7 @@ import { Driver } from "../../interfaces/Driver";
 import type { FastestLap } from "../../interfaces/FastestLap";
 import Loading from "../../components/Loading";
 import { logError } from "../../utils/errorLogger";
-import { useAuth } from "../../context/authcontext";
+import { useAuth } from "../../context/authcontext/useAuth";
 
 interface DriverFastestLaps {
   driverId: string;

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "../styles/nav.scss";
-import { useAuth } from "../context/authcontext";
+import { useAuth } from "../context/authcontext/useAuth";
 import f1Logo from "../assets/F1.svg";
 import { Driver } from "../interfaces/Driver";
 import { useDarkMode } from "../context/darkModeContext/useDarkMode";

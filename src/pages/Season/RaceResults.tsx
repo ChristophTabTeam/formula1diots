@@ -11,7 +11,7 @@ import type {
 import { Driver } from "../../interfaces/Driver";
 import Loading from "../../components/Loading";
 import { logError } from "../../utils/errorLogger";
-import { useAuth } from "../../context/authcontext";
+import { useAuth } from "../../context/authcontext/useAuth";
 
 interface RaceResultsProps {
   raceId: string;

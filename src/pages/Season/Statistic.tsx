@@ -16,7 +16,7 @@ import Loading from "../../components/Loading";
 import { Driver } from "../../interfaces/Driver";
 import { Race } from "../../interfaces/Race";
 import { SeasonRace } from "../../interfaces/SeasonRace";
-import { useAuth } from "../../context/authcontext";
+import { useAuth } from "../../context/authcontext/useAuth";
 import { logError } from "../../utils/errorLogger";
 import { useDarkMode } from "../../context/darkModeContext/useDarkMode";
 

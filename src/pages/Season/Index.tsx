@@ -4,7 +4,7 @@ import type { Season } from "../../interfaces/Season";
 import Loading from "../../components/Loading";
 import { db } from "../../firebase/firebaseConfig";
 import { logError } from "../../utils/errorLogger";
-import { useAuth } from "../../context/authcontext";
+import { useAuth } from "../../context/authcontext/useAuth";
 
 const Season: React.FC = () => {
   const { user } = useAuth();

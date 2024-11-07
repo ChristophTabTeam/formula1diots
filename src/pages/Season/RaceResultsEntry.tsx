@@ -11,7 +11,7 @@ import {
 import { db } from "../../firebase/firebaseConfig";
 import Loading from "../../components/Loading";
 import { DriverPoints } from "../../interfaces/DriverPoints";
-import { useAuth } from "../../context/authcontext";
+import { useAuth } from "../../context/authcontext/useAuth";
 import { logError } from "../../utils/errorLogger";
 
 interface RaceResultsEntryProps {

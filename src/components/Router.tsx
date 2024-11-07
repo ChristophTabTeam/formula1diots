@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import Home from "../pages/Home";
 import Login from "../pages/Auth/Login";
 import CreateSeason from "../pages/Season/CreateSeason/Index";
-import { useAuth } from "../context/authcontext";
+import { useAuth } from "../context/authcontext/useAuth";
 import Season from "../pages/Season/Index";
 import RaceResultsEntry from "../pages/Season/RaceResultsEntry";
 import DriverLineup from "../pages/Season/DriverLineup";

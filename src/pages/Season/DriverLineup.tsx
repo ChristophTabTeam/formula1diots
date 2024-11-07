@@ -6,7 +6,7 @@ import { collection, getDocs } from "firebase/firestore";
 import { db } from "../../firebase/firebaseConfig";
 import Loading from "../../components/Loading";
 import { logError } from "../../utils/errorLogger";
-import { useAuth } from "../../context/authcontext";
+import { useAuth } from "../../context/authcontext/useAuth";
 
 interface DriverLineupProps {
   seasonId: string;

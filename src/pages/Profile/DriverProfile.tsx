@@ -11,7 +11,7 @@ import {
 import Loading from "../../components/Loading";
 import { Team } from "../../interfaces/Team";
 import { Season } from "../../interfaces/Season";
-import { useAuth } from "../../context/authcontext";
+import { useAuth } from "../../context/authcontext/useAuth";
 import Trophies from "./Trophies";
 import DriverStats from "./DriverStats";
 import { Trophy } from "../../interfaces/Trophy";

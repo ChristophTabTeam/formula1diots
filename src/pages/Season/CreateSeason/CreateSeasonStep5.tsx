@@ -11,7 +11,7 @@ import { Season } from "../../../interfaces/Season";
 import { Driver } from "../../../interfaces/Driver";
 import { SeasonRules } from "../../../interfaces/SeasonRules";
 import Loading from "../../../components/Loading";
-import { useAuth } from "../../../context/authcontext";
+import { useAuth } from "../../../context/authcontext/useAuth";
 import { defaultSeasonRules } from "./SeasonRulesDefault";
 import { logError } from "../../../utils/errorLogger";
 

@@ -6,7 +6,7 @@ import { Race } from "../../interfaces/Race";
 import Loading from "../../components/Loading";
 import { Driver } from "../../interfaces/Driver";
 import { RaceResults, SeasonRace } from "../../interfaces/SeasonRace";
-import { useAuth } from "../../context/authcontext";
+import { useAuth } from "../../context/authcontext/useAuth";
 import { logError } from "../../utils/errorLogger";
 
 interface SeasonResultsProps {

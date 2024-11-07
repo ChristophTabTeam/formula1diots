@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { changePassword } from "../../firebase/auth";
 import { logError } from "../../utils/errorLogger";
-import { useAuth } from "../../context/authcontext";
+import { useAuth } from "../../context/authcontext/useAuth";
 
 const ChangePassword: React.FC = () => {
   const { user } = useAuth();

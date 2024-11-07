@@ -5,7 +5,7 @@ import { collection, doc, getDoc, getDocs } from "firebase/firestore";
 import Loading from "../../components/Loading";
 import { Tyre } from "../../interfaces/Tyre";
 import { logError } from "../../utils/errorLogger";
-import { useAuth } from "../../context/authcontext";
+import { useAuth } from "../../context/authcontext/useAuth";
 
 interface RaceViewProps {
   id: string;

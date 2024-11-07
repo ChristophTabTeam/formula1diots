@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import Nav from "./components/Nav";
 import Router from "./components/Router";
-import { AuthProvider, useAuth } from "./context/authcontext";
+import { AuthProvider } from "./context/authcontext";
+import { useAuth } from "./context/authcontext/useAuth";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "./firebase/firebaseConfig";
 import { Driver } from "./interfaces/Driver";
