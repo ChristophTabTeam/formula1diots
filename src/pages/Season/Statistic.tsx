@@ -18,6 +18,7 @@ import { Race } from "../../interfaces/Race";
 import { SeasonRace } from "../../interfaces/SeasonRace";
 import { useAuth } from "../../context/authcontext";
 import { logError } from "../../utils/errorLogger";
+import { useDarkMode } from "../../context/darkModeContext/useDarkMode";
 
 ChartJS.register(
   CategoryScale,
@@ -47,6 +48,7 @@ const Statistic: React.FC<StatisticProps> = ({ seasonId }) => {
   const [races, setRaces] = useState<Race[]>([]);
   const chartRef = useRef<ChartJS<"line">>(null);
   const [toggledDrivers, setToggledDrivers] = useState<boolean>(true);
+  const { isDarkMode } = useDarkMode();
 
   useEffect(() => {
     const fetchRaceResults = async () => {
@@ -226,8 +228,50 @@ const Statistic: React.FC<StatisticProps> = ({ seasonId }) => {
       })),
   };
 
+  const chartOptions = {
+    responsive: true,
+    plugins: {
+      legend: {
+        position: "top" as const,
+        labels: {
+          color: isDarkMode ? 'white' : 'black', // Farbe der Legende basierend auf dem Dark Mode
+        },
+      },
+    },
+    scales: {
+      x: {
+        ticks: {
+          color: isDarkMode ? 'white' : 'black', // Farbe der x-Achsen-Beschriftung
+        },
+        grid: {
+          color: isDarkMode ? 'rgba(255, 255, 255, 0.2)' : 'rgba(0, 0, 0, 0.1)', // Farbe der x-Achsen-Gitterlinien
+        },
+      },
+      y: {
+        ticks: {
+          color: isDarkMode ? 'white' : 'black', // Farbe der y-Achsen-Beschriftung
+        },
+        grid: {
+          color: isDarkMode ? 'rgba(255, 255, 255, 0.2)' : 'rgba(0, 0, 0, 0.1)', // Farbe der y-Achsen-Gitterlinien
+        },
+      },
+    },
+  };
+
   return (
-    <div>
+    <div
+      style={{
+        maxWidth: "100%",
+        margin: "0 auto",
+        padding: "20px 0 40px",
+        maxHeight: "calc(100% - 50px)",
+        display: "flex",
+        justifyContent: "flex-start",
+        flexDirection: "column",
+        alignItems: "center",
+        gap: "20px",
+      }}
+    >
       <div
         style={{
           display: "flex",
@@ -235,9 +279,10 @@ const Statistic: React.FC<StatisticProps> = ({ seasonId }) => {
           marginBottom: "10px",
           alignItems: "center",
           justifyContent: "space-between",
+          width: "100%",
         }}
       >
-        <h1 className="display-4">Season Statistic</h1>
+        <h1 className="display-4 f1-regular">Season Statistic</h1>
         {toggledDrivers ? (
           <button
             className="btn-primary"
@@ -257,7 +302,8 @@ const Statistic: React.FC<StatisticProps> = ({ seasonId }) => {
       <Line
         ref={chartRef}
         data={chartData}
-        options={{ responsive: true, plugins: { legend: { position: "top" } } }}
+        options={chartOptions}
+        style={{ maxWidth: "1500px", maxHeight: "700px" }}
       />
     </div>
   );

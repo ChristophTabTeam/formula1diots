@@ -3,17 +3,17 @@ import "../styles/nav.scss";
 import { useAuth } from "../context/authcontext";
 import f1Logo from "../assets/F1.svg";
 import { Driver } from "../interfaces/Driver";
+import { useDarkMode } from "../context/darkModeContext/useDarkMode";
 
 interface NavProps {
-  darkMode: boolean;
-  toggleDarkMode: () => void;
   userId: string;
   driverProfile: Driver;
 }
 
-const Nav: React.FC<NavProps> = ({ darkMode, toggleDarkMode, userId, driverProfile }) => {
+const Nav: React.FC<NavProps> = ({ userId, driverProfile }) => {
   const { logout } = useAuth();
   const [path, setPath] = useState<string>("");
+  const { isDarkMode, toggleDarkMode } = useDarkMode();
 
   useEffect(() => {
     const windowPath = window.location.pathname.split("/")[1] || "";
@@ -79,7 +79,7 @@ const Nav: React.FC<NavProps> = ({ darkMode, toggleDarkMode, userId, driverProfi
         <div className="nav-item nav-dark-mode-switch" style={{ color: "white"}}>
           <span className="icon-20pt" aria-hidden="true">light_mode</span>
           <label className="switch">
-            <input type="checkbox" checked={darkMode} onChange={toggleDarkMode} />
+            <input type="checkbox" checked={isDarkMode} onChange={() => toggleDarkMode(userId)} />
             <span className="switch-span"></span>
           </label>
           <span className="icon-20pt" aria-hidden="true">dark_mode</span>
