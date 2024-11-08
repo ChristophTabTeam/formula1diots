@@ -113,7 +113,11 @@ const Home: React.FC = () => {
         setTeams(updatedTeamsData);
       } catch (error) {
         console.error("Fehler beim Abrufen der Daten:", error);
-        logError(error as Error, user?.email?.replace("@formulaidiots.de", "") || "unknown", { context: "fetchSeasonData" });
+        logError(
+          error as Error,
+          user?.email?.replace("@formulaidiots.de", "") || "unknown",
+          { context: "fetchSeasonData" }
+        );
       } finally {
         setLoading(false);
       }
@@ -143,21 +147,29 @@ const Home: React.FC = () => {
       <div className="container">
         <div className="home-header">
           <div className="home-headline-wraper">
-            <h1 className="display-4 f1-regular uppercase">Season {seasonName}</h1>
+            <h1 className="display-4 f1-regular uppercase">
+              Season {seasonName}
+            </h1>
             <div className="btn-wrapper">
               {lastRaceId && (
                 <a
                   className="btn-primary"
                   href={`/season/${seasonName}/race/${lastRaceId}`}
                 >
-                  ← Last Race
+                  <span className="icon-12pt" aria-hidden="true">
+                    arrow_back_ios
+                  </span>{" "}
+                  Last Race
                 </a>
               )}
               <a
                 className="btn-primary"
                 href={`/season/${seasonName}/results-entry`}
               >
-                Next Race →
+                Next Race
+                <span className="icon-12pt" aria-hidden="true">
+                  arrow_forward_ios
+                </span>
               </a>
             </div>
           </div>

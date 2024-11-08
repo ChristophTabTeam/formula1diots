@@ -178,6 +178,10 @@ a {
   border-radius: 10px;
   text-decoration: none;
   transition: all 0.3s;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-family: "Formula1-Regular";
   &:hover {
     color: white;
     background-color: variables.$accent-red;
@@ -545,13 +549,12 @@ h1:focus {
     border-radius: 20px;
     border: 3px solid transparent; // Initial invisible border
     box-sizing: border-box;
-    transition: border-color 0.2s linear; // Overall animation timing
+    transition: border-color 0.3s linear; // Overall animation timing
     pointer-events: none;
   }
 
   &:hover::before {
     border-color: red;
-    animation: border-draw 0.2s linear forwards;
   }
 
   &.disabled {

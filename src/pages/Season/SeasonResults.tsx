@@ -138,7 +138,7 @@ const SeasonResults: React.FC<SeasonResultsProps> = ({
       <div className="table-wrapper">
         <div className="table-mask season-result-table-mask">
           {seasonData && (
-            <table className="leaderboard-table season-results-table">
+            <table className="leaderboard-table season-results-table f1-regular">
               <thead>
                 <tr>
                   <th>Driver</th>

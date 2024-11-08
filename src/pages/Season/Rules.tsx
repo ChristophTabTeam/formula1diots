@@ -87,7 +87,7 @@ const Rules: React.FC<RulesProps> = ({ seasonId }) => {
 
   return (
     <div className="create-season-wrapper justify-top">
-      <h1 className="display-2">Season Rules Setup</h1>
+      <h1 className="display-2 f1-regular">Season Rules Setup</h1>
       <div className="season-rules-wrapper container">
         <div className="season-rules-menu">
           <button

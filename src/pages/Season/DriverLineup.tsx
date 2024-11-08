@@ -107,7 +107,7 @@ const DriverLineup: React.FC<DriverLineupProps> = ({ seasonId }) => {
                 }}
                 key={team.id}
               >
-                <p className="team-name">{team.shortName}</p>
+                <p className="team-name f1-regular">{team.shortName}</p>
                 <div className="driver-wrapper">
                   {teamData.driver1 && (
                     <div

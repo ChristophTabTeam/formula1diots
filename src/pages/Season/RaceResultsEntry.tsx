@@ -458,7 +458,7 @@ const RaceResultsEntry: React.FC<RaceResultsEntryProps> = ({ seasonId }) => {
           <h2 className="display-6 f1-regular">Qualifying Results</h2>
           <div className="table-wrapper">
             <div className="table-mask">
-              <table className="leaderboard-table">
+              <table className="leaderboard-table f1-regular">
                 <thead>
                   <tr>
                     <th>Pos.</th>
@@ -531,7 +531,7 @@ const RaceResultsEntry: React.FC<RaceResultsEntryProps> = ({ seasonId }) => {
           <h2 className="display-6 f1-regular">Race Results</h2>
           <div className="table-wrapper">
             <div className="table-mask">
-              <table className="leaderboard-table">
+              <table className="leaderboard-table f1-regular">
                 <thead>
                   <tr>
                     <th>Pos.</th>
@@ -612,8 +612,9 @@ const RaceResultsEntry: React.FC<RaceResultsEntryProps> = ({ seasonId }) => {
               alignItems: "center",
               gap: 40,
             }}
+            className="f1-regular"
           >
-            <h2 className="display-6 f1-regular">Fastest Lap</h2>
+            <h2 className="display-6">Fastest Lap</h2>
             <label style={{ display: "flex", gap: 20, alignItems: "center" }}>
               <select
                 value={fastestLap}
@@ -669,7 +670,7 @@ const RaceResultsEntry: React.FC<RaceResultsEntryProps> = ({ seasonId }) => {
               disabled={isSaving}
               className="custom-file-upload btn-primary"
             >
-              {isSaving ? "Saving..." : "Save Qualifying Results"}
+              {isSaving ? "Saving..." : "Save Qualifying"}
             </button>
             <button
               onClick={handleSaveResults}
