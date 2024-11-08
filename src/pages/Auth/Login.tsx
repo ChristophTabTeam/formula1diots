@@ -85,14 +85,14 @@ const Login: React.FC = () => {
   return (
     <div className="login-container">
       <div className="login-card">
-        <h1 className="login-title display-6">
+        <h1 className="login-title display-6 f1-regular">
           <img className="login-image" src={f1Logo} alt="F1 Logo" />
           Formula1diots
         </h1>
-        <h2 className="login-title display-4">Login</h2>
+        <h2 className="login-title display-4 f1-regular">Login</h2>
         <form className="login-form" onSubmit={handleSubmit}>
           <div className="form-group">
-            <label className="form-label">Email:</label>
+            <label className="form-label f1-regular">Email:</label>
             <input
               className="form-input"
               type="email"
@@ -102,7 +102,7 @@ const Login: React.FC = () => {
             />
           </div>
           <div className="form-group">
-            <label className="form-label">Password:</label>
+            <label className="form-label f1-regular">Password:</label>
             <input
               className="form-input"
               type="password"
@@ -115,6 +115,7 @@ const Login: React.FC = () => {
             Login
           </button>
         </form>
+        <a href="/privacy-policy" className="hyperlink" style={{textAlign: "center", marginTop: 20}}>Privacy Policy</a>
         {/* <div className="login-links-wrapper">
           <p>
             <a className="forgot-password-link" href="/reset-password">

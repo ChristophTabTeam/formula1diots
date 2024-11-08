@@ -7,6 +7,7 @@ import { useDarkMode } from "../context/darkModeContext/useDarkMode";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../firebase/firebaseConfig";
 import { Season } from "../interfaces/Season";
+import { useCookieConsent } from "../context/cookieContext/useCookieConsent";
 
 interface NavProps {
   userId: string;
@@ -18,6 +19,7 @@ const Nav: React.FC<NavProps> = ({ userId, driverProfile }) => {
   const [path, setPath] = useState<string>("");
   const [seasonId, setSeasonId] = useState<string>("");
   const { isDarkMode, toggleDarkMode } = useDarkMode();
+  const { setBannerVisible } = useCookieConsent();
 
   useEffect(() => {
     const windowPath = window.location.pathname.split("/")[1] || "";
@@ -46,6 +48,10 @@ const Nav: React.FC<NavProps> = ({ userId, driverProfile }) => {
   const handleLogout = async () => {
     await logout();
     window.location.href = "/login";
+  };
+
+  const handleCookieSettings = () => {
+    setBannerVisible(true);
   };
 
   return (
@@ -151,6 +157,13 @@ const Nav: React.FC<NavProps> = ({ userId, driverProfile }) => {
               logout
             </span>{" "}
             Logout
+          </div>
+        </div>
+        <div className="version-wrapper">
+          <p>Version 1.4.0</p>
+          <div>
+            <a href="/privacy-policy">Privacy Policy</a> |{" "}
+            <p onClick={handleCookieSettings}>Cookie Settings</p>
           </div>
         </div>
       </nav>

@@ -8,6 +8,8 @@ import { db } from "./firebase/firebaseConfig";
 import { Driver } from "./interfaces/Driver";
 import { DarkModeProvider } from "./context/darkModeContext";
 import { useDarkMode } from "./context/darkModeContext/useDarkMode";
+import { CookieConsentProvider } from "./context/cookieContext";
+import CookieBanner from "./components/CookieBanner";
 
 function AppContent() {
   const { isAuthenticated, user } = useAuth();
@@ -30,22 +32,15 @@ function AppContent() {
       }
     };
 
-
-
     fetchDriverProfile();
   }, [userId]);
+
 
   return (
     <div className={`page ${isDarkMode ? "dark" : ""}`}>
       {isAuthenticated && driverProfile && (
         <div className="sidebar">
-          <Nav
-            userId={userId || ""}
-            driverProfile={driverProfile}
-          />
-          <div className="version-wrapper">
-            <p>Version 1.3.0</p>
-          </div>
+          <Nav userId={userId || ""} driverProfile={driverProfile} />
         </div>
       )}
       <main style={{ position: "relative" }}>
@@ -58,9 +53,12 @@ function AppContent() {
 function App() {
   return (
     <AuthProvider>
-      <DarkModeProvider>
-        <AppContent />
-      </DarkModeProvider>
+      <CookieConsentProvider>
+        <DarkModeProvider>
+          <AppContent />
+          <CookieBanner />
+        </DarkModeProvider>
+      </CookieConsentProvider>
     </AuthProvider>
   );
 }

@@ -144,6 +144,12 @@
   height: 3rem;
 }
 
+.lower-nav {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
 @media (min-width: 641px) {
   .navbar-toggler {
     display: none;
@@ -154,7 +160,7 @@
     flex-direction: column;
     justify-content: space-between;
     /* Allow sidebar to scroll for tall menus */
-    height: calc(100vh - 3.5rem);
+    height: 100%;
     overflow-y: auto;
   }
 }

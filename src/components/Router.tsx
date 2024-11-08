@@ -17,6 +17,7 @@ import FastestLap from "../pages/Season/FastestLaps";
 import Races from "../pages/Races/Index";
 import RaceView from "../pages/Races/RaceView";
 import Rivalry from "../pages/Rivalry/Index";
+import PrivacyPolicy from "../pages/PrivacyPolicy";
 
 const routes: { [key: string]: () => React.JSX.Element } = {
   "/login": () => <Login />,
@@ -128,6 +129,9 @@ const routes: { [key: string]: () => React.JSX.Element } = {
       </PrivateRoute>
     );
   },
+  "/privacy-policy": () => {
+    return <PrivacyPolicy/>;
+  }
 };
 
 const PrivateRoute = ({ children }: { children: React.JSX.Element }) => {

@@ -216,11 +216,19 @@ h1:focus {
   display: flex;
   flex-direction: column;
   align-items: center;
-  & > a {
-    color: white !important;
-  }
+  padding-bottom: 10px;
   & > p {
     margin: 0;
+  }
+  & > div {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  & > div > p, & > div > a {
+    margin: 0;
+    font-size: .8em;
+    color: variables.$accent-red;
   }
 }
 
@@ -824,4 +832,98 @@ h1:focus {
       }
     }
   }
+}
+
+.cookie-banner-wrapper {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  top: 0;
+  right: 0;
+  width: 100%;
+  background: rgba($color: #000000, $alpha: .6);
+  color: white;
+  padding: 10px 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.cookie-more-info-wrapper {
+  max-height: 500px;
+  overflow-y: auto;
+}
+
+.cookie-banner {
+  background: linear-gradient(
+    45deg,
+    variables.$table-background-dark,
+    variables.$table-background-light
+  );
+  padding: 50px 50px 40px;
+  border-radius: 20px;
+  border: 3px solid variables.$accent-red;
+  max-width: 600px;
+  max-height: 500px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  transition: all 1s;
+  &.more-info {
+    max-width: 1000px;
+    max-height: 900px;
+  }
+}
+
+.hyperlink {
+  color: variables.$accent-red !important;
+}
+
+.cookie-accept {
+  background: variables.$accent-red;
+  padding: 10px 30px;
+  font-size: 20px;
+  border-radius: 10px;
+  color: white;
+  font-weight: 600;
+  border: none;
+  flex: 1 1 35%;
+  justify-self: end;
+}
+
+.cookie-decline {
+  background: variables.$table-background-dark;
+  padding: 10px 30px;
+  font-size: 20px;
+  border-radius: 10px;
+  color: white;
+  font-weight: 600;
+  border: none;
+  flex: 1 1 35%;
+  justify-self: start;
+}
+
+.cookie-more-info {
+  background: variables.$table-background-dark;
+  padding: 10px 20px;
+  font-size: 20px;
+  border-radius: 10px;
+  color: white;
+  font-weight: 600;
+  border: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  grid-column: span 2;
+}
+
+.btn-wrapper.cookie {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  justify-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+  justify-content: center;
 }

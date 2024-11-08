@@ -1,6 +1,6 @@
-// Import the functions you need from the SDKs you need
+// firebaseConfig.ts
 import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
+import { getAnalytics, isSupported, Analytics } from "firebase/analytics"; // Use `isSupported` for conditional loading
 import { getFirestore } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 import { getStorage } from "firebase/storage";
@@ -17,9 +17,18 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
 const db = getFirestore(app);
 const auth = getAuth(app);
 const storage = getStorage(app);
 
-export { app, analytics, db, auth, storage };
+// Analytics variable that will be initialized only when consent is given
+let analytics: Analytics | null = null;
+
+export const initializeAnalytics = async () => {
+  if (!analytics && (await isSupported())) { // Check if analytics is supported
+    analytics = getAnalytics(app);
+  }
+  return analytics;
+};
+
+export { app, db, auth, storage };
