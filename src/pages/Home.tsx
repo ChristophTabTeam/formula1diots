@@ -179,13 +179,13 @@ const Home: React.FC = () => {
             <h3 className="display-6">Driver Standings</h3>
             <div className="table-wrapper" style={{ height: 593 }}>
               <div className="table-mask">
-                <table className="leaderboard-table">
+                <table className="leaderboard-table f1-regular">
                   <thead>
                     <tr>
                       <th>Pos.</th>
                       <th>Driver</th>
                       <th>Team</th>
-                      <th>Points</th>
+                      <th>TOT</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -208,12 +208,12 @@ const Home: React.FC = () => {
           <div className="home-column">
             <h3 className="display-6">Team Standings</h3>
             <div className="table-wrapper" style={{ height: 593 }}>
-              <table className="leaderboard-table">
+              <table className="leaderboard-table f1-regular">
                 <thead>
                   <tr>
                     <th>Pos.</th>
                     <th>Team</th>
-                    <th>Points</th>
+                    <th>TOT</th>
                   </tr>
                 </thead>
                 <tbody>

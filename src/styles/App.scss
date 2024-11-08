@@ -158,6 +158,11 @@ a {
   }
 }
 
+.container {
+  max-width: 1400px !important;
+  margin: 0 auto;
+}
+
 .container-large {
   max-width: 1550px;
   margin: 0 auto;

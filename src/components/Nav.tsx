@@ -160,7 +160,7 @@ const Nav: React.FC<NavProps> = ({ userId, driverProfile }) => {
           </div>
         </div>
         <div className="version-wrapper">
-          <p>Version 1.4.0</p>
+          <p>Version 1.4.1</p>
           <div>
             <a href="/privacy-policy">Privacy Policy</a> |{" "}
             <p onClick={handleCookieSettings}>Cookie Settings</p>
